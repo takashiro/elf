@@ -1,4 +1,4 @@
-Orchard Hut Shop Online
+Elf Web App
 ==========
 
 | Example Page | http://weifruit.cn   |
@@ -24,36 +24,26 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 Introduction
 ------------
 
-Orchard Hut is a mini e-shop system (embeded in WeChat, optional).
+Elf is an extensible raw web application.
 
 Features
 ----------
 
-1. Basic Functions
-    * Error Reporter, record each run-time error as a report in data/error/
-    * File-based data storage and cache
-    * Simple but powerful template engine with statements like if, elseif, else, loop, echo and eval.
-    * Frequently-used input elements like select, radio and checkbox can be output easily without foreach or many if statments
-    * MySQL connection class
-    * Automatically attached and removed cookie prefix to avoid cookie collision
-    * Hook engine, for open-close principle
-    * Timed announcements
-    *
-
-2. Product management
-    * Multiple prices for one product
-    * Storage management
-    * Timed price
-
-3. Online Payment
-    * Alipay via mobile webpage supported
-
+* Error Reporter, record each run-time error as a report in data/error/
+* File-based data storage and cache
+* Simple but powerful template engine with statements like if, elseif, else, loop, echo and eval.
+* Frequently-used input elements like select, radio and checkbox can be output easily without foreach or many if statments
+* MySQL connection class
+* Automatically attached and removed cookie prefix to avoid cookie collision
+* Alipay via mobile webpage supported
+* Hook engine, for open-close principle
+* Extra functional modules can be easily added
 
 Running Environment
 -------------------
 1. PHP 5.5
 2. MySQL 5
 3. Apache Or IIS
-4. PHP extension: cURL, openssl
+4. PHP extension: cURL, openssl, mcrypt
 
 Run http://yoursitename/install and it will be working.
