@@ -56,6 +56,7 @@ function loadmodule(){
 				'admin_modules' => $admin_modules,
 			);
 		}
+		closedir($dir);
 	}
 
 	return $module_list;
