@@ -19,8 +19,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 takashiro@qq.com
 ************************************************************************/
 
-document.write('<script type="text/javascript" src="./plugin/datetimepicker/jquery.datetimepicker.min.js"></script>');
-document.write('<style type="text/css">@import url(./plugin/datetimepicker/jquery.datetimepicker.css);</style>');
+document.write('<script type="text/javascript" src="./3rdparty/datetimepicker/jquery.datetimepicker.min.js"></script>');
+document.write('<style type="text/css">@import url(./3rdparty/datetimepicker/jquery.datetimepicker.css);</style>');
 
 $(function(){
 	$('input.datetime').datetimepicker({

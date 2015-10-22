@@ -5,5 +5,3 @@ return array(
 	'illegal_operation' => '非法操作。',
 	'edit_succeed' => '编辑成功。',
 );
-
-?>

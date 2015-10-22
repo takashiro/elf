@@ -66,7 +66,11 @@ function loadtranslation($target, $style, $type){
 	static $lang = array();
 
 	if(!isset($lang[$target][$style][$type])){
-		$file = S_ROOT.'view/'.$target.'/'.$style.'/'.$type.'.lang.php';
+		if($style == 'default'){
+			$file = S_ROOT.'view/'.$target.'/'.$type.'.lang.php';
+		}else{
+			$file = S_ROOT.'extension/view/'.$target.'/'.$style.'/'.$type.'.lang.php';
+		}
 		$lang[$target][$style][$type] = file_exists($file) ? include $file : array();
 	}
 
@@ -77,8 +81,8 @@ function loadtranslation($target, $style, $type){
 	Load the language pack (./view/$_G[style]/$type.lang.php) and translate $from into the local language
 */
 function lang($type, $from){
-	$style = &$GLOBALS['_G']['style'];
 	$target = defined('IN_ADMINCP') ? 'admin' : 'user';
+	$style = $target == 'admin' ? 'default' : $GLOBALS['_G']['style'];
 
 	$lang = loadtranslation($target, $style, $type);
 	if(isset($lang[$from])){
