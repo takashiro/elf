@@ -86,6 +86,8 @@ if(file_exists($module_path)){
 		define('MOD_ROOT', S_ROOT.'module/'.$mods[0].'/');
 		$module_path = $extra_module_path;
 		$classname = $mods[0].$mods[1].'Module';
+	}else{
+		exit('access denied');
 	}
 	unset($mods, $extra_module_path);
 }
