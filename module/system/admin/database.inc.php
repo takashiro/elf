@@ -76,7 +76,7 @@ class SqlTable{
 		$this->is_valid = true;
 	}
 
-	private function parseColumns($columns){
+	public function parseColumns($columns){
 		preg_match_all('/`(\w+)`\s+(\w+(?:\(\d+(?:,\d+)*\))?(?:\s+(?:unsigned|unsigned))?)(?:\s+((?:NOT\s+)?NULL))?(?:\s+DEFAULT\s+(\'.*?\'|NULL|CURRENT_TIMESTAMP))?(?:\s+(AUTO_INCREMENT))?\s*[,)]/i', $columns, $matches);
 
 		$column_num = count($matches[0]);
@@ -377,7 +377,7 @@ class SystemDatabaseModule extends AdminControlPanelModule{
 
 		global $_G;
 		foreach($_G['module_list'] as $module){
-			$sql_file = S_ROOT.'module/'.$module['name'].'/install.sql';
+			$sql_file = $module['root_path'].'install.sql';
 			if(!file_exists($sql_file))
 				continue;
 			$sql_file = file_get_contents($sql_file);
@@ -392,6 +392,14 @@ class SystemDatabaseModule extends AdminControlPanelModule{
 			$t->parse($sentence);
 			if($t->isValid()){
 				$standard_tables[$t->name] = $t;
+			}else{
+				if(preg_match('/\s*ALTER\s+TABLE\s+`(\w+)`\s+ADD\s+(.*?)\s*(?:\;|$)/i', $sentence, $matches)){
+					$table_name = $matches[1];
+					if(!isset($standard_tables[$table_name]))
+						continue;
+					$table = $standard_tables[$table_name];
+					$table->parseColumns($matches[2].',');
+				}
 			}
 			unset($t);
 		}
@@ -403,14 +411,17 @@ class SystemDatabaseModule extends AdminControlPanelModule{
 		$current_tables = array();
 
 		global $db, $tpre;
-		$query = $db->query("SHOW TABLES");
+		$query = $db->query('SHOW TABLES');
 		while($table = $query->fetch_array()){
 			$table_name = $table[0];
 
 			$t = new SqlTable;
-			$current_tables[$table_name] = $t;
 
-			$t->name = $table_name;
+			$pre_length = strlen($tpre);
+			if(strncmp($table_name, $tpre, $pre_length) == 0)
+				$t->name = 'pre_'.substr($table_name, $pre_length);
+			else
+				$t->name = $table_name;
 
 			$config = $db->fetch_first("SHOW TABLE STATUS WHERE name='{$table_name}'");
 			$t->engine = $config['Engine'];
@@ -445,6 +456,8 @@ class SystemDatabaseModule extends AdminControlPanelModule{
 					}
 				}
 			}
+
+			$current_tables[$t->name] = $t;
 		}
 
 		$charsets = $db->fetch_all('SHOW CHARACTER SET');
