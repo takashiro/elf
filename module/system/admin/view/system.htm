@@ -42,7 +42,7 @@ $(function(){
 		</tr>
 		<tr>
 			<th><label>用户界面风格：</label></th>
-			<td>{echo Template::select('system[style]', $_G['stylelist']['user'], $_CONFIG['style'])}</td>
+			<td>{echo Template::select('system[style]', $user_style_list, $_CONFIG['style'])}</td>
 		</tr>
 	</table>
 

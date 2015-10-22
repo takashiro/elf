@@ -266,7 +266,7 @@ function view($template_name){
 
 	$forced_parse = !file_exists($file_path);
 	if($forced_parse || !empty($_G['config']['refresh_template'])){
-		$template = new Template($target, $_G['style'], $template_name);
+		$template = new Template($target, $target == 'user' ? $_G['style'] : 'default', $template_name);
 		if($forced_parse || $template->getLastModifiedTime() > filemtime($file_path)){
 			file_put_contents($file_path, $template->parse());
 		}

@@ -290,6 +290,27 @@ class Template{
 
 		return $str;
 	}
+
+	static public function StyleList($target = 'user'){
+		$style_list = array('default');
+
+		$styledir = S_ROOT.'extension/view/'.$target.'/';
+		if(is_dir($styledir) && is_readable($styledir)){
+			$view = opendir($styledir);
+			while($style = readdir($view)){
+				if($style{0} === '.'){
+					continue;
+				}
+
+				if(is_dir($styledir.$style)){
+					$style_list[$style] = $style;
+				}
+			}
+			closedir($view);
+		}
+
+		return $style_list;
+	}
 }
 
 ?>

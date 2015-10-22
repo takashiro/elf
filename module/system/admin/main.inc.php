@@ -56,24 +56,7 @@ class SystemMainModule extends AdminControlPanelModule{
 			isset($_CONFIG[$var]) || $_CONFIG[$var] = $v;
 		}
 
-		$_G['stylelist'] = array(
-			'admin' => array(),
-			'user' => array(),
-		);
-		foreach($_G['stylelist'] as $template_type => &$stylelist){
-			$styledir = S_ROOT.'view/'.$template_type.'/';
-			$view = opendir($styledir);
-			while($style = readdir($view)){
-				if($style{0} == '.'){
-					continue;
-				}
-
-				if(is_dir($styledir.$style)){
-					$stylelist[$style] = $style;
-				}
-			}
-		}
-		unset($stylelist);
+		$user_style_list = Template::StyleList('user');
 
 		include view('system');
 	}
