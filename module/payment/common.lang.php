@@ -30,6 +30,11 @@ return array(
 	'permission_payment:prepaidreward' => '充值奖励',
 	'permission_payment:prepaidreward_comment' => '',
 	'permission_payment:userwallet' => '用户钱包',
+
+	'wallet_via_cash' => '现金支付',
+	'wallet_via_alipay' => '支付宝',
+	'wallet_via_wallet' => '钱包余额',
+	'wallet_via_bestpay' => '翼支付',
 );
 
 ?>

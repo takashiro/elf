@@ -28,7 +28,7 @@ if(!$_G['user']->isLoggedIn()){
 
 $paymentconfig = readdata('payment');
 if(isset($_GET['orderid'])){
-	if(empty($paymentconfig['enabled_method'][Order::PaidWithWallet])){
+	if(empty($paymentconfig['enabled_method'][Wallet::ViaWallet])){
 		showmsg('wallet_payment_is_disabled');
 	}
 

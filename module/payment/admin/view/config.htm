@@ -13,7 +13,7 @@
 			<tr>
 				<th><label>可用支付方式：</th></label>
 				<td>
-				<!--{loop Order::$PaymentMethod $methodid $methodname}-->
+				<!--{loop Wallet::$PaymentMethod $methodid $methodname}-->
 					{echo Template::checkbox("payment[enabled_method][$methodid]", $methodname, !empty($payment['enabled_method'][$methodid]))}
 				<!--{/loop}-->
 				</td>

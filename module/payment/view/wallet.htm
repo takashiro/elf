@@ -23,11 +23,11 @@ $(function(){
 				<table>
 					<tr>
 						<th><label>余额：</label></th>
-						<td>{echo $_G['user']->wallet}{echo Product::$PriceUnit}</td>
+						<td>{echo $_G['user']->wallet}{echo Wallet::$PriceUnit}</td>
 					</tr>
 					<tr>
 						<th><label>充值：</label></th>
-						<td><input type="text" name="recharge" value="100.00" />{echo Product::$PriceUnit}</td>
+						<td><input type="text" name="recharge" value="100.00" />{echo Wallet::$PriceUnit}</td>
 					</tr>
 				</table>
 
@@ -35,7 +35,7 @@ $(function(){
 					<h1>付款方式</h1>
 					<div class="content">
 						<ul class="mselect paymentmethod">
-						<!--{loop Order::$PaymentMethod $methodid $name}-->
+						<!--{loop Wallet::$PaymentMethod $methodid $name}-->
 						<!--{if !empty(Order::$PaymentInterface[$methodid]) && $methodid != Order::PaidWithWallet && !empty($paymentconfig['enabled_method'][$methodid])}-->
 							<li><input type="radio" name="mod" value="{echo Order::$PaymentInterface[$methodid]}" />$name</li>
 						<!--{/if}-->
@@ -51,7 +51,7 @@ $(function(){
 		</div>
 
 		<!--{if !empty($prepaidreward)}-->
-		<!--{loop $prepaidreward $r}--><a href="./?mod=alipay&recharge=$r[minamount]" class="button" style="width:auto">充{$r[minamount]}<!--{if $r['maxamount'] > $r['minamount']}--> ~ {$r[maxamount]}<!--{/if}-->{echo Product::$PriceUnit}返{$r[reward]}{echo Product::$PriceUnit}</a> <!--{/loop}-->
+		<!--{loop $prepaidreward $r}--><a href="./?mod=alipay&recharge=$r[minamount]" class="button" style="width:auto">充{$r[minamount]}<!--{if $r['maxamount'] > $r['minamount']}--> ~ {$r[maxamount]}<!--{/if}-->{echo Wallet::$PriceUnit}返{$r[reward]}{echo Wallet::$PriceUnit}</a> <!--{/loop}-->
 		<!--{/if}-->
 
 		<div class="order_list">
@@ -59,7 +59,7 @@ $(function(){
 				<thead>
 					<tr>
 						<td style="width:6em">时间</td>
-						<td>金额({echo Product::$PriceUnit})</td>
+						<td>金额({echo Wallet::$PriceUnit})</td>
 						<td>详细</td>
 					</tr>
 				</thead>
@@ -76,7 +76,7 @@ $(function(){
 						<td><!--{if $l['delta'] > 0}-->+<!--{/if}-->{$l[delta]}</td>
 						<td>
 							<!--{if $l['type'] == Wallet::RechargeLog}-->
-								{echo Order::$PaymentMethod[$l['paymentmethod']]}转入{$l[cost]}{echo Product::$PriceUnit}<br />
+								{echo Wallet::$PaymentMethod[$l['paymentmethod']]}转入{$l[cost]}{echo Wallet::$PriceUnit}<br />
 								(<!--{if $l['tradestate']}-->{echo Order::$TradeState[$l['tradestate']]}<!--{else}-->等待付款<!--{/if}-->)
 								<!--{if !empty(Order::$PaymentInterface[$l['paymentmethod']]) && $l['tradestate'] != Order::TradeSuccess && $l['tradestate'] != Order::TradeFinished}-->
 								<a href="./?mod={echo Order::$PaymentInterface[$l['paymentmethod']]}&rechargeid=$l[id]">[继续]</a>

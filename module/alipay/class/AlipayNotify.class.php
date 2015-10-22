@@ -166,12 +166,4 @@ class AlipayNotify {
 	public static $TradeStateEnum;
 }
 
-AlipayNotify::$TradeStateEnum = array(
-	'WAIT_BUYER_PAY' => Order::WaitBuyerPay,
-	'TRADE_CLOSED' => Order::TradeClosed,
-	'TRADE_SUCCESS' => Order::TradeSuccess,
-	'TRADE_PENDING' => Order::TradePending,
-	'TRADE_FINISHED' => Order::TradeFinished,
-);
-
 ?>

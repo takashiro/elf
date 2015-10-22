@@ -33,7 +33,7 @@ if($verify_result){//验证成功
 		//支付宝交易号
 		$_GET['trade_no'],
 		//交易状态
-		AlipayNotify::$TradeStateEnum[$_GET['trade_status']],
+		$_GET['trade_status'],
 	);
 	runhooks('alipay_callback_executed', $arguments);
 

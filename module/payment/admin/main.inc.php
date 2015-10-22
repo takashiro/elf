@@ -29,7 +29,7 @@ class PaymentMainModule extends AdminControlPanelModule{
 
 		if($_POST){
 			$payment = array();
-			foreach(Order::$PaymentMethod as $methodid => $name){
+			foreach(Wallet::$PaymentMethod as $methodid => $name){
 				$payment['enabled_method'][$methodid] = !empty($_POST['payment']['enabled_method'][$methodid]);
 			}
 

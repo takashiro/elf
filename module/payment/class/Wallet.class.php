@@ -29,6 +29,19 @@ class Wallet{
 
 	static public $LogType = array();
 
+	//Payment Method
+	public static $PaymentMethod;
+	public static $PaymentInterface;
+	const ViaCash = 0;
+	const ViaAlipay = 1;
+	const ViaWallet = 2;
+	const ViaBestpay = 3;
+	const ViaWeChat = 4;
+
+	//Price Unit
+	//@to-do: configuration
+	public static $PriceUnit = '元';
+
 	private $user;
 
 	public function __construct($user){
@@ -40,7 +53,7 @@ class Wallet{
 		$db->query("UPDATE {$tpre}user SET wallet=wallet-{$order->totalprice} WHERE id={$this->user->id} AND wallet>={$order->totalprice}");
 		if($db->affected_rows > 0){
 			$order->tradestate = Order::TradeSuccess;
-			$order->paymentmethod = Order::PaidWithWallet;
+			$order->paymentmethod = Wallet::ViaWallet;
 			$order->tradetime = TIMESTAMP;
 			$log = array(
 				'uid' => $this->user->id,
@@ -66,7 +79,7 @@ class Wallet{
 				'dateline' => TIMESTAMP,
 				'cost' => floatval($_GET['recharge']),
 				'type' => self::RechargeLog,
-				'paymentmethod' => Order::PaidWithAlipay,
+				'paymentmethod' => Wallet::ViaAlipay,
 			);
 
 			$log['cost'] = round($log['cost'] * 100) / 100;
@@ -112,7 +125,7 @@ class Wallet{
 			$id = raddslashes($id);
 
 			$log = array(
-				'paymentmethod' => Order::PaidWithAlipay,
+				'paymentmethod' => Wallet::ViaAlipay,
 				'tradeid' => $trade_no,
 				'tradestate' => $trade_status,
 			);
@@ -162,7 +175,7 @@ class Wallet{
 				'dateline' => TIMESTAMP,
 				'cost' => floatval($_GET['recharge']),
 				'type' => self::RechargeLog,
-				'paymentmethod' => Order::PaidWithBestpay,
+				'paymentmethod' => Wallet::ViaBestpay,
 			);
 
 			$log['cost'] = round($log['cost'] * 100) / 100;
@@ -208,7 +221,7 @@ class Wallet{
 			$id = raddslashes($id);
 
 			$log = array(
-				'paymentmethod' => Order::PaidWithBestpay,
+				'paymentmethod' => Wallet::ViaBestpay,
 				'tradeid' => $trade_no,
 				'tradestate' => $trade_status == '0000' ? Order::TradeSuccess : Order::WaitBuyerPay,
 			);
@@ -248,7 +261,7 @@ class Wallet{
 	}
 
 	static public function __on_order_canceled($order){
-		if(($order->tradestate == Order::TradeSuccess || $order->tradestate == Order::TradeFinished) && $order->paymentmethod != Order::PaidWithCash){
+		if(($order->tradestate == Order::TradeSuccess || $order->tradestate == Order::TradeFinished) && $order->paymentmethod != Wallet::ViaCash){
 			global $db, $tpre;
 			$db->query("UPDATE {$tpre}user SET wallet=wallet+{$order->totalprice} WHERE id={$order->userid}");
 			if ($db->affected_rows > 0){
@@ -272,6 +285,21 @@ Wallet::$LogType = array(
 	Wallet::OrderPaymentLog => lang('common', 'order_payment'),
 	Wallet::TransferLog => lang('common', 'transfer'),
 	Wallet::OrderRewardLog => lang('common', 'order_reward'),
+);
+
+
+Wallet::$PaymentMethod = array(
+	Wallet::ViaCash => lang('common', 'wallet_via_cash'),
+	Wallet::ViaAlipay => lang('common', 'wallet_via_alipay'),
+	Wallet::ViaWallet => lang('common', 'wallet_via_wallet'),
+	Wallet::ViaBestpay => lang('common', 'wallet_via_bestpay'),
+);
+
+Wallet::$PaymentInterface = array(
+	Wallet::ViaCash => '',
+	Wallet::ViaAlipay => 'alipay',
+	Wallet::ViaWallet => 'payment',
+	Wallet::ViaBestpay => 'bestpay',
 );
 
 ?>

@@ -25,11 +25,6 @@ $alipayNotify = new AlipayNotify($alipay_config);
 $verify_result = $alipayNotify->verifyNotify();
 
 if($verify_result){//验证成功
-	if(!isset(AlipayNotify::$TradeStateEnum[$_POST['trade_status']])){
-		writelog('alipay_notify', "UNEXPECTED_ORDER_STATE\tPOST = ".var_export($_POST, true));
-		exit('fail');
-	}
-
 	$arguments = array(
 		//商户订单号
 		$_POST['out_trade_no'],
@@ -38,7 +33,7 @@ if($verify_result){//验证成功
 		$_POST['trade_no'],
 
 		//交易状态
-		AlipayNotify::$TradeStateEnum[$_POST['trade_status']],
+		$_POST['trade_status'],
 	);
 
 	runhooks('alipay_notified', $arguments);
