@@ -20,11 +20,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 takashiro@qq.com
 ************************************************************************/
 
-define('S_ROOT', dirname(dirname(__FILE__)).'/');//网站根目录常量
+define('S_ROOT', dirname(dirname(__FILE__)).'/');
+define('IN_ADMINCP', true);
 //error_reporting(0);//Debug
 
 if(PHP_VERSION < '5.5'){
-	exit('本系统要求PHP版本至少5.5');
+	exit('Elf Web App requires PHP 5.5 or later.');
+}
+
+if(!ini_get('short_open_tag')){
+	exit('Short open tag must be enabled.');
 }
 
 function __autoload($classname){
@@ -42,6 +47,11 @@ $_G = array();
 @$_G['config']['db'] = include S_ROOT.'./data/dbconfig.inc.php';
 $_CONFIG = &$_G['config'];
 isset($_CONFIG['timezone']) || $_CONFIG['timezone'] = 8;
+empty($_CONFIG['db']['host']) && $_CONFIG['db']['host'] = 'localhost';
+foreach(array('user', 'pw', 'name') as $var)
+	empty($_CONFIG['db'][$var]) && $_CONFIG['db'][$var] = '';
+empty($_CONFIG['db']['tpre']) && $_CONFIG['db']['tpre'] = 'pre_';
+
 define('TIMEZONE', $_CONFIG['timezone']);
 $_G['style'] = 'admin';
 $_G['timestamp'] = time();
@@ -49,11 +59,7 @@ define('TIMESTAMP', $_G['timestamp']);
 
 if(file_exists(S_ROOT.'./data/install.lock')){
 	rheader('Content-Type:text/html; charset=utf-8');
-	exit('已经安装过本系统，要重新安装请删除./data/install.lock文件。');
-}
-
-if(!ini_get('short_open_tag')){  //ini_get — 获取一个配置选项的值
-	exit('请先开启short open tag.');
+	exit('Elf Web App has been installed. ./data/install.lock must be removed before you reinstall the system.');
 }
 
 if($_POST){
@@ -76,7 +82,7 @@ if($_POST){
 	writeconfig('stconfig_bak_'.randomstr(3), $stconfig);
 
 	$dbconfig = array(
-		'type' => $_POST['db']['type'],
+		'type' => 'mysql',
 		'charset' => 'utf8',
 		'host' => $_POST['db']['host'],
 		'user' => $_POST['db']['user'],
@@ -95,6 +101,7 @@ if($_POST){
 	$db->connect($dbconfig['host'], $dbconfig['user'], $dbconfig['pw'], '', $dbconfig['pconnect']);
 	$db->set_table_prefix($dbconfig['tpre']);
 
+	$db->query("CREATE DATABASE IF NOT EXISTS `{$dbconfig['name']}` DEFAULT CHARSET utf8 COLLATE utf8_general_ci");
 	$databases = $db->fetch_all('SHOW DATABASES');
 	$database_exists = false;
 	foreach($databases as $d){
@@ -104,7 +111,7 @@ if($_POST){
 		}
 	}
 	if(!$database_exists){
-		exit('您指定的数据库'.$dbconfig['name'].'不存在。');
+		exit('Database '.$dbconfig['name'].' does not exist and can not be created without proper permission.');
 	}
 	$db->select_db($dbconfig['name']);
 
@@ -115,7 +122,7 @@ if($_POST){
 		if($module_dir{0} == '.')
 			continue;
 
-		$file = S_ROOT.'module/'.$module.'/install.sql';
+		$file = S_ROOT.'module/'.$module_dir.'/install.sql';
 		file_exists($file) && $sql_files[] = $file;
 	}
 	unset($module_dirs);
@@ -146,8 +153,8 @@ if($_POST){
 
 			if(substr_compare($line[$i], ';', -1) === 0){
 				$in_sql = false;
-				if($dbconfig['tpre'] != 'hut_'){
-					$sql = preg_replace('/`hut\_(.*?)`/is', "`{$dbconfig['tpre']}\\1`", $sql);
+				if($dbconfig['tpre'] != 'pre_'){
+					$sql = preg_replace('/`pre\_(.*?)`/is', "`{$dbconfig['tpre']}\\1`", $sql);
 				}
 				$db->query($sql);
 				$sql = '';
@@ -164,49 +171,81 @@ if($_POST){
 	//安装标记
 	touch(S_ROOT.'./data/install.lock');
 
-	showmsg('安装成功！请手动删除网站根目录下install目录，防止重复安装以及其他可能出现的问题。', '../');
+	exit('Elf Web App is successfully installed.');
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>OrchardHut 安装程序</title>
-<link href="../image/admin/common.css" rel="stylesheet" type="text/css" />
+<title>Elf 安装程序</title>
+<link href="common.css" type="text/css" rel="stylesheet" />
 </head>
 
-<body<?php if(defined('CURSCRIPT')) echo ' class="'.CURSCRIPT.'"';?>">
+<body>
 
 <div class="container">
 
-	<div class="nav">
-		<div class="left"></div>
-		<ul id="navlist" class="middle" style="width:960px;color:white;">
-        	Installing...
-		</ul>
-		<div class="right"></div>
-	</div>
+	<header>
+		<h2>Elf 安装程序</h2>
+	</header>
 
 	<div class="content">
 		<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
-		<h1>数据库配置</h1>
+		<h3>数据库配置</h3>
 		<table>
-			<tr><th><label>数据库类型：</label></th><td><input type="text" id="db[type]" name="db[type]" value="<?php echo $_G['config']['db']['type']?>" /></td></tr>
-			<tr><th><label>数据库字符集：</label></th><td><input type="text" id="db[charset]" name="db[charset]" value="<?php echo $_G['config']['db']['charset']?>" /></td></tr>
-			<tr><th><label>数据库服务器地址：</label></th><td><input type="text" id="db[host]" name="db[host]" value="<?php echo $_G['config']['db']['host']?>" /></td></tr>
-			<tr><th><label>数据库账号：</label></th><td><input type="text" id="db[user]" name="db[user]" value="<?php echo $_G['config']['db']['user']?>" /></td></tr>
-			<tr><th><label>数据库密码：</label></th><td><input type="text" id="db[pw]" name="db[pw]" value="<?php echo $_G['config']['db']['pw']?>" /></td></tr>
-			<tr><th><label>数据库表前缀：</label></th><td><input type="text" id="db[tpre]" name="db[tpre]" value="<?php echo $_G['config']['db']['tpre']?>" /></td></tr>
-			<tr><th><label>数据库名：</label></th><td><input type="text" id="db[name]" name="db[name]" value="<?php echo $_G['config']['db']['name']?>" /></td></tr>
-			<tr><th><label>是否持续链接：</label></th><td><input type="radio" id="db[pconnect]" name="db[pconnect]" value="0" checked="checked" />否 <input type="radio" id="db[pconnect]" name="db[pconnect]" value="0" />是</td></tr>
+			<tr>
+				<th><label>数据库类型：</label></th>
+				<td>MySQL / MariaDB</td>
+			</tr>
+			<tr>
+				<th><label>数据库字符集：</label></th>
+				<td>UTF-8</td>
+			</tr>
+			<tr>
+				<th><label>数据库服务器地址：</label></th>
+				<td><input type="text" id="db[host]" name="db[host]" value="<?php echo $_G['config']['db']['host']?>" /></td>
+			</tr>
+			<tr>
+				<th><label>数据库账号：</label></th>
+				<td><input type="text" id="db[user]" name="db[user]" value="<?php echo $_G['config']['db']['user']?>" /></td>
+			</tr>
+			<tr>
+				<th><label>数据库密码：</label></th>
+				<td><input type="text" id="db[pw]" name="db[pw]" value="<?php echo $_G['config']['db']['pw']?>" /></td>
+			</tr>
+			<tr>
+				<th><label>数据库表前缀：</label></th>
+				<td><input type="text" id="db[tpre]" name="db[tpre]" value="<?php echo $_G['config']['db']['tpre']?>" /></td>
+			</tr>
+			<tr>
+				<th><label>数据库名：</label></th>
+				<td><input type="text" id="db[name]" name="db[name]" value="<?php echo $_G['config']['db']['name']?>" /></td>
+			</tr>
+			<tr>
+				<th><label>是否持续链接：</label></th>
+				<td><input type="radio" id="db[pconnect]" name="db[pconnect]" value="0" checked="checked" />否 <input type="radio" id="db[pconnect]" name="db[pconnect]" value="0" />是</td>
+			</tr>
 		</table>
 
-		<h1>系统设置</h1>
+		<h3>系统设置</h3>
 		<table>
-			<tr><th><label>站点名称：</label></th><td><input type="text" id="config[sitename]" name="config[sitename]" /></td></tr>
-			<tr><th><label>时区设置：</label></th><td><input type="text" id="config[timezone]" name="config[timezone]" value="<?php echo $_G['config']['timezone']?>" /></td></tr>
-			<tr><th><label>初始管理员账号：</label></th><td><input type="text" id="admin[account]" name="admin[account]" /></td></tr>
-			<tr><th><label>初始管理员密码：</label></th><td><input type="text" id="admin[password]" name="admin[password]" /></td></tr>
+			<tr>
+				<th><label>站点名称：</label></th>
+				<td><input type="text" id="config[sitename]" name="config[sitename]" /></td>
+			</tr>
+			<tr>
+				<th><label>时区设置：</label></th>
+				<td><input type="text" id="config[timezone]" name="config[timezone]" value="<?php echo $_G['config']['timezone']?>" /></td>
+			</tr>
+			<tr>
+				<th><label>初始管理员账号：</label></th>
+				<td><input type="text" id="admin[account]" name="admin[account]" /></td>
+			</tr>
+			<tr>
+				<th><label>初始管理员密码：</label></th>
+				<td><input type="text" id="admin[password]" name="admin[password]" /></td>
+			</tr>
 		</table>
 
 		<button type="submit">开始安装</button>
@@ -214,13 +253,11 @@ if($_POST){
 		</form>
 	</div>
 
-	<div class="footer">
-		<div class="mark"></div>
-		<div class="split"></div>
+	<footer>
 		<div class="copyright">
-			<p><a href="###" target="_blank">OrchardHut</a>, Powered By <a href="http://inu.3-a.net/?1" target="_blank">Kazuichi Takashiro</a></p>
+			<p><a href="###" target="_blank">Elf Web App</a>, Powered By <a href="http://takashiro.github.io" target="_blank">Kazuichi Takashiro</a></p>
 		</div>
-	</div>
+	</footer>
 
 </div>
 

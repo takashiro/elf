@@ -1,0 +1,47 @@
+body{
+	margin: 0;
+	padding: 0;
+}
+
+body, button{
+	font-family: 'Microsoft YaHei';
+}
+
+.container{
+	width: 960px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.container table{
+	margin: auto;
+	width: 100%;
+}
+
+.container table th{
+	text-align: right;
+	width: 48%;
+}
+
+.container table td{
+	text-align: left;
+}
+
+button{
+	font-size: 14pt;
+	padding: 5px 10px;
+	margin: 5px;
+}
+
+header, footer{
+	background: #222;
+	color: #7F7F7F;
+	margin: 0;
+	line-height: 3em;
+	text-shadow: 0px 0px 8px #747474;
+}
+
+a{
+	color: #ccc;
+	text-decoration: none;
+}

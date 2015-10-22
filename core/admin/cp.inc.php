@@ -28,6 +28,10 @@ class CpModule extends AdminControlPanelModule{
 		return 'public';
 	}
 
+	public function defaultAction(){
+		$this->editAction();
+	}
+
 	public function editAction(){
 		if($_POST){
 			global $_G;

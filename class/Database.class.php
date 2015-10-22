@@ -21,6 +21,7 @@ takashiro@qq.com
 ************************************************************************/
 
 class Database extends mysqli{
+
 	protected $table_prefix;
 	protected $query_num = 0;
 	protected $table_objects = array();

@@ -20,6 +20,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 takashiro@qq.com
 ************************************************************************/
 
+if(!defined('IN_ADMINCP')) exit('access denied');
+
 class Administrator extends User{
 	const TABLE_NAME = 'administrator';
 
@@ -115,6 +117,10 @@ class Administrator extends User{
 
 	public function isSuperAdmin(){
 		return $this->permissions === 'all';
+	}
+
+	public function insert($extra = ''){
+		return DBObject::insert($extra);
 	}
 
 	static public function Register($admin){
@@ -314,7 +320,5 @@ class Administrator extends User{
 
 	const DUPLICATED_ACCOUNT = -1;
 }
-
-Administrator::LoadPermissions();
 
 ?>

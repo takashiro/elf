@@ -65,6 +65,8 @@ class AdminControlPanelModule{
 	}
 }
 
+Administrator::LoadPermissions();
+
 $mod = isset($_GET['mod']) ? trim($_GET['mod']) : 'home';
 $module_path = 'core/admin/'.$mod.'.inc.php';
 $mod_url = 'admin.php?mod='.$mod;

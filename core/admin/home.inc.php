@@ -31,20 +31,16 @@ class HomeModule extends AdminControlPanelModule{
 	public function defaultAction(){
 		global $_G;
 
-		if($_G['admin']->hasPermission('order')){
-			redirect('admin.php?mod=order');
-		}else{
-			foreach(Administrator::$Permissions as $perm => $v){
-				if($perm == 'home' || $perm == 'cp')
-					continue;
+		foreach(Administrator::$Permissions as $perm => $v){
+			if($perm == 'home' || $perm == 'cp')
+				continue;
 
-				if($_G['admin']->hasPermission($perm)){
-					redirect('admin.php?mod='.$perm);
-				}
+			if($_G['admin']->hasPermission($perm)){
+				redirect('admin.php?mod='.$perm);
 			}
-
-			redirect('admin.php?mod=cp');
 		}
+
+		redirect('admin.php?mod=cp');
 	}
 }
 
