@@ -232,7 +232,7 @@ class Wallet{
 			$log = array(
 				'paymentmethod' => Wallet::ViaBestpay,
 				'tradeid' => $trade_no,
-				'tradestate' => $trade_status == '0000' ? Wallet::TradeSuccess : Order::WaitBuyerPay,
+				'tradestate' => $trade_status == '0000' ? Wallet::TradeSuccess : Wallet::WaitBuyerPay,
 			);
 			$table = $db->select_table('userwalletlog');
 			$table->update($log, array('id' => $id));
@@ -312,7 +312,7 @@ Wallet::$PaymentInterface = array(
 );
 
 Wallet::$TradeState = array(
-	Order::WaitBuyerPay => lang('common', 'wallet_waitbuyerpay'),
+	Wallet::WaitBuyerPay => lang('common', 'wallet_waitbuyerpay'),
 	Wallet::TradeSuccess => lang('common', 'wallet_tradesuccess'),
 	Wallet::TradeClosed => lang('common', 'wallet_tradeclosed'),
 	Wallet::TradePending => lang('common', 'wallet_tradepending'),
@@ -320,7 +320,7 @@ Wallet::$TradeState = array(
 );
 
 Wallet::$TradeStateEnum = array(
-	'WAIT_BUYER_PAY' => Order::WaitBuyerPay,
+	'WAIT_BUYER_PAY' => Wallet::WaitBuyerPay,
 	'TRADE_CLOSED' => Wallet::TradeClosed,
 	'TRADE_SUCCESS' => Wallet::TradeSuccess,
 	'TRADE_PENDING' => Wallet::TradePending,
