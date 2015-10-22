@@ -20,8 +20,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 takashiro@qq.com
 ************************************************************************/
 
-if(!defined('IN_ADMINCP')) exit('access denied');
-
 class Administrator extends User{
 	const TABLE_NAME = 'administrator';
 

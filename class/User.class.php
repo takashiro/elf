@@ -173,7 +173,8 @@ class User extends DBObject{
 			return self::DUPLICATED_ACCOUNT;
 		}
 
-		return $user->insert();;
+		$user->insert();
+		return $db->insert_id;
 	}
 
 	public function updateInfo($user){
