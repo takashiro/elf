@@ -21,6 +21,10 @@ takashiro@qq.com
 ************************************************************************/
 
 function loadmodule(){
+	$module_list = readcache('module_list');
+	if($module_list !== null)
+		return $module_list;
+
 	$module_dirs = array(
 		S_ROOT.'extension/module/',
 		S_ROOT.'module/',
@@ -59,6 +63,7 @@ function loadmodule(){
 		closedir($dir);
 	}
 
+	writecache('module_list', $module_list);
 	return $module_list;
 }
 
