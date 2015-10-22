@@ -265,7 +265,7 @@ class Administrator extends User{
 			foreach($_G['module_list'] as $module_info){
 				foreach($module_info['admin_modules'] as $submodule_name){
 					$class_name = $module_info['name'].$submodule_name.'Module';
-					require_once S_ROOT.'module/'.$module_info['name'].'/admin/'.$submodule_name.'.inc.php';
+					require_once $module_info['root_path'].'admin/'.$submodule_name.'.inc.php';
 
 					if(class_exists($class_name)){
 						$module = new $class_name;
