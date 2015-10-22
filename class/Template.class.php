@@ -21,7 +21,7 @@ takashiro@qq.com
 ************************************************************************/
 
 class Template{
-	const SOURCE_DIR = 'view/';
+	const SOURCE_DIR = 'extension/view/';
 
 	static protected $StatementNext = 6;
 
@@ -88,10 +88,9 @@ class Template{
 			$htmpath = $this->getDirectoryPath().$this->name.'.php';
 
 			if(!file_exists($htmpath)){
-				$htmpath = S_ROOT.self::SOURCE_DIR.$this->type.'/default/'.$this->name.'.htm';
-
+				$htmpath = S_ROOT.'view/'.$this->type.'/'.$this->name.'.htm';
 				if($this->type != 'user' && !file_exists($htmpath)){
-					$htmpath = S_ROOT.self::SOURCE_DIR.'user/default/'.$this->name.'.htm';
+					$htmpath = S_ROOT.'view/user/'.$this->name.'.htm';
 				}
 			}
 		}
@@ -99,7 +98,12 @@ class Template{
 	}
 
 	public function getTemplateRoot(){
-		return './view/'.$this->type.'/'.$this->style.'/';
+		global $_G;
+		if($this->style == 'default'){
+			return $_G['root_url'].'view/'.$this->type.'/';
+		}else{
+			return $_G['root_url'].'extension/view/'.$this->type.'/'.$this->style.'/';
+		}
 	}
 
 	public function parse(){
