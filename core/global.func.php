@@ -259,15 +259,17 @@ function view($template_name){
 	global $_G;
 
 	$target = defined('IN_ADMINCP') ? 'admin' : 'user';
+	$style = $target == 'user' ? $_G['style'] : 'default';
+
 	if(!defined('MOD_NAME')){
-		$file_path = S_ROOT.'data/template/'.$target.'_'.$_G['style'].'_'.$template_name.'.tpl.php';
+		$file_path = S_ROOT.'data/template/'.$target.'_'.$style.'_'.$template_name.'.tpl.php';
 	}else{
-		$file_path = S_ROOT.'data/template/'.$target.'_'.$_G['style'].'_mod_'.MOD_NAME.'_'.$template_name.'.tpl.php';
+		$file_path = S_ROOT.'data/template/'.$target.'_'.$style.'_mod_'.MOD_NAME.'_'.$template_name.'.tpl.php';
 	}
 
 	$forced_parse = !file_exists($file_path);
 	if($forced_parse || !empty($_G['config']['refresh_template'])){
-		$template = new Template($target, $target == 'user' ? $_G['style'] : 'default', $template_name);
+		$template = new Template($target, $style, $template_name);
 		if($forced_parse || $template->getLastModifiedTime() > filemtime($file_path)){
 			file_put_contents($file_path, $template->parse());
 		}
