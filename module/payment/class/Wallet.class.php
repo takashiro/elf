@@ -42,6 +42,15 @@ class Wallet{
 	//@to-do: configuration
 	public static $PriceUnit = '元';
 
+	//Trade State
+	public static $TradeState;
+	public static $TradeStateEnum;
+	const WaitBuyerPay = 1;		//交易创建，等待买家付款。
+	const TradeClosed = 2;		//在指定时间段内未支付时关闭的交易；在交易完成全额退款成功时关闭的交易。
+	const TradeSuccess = 3;		//交易成功，且可对该交易做操作，如：多级分润、退款等。
+	const TradePending = 4;		//等待卖家收款（买家付款后，如果卖家账号被冻结）。
+	const TradeFinished = 5;	//交易成功且结束，即不可再做任何操作
+
 	private $user;
 
 	public function __construct($user){
@@ -52,7 +61,7 @@ class Wallet{
 		global $db, $tpre;
 		$db->query("UPDATE {$tpre}user SET wallet=wallet-{$order->totalprice} WHERE id={$this->user->id} AND wallet>={$order->totalprice}");
 		if($db->affected_rows > 0){
-			$order->tradestate = Order::TradeSuccess;
+			$order->tradestate = Wallet::TradeSuccess;
 			$order->paymentmethod = Wallet::ViaWallet;
 			$order->tradetime = TIMESTAMP;
 			$log = array(
@@ -127,12 +136,12 @@ class Wallet{
 			$log = array(
 				'paymentmethod' => Wallet::ViaAlipay,
 				'tradeid' => $trade_no,
-				'tradestate' => $trade_status,
+				'tradestate' => Wallet::$TradeStateEnum[$trade_status],
 			);
 			$table = $db->select_table('userwalletlog');
 			$table->update($log, array('id' => $id));
 
-			if($log['tradestate'] == Order::TradeSuccess || $log['tradestate'] == Order::TradeFinished){
+			if($log['tradestate'] == Wallet::TradeSuccess || $log['tradestate'] == Wallet::TradeFinished){
 				global $tpre;
 				$db->query("UPDATE {$tpre}userwalletlog SET recharged=1 WHERE id='$id'");
 				if($db->affected_rows > 0){
@@ -223,12 +232,12 @@ class Wallet{
 			$log = array(
 				'paymentmethod' => Wallet::ViaBestpay,
 				'tradeid' => $trade_no,
-				'tradestate' => $trade_status == '0000' ? Order::TradeSuccess : Order::WaitBuyerPay,
+				'tradestate' => $trade_status == '0000' ? Wallet::TradeSuccess : Order::WaitBuyerPay,
 			);
 			$table = $db->select_table('userwalletlog');
 			$table->update($log, array('id' => $id));
 
-			if($log['tradestate'] == Order::TradeSuccess){
+			if($log['tradestate'] == Wallet::TradeSuccess){
 				global $tpre;
 				$db->query("UPDATE {$tpre}userwalletlog SET recharged=1 WHERE id='$id'");
 				if($db->affected_rows > 0){
@@ -261,7 +270,7 @@ class Wallet{
 	}
 
 	static public function __on_order_canceled($order){
-		if(($order->tradestate == Order::TradeSuccess || $order->tradestate == Order::TradeFinished) && $order->paymentmethod != Wallet::ViaCash){
+		if(($order->tradestate == Wallet::TradeSuccess || $order->tradestate == Wallet::TradeFinished) && $order->paymentmethod != Wallet::ViaCash){
 			global $db, $tpre;
 			$db->query("UPDATE {$tpre}user SET wallet=wallet+{$order->totalprice} WHERE id={$order->userid}");
 			if ($db->affected_rows > 0){
@@ -300,6 +309,22 @@ Wallet::$PaymentInterface = array(
 	Wallet::ViaAlipay => 'alipay',
 	Wallet::ViaWallet => 'payment',
 	Wallet::ViaBestpay => 'bestpay',
+);
+
+Wallet::$TradeState = array(
+	Order::WaitBuyerPay => lang('common', 'wallet_waitbuyerpay'),
+	Wallet::TradeSuccess => lang('common', 'wallet_tradesuccess'),
+	Wallet::TradeClosed => lang('common', 'wallet_tradeclosed'),
+	Wallet::TradePending => lang('common', 'wallet_tradepending'),
+	Wallet::TradeFinished => lang('common', 'wallet_tradefinished'),
+);
+
+Wallet::$TradeStateEnum = array(
+	'WAIT_BUYER_PAY' => Order::WaitBuyerPay,
+	'TRADE_CLOSED' => Wallet::TradeClosed,
+	'TRADE_SUCCESS' => Wallet::TradeSuccess,
+	'TRADE_PENDING' => Wallet::TradePending,
+	'TRADE_FINISHED' => Wallet::TradeFinished,
 );
 
 ?>

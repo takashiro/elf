@@ -35,6 +35,12 @@ return array(
 	'wallet_via_alipay' => '支付宝',
 	'wallet_via_wallet' => '钱包余额',
 	'wallet_via_bestpay' => '翼支付',
+
+	'wallet_waitbuyerpay' => '待付款',
+	'wallet_tradeclosed' => '关闭',
+	'wallet_tradesuccess' => '成功',
+	'wallet_tradepending' => '待收款',
+	'wallet_tradefinished' => '结束',
 );
 
 ?>
