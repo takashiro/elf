@@ -80,10 +80,11 @@ if(file_exists($module_path)){
 			$mods[1] = 'main';
 		}
 		$extra_module_path = 'module/'.$mods[0].'/admin/'.$mods[1].'.inc.php';
+		file_exists($extra_module_path) || $extra_module_path = 'extension/'.$extra_module_path;
 	}
 	if(!empty($extra_module_path) && file_exists($extra_module_path)){
 		define('MOD_NAME', $mods[0]);
-		define('MOD_ROOT', S_ROOT.'module/'.$mods[0].'/');
+		define('MOD_ROOT', S_ROOT.dirname($extra_module_path).'/');
 		$module_path = $extra_module_path;
 		$classname = $mods[0].$mods[1].'Module';
 	}else{

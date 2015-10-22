@@ -34,11 +34,12 @@ if(empty($module[1]) || !preg_match('/^\w+$/', $module[1])){
 }
 
 $module_path = 'module/'.$module[0].'/'.$module[1].'.inc.php';
+file_exists($module_path) || $module_path = 'extension/'.$module_path;
 if(file_exists($module_path)){
 	require_once './core/init.inc.php';
 	define('MOD_NAME', $module[0]);
-	define('MOD_ROOT', S_ROOT.'module/'.$module[0].'/');
-	require $module_path;
+	define('MOD_ROOT', S_ROOT.dirname($module_path).'/');
+	include $module_path;
 }else{
 	exit('illegal module id');
 }

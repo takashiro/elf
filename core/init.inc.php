@@ -39,7 +39,7 @@ spl_autoload_register(function($classname){
 	}else{
 		global $_G;
 		foreach($_G['module_list'] as $module){
-			$filepath = S_ROOT.'module/'.$module['name'].'/class/'.$classname.'.class.php';
+			$filepath = $module['root_path'].'class/'.$classname.'.class.php';
 			if(file_exists($filepath)){
 				require_once $filepath;
 				break;
@@ -48,33 +48,9 @@ spl_autoload_register(function($classname){
 	}
 });
 
-$_G['module_list'] = array();
-$module_dirs = opendir(S_ROOT.'module/');
-while($module_dir = readdir($module_dirs)){
-	$mod_root = S_ROOT.'module/'.$module_dir.'/';
-	if($module_dir{0} != '.' && is_dir($mod_root)){
-		$admin_modules = array();
-
-		$admin_module_path = $mod_root.'admin/';
-		if(is_dir($admin_module_path)){
-			$submodules = scandir($admin_module_path);
-			foreach($submodules as $file){
-				if(substr_compare($file, '.inc.php', -8) == 0){
-					$submodule = substr($file, 0, strlen($file) - 8);
-					$admin_modules[] = $submodule;
-				}
-			}
-		}
-
-		$_G['module_list'][] = array(
-			'name' => $module_dir,
-			'admin_modules' => $admin_modules,
-		);
-	}
-}
-unset($module_dirs, $submodules, $mod_root, $admin_modules);
-
 require_once S_ROOT.'./core/global.func.php';
+
+$_G['module_list'] = loadmodule();
 
 $PHP_SELF = $_SERVER['PHP_SELF'] ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];
 

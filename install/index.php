@@ -63,6 +63,9 @@ if(file_exists(S_ROOT.'./data/install.lock')){
 }
 
 if($_POST){
+	if(empty($_POST['db']['name']))
+		exit('Please fill in database name.');
+
 	$config = array(
 		'timezone' => intval($_POST['config']['timezone']),
 		'timefix' => 0,
@@ -117,12 +120,9 @@ if($_POST){
 
 
 	$sql_files = array('install.sql');
-	$module_dirs = opendir(S_ROOT.'module/');
-	while($module_dir = readdir($module_dirs)){
-		if($module_dir{0} == '.')
-			continue;
-
-		$file = S_ROOT.'module/'.$module_dir.'/install.sql';
+	$module_list = loadmodule();
+	foreach($module_list as $module){
+		$file = $module['root_path'].'install.sql';
 		file_exists($file) && $sql_files[] = $file;
 	}
 	unset($module_dirs);

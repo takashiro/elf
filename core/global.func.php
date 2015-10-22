@@ -20,6 +20,47 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 takashiro@qq.com
 ************************************************************************/
 
+function loadmodule(){
+	$module_dirs = array(
+		S_ROOT.'extension/module/',
+		S_ROOT.'module/',
+	);
+
+	$module_list = array();
+	foreach($module_dirs as $module_root){
+		if(!is_dir($module_root) || !is_readable($module_root))
+			continue;
+
+		$dir = opendir($module_root);
+		while($module_dir = readdir($dir)){
+			$module_path = $module_root.$module_dir.'/';
+			if($module_dir{0} === '.' || !is_dir($module_path))
+				continue;
+
+			$admin_modules = array();
+
+			$admin_module_path = $module_path.'admin/';
+			if(is_dir($admin_module_path)){
+				$submodules = scandir($admin_module_path);
+				foreach($submodules as $file){
+					if(substr_compare($file, '.inc.php', -8) == 0){
+						$submodule = substr($file, 0, strlen($file) - 8);
+						$admin_modules[] = $submodule;
+					}
+				}
+			}
+
+			$module_list[] = array(
+				'name' => $module_dir,
+				'root_path' => $module_path,
+				'admin_modules' => $admin_modules,
+			);
+		}
+	}
+
+	return $module_list;
+}
+
 function loadtranslation($target, $style, $type){
 	static $lang = array();
 
@@ -59,7 +100,7 @@ function lang($type, $from){
 
 	global $_G;
 	foreach($_G['module_list'] as $module){
-		$file = S_ROOT.'/module/'.$module['name'].'/'.$type.'.lang.php';
+		$file = $module['root_path'].$type.'.lang.php';
 		if(file_exists($file)){
 			$lang = include $file;
 			if(isset($lang[$from])){
