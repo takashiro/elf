@@ -36,8 +36,8 @@ $(function(){
 					<div class="content">
 						<ul class="mselect paymentmethod">
 						<!--{loop Wallet::$PaymentMethod $methodid $name}-->
-						<!--{if !empty(Order::$PaymentInterface[$methodid]) && $methodid != Order::PaidWithWallet && !empty($paymentconfig['enabled_method'][$methodid])}-->
-							<li><input type="radio" name="mod" value="{echo Order::$PaymentInterface[$methodid]}" />$name</li>
+						<!--{if !empty(Wallet::$PaymentInterface[$methodid]) && $methodid != Wallet::ViaWallet && !empty($paymentconfig['enabled_method'][$methodid])}-->
+							<li><input type="radio" name="mod" value="{echo Wallet::$PaymentInterface[$methodid]}" />$name</li>
 						<!--{/if}-->
 						<!--{/loop}-->
 						</ul>
@@ -78,8 +78,8 @@ $(function(){
 							<!--{if $l['type'] == Wallet::RechargeLog}-->
 								{echo Wallet::$PaymentMethod[$l['paymentmethod']]}转入{$l[cost]}{echo Wallet::$PriceUnit}<br />
 								(<!--{if $l['tradestate']}-->{echo Order::$TradeState[$l['tradestate']]}<!--{else}-->等待付款<!--{/if}-->)
-								<!--{if !empty(Order::$PaymentInterface[$l['paymentmethod']]) && $l['tradestate'] != Order::TradeSuccess && $l['tradestate'] != Order::TradeFinished}-->
-								<a href="./?mod={echo Order::$PaymentInterface[$l['paymentmethod']]}&rechargeid=$l[id]">[继续]</a>
+								<!--{if !empty(Wallet::$PaymentInterface[$l['paymentmethod']]) && $l['tradestate'] != Order::TradeSuccess && $l['tradestate'] != Order::TradeFinished}-->
+								<a href="./?mod={echo Wallet::$PaymentInterface[$l['paymentmethod']]}&rechargeid=$l[id]">[继续]</a>
 								<!--{/if}-->
 							<!--{elseif $l['type'] == Wallet::OrderRefundLog || $l['type'] == Wallet::OrderPaymentLog}-->
 								<a href="./?mod=order&action=view&orderid=$l[orderid]">订单{echo Wallet::$LogType[$l['type']]}</a>
