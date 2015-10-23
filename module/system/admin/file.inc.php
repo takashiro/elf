@@ -34,15 +34,14 @@ class SystemFileModule extends AdminControlPanelModule{
 		$lost_files = array();
 		$modified_files = array();
 
-		$fp = fopen('data/sha1.inc.php', 'r');
-		while($data = fscanf($fp, '%d %s %d %s')){
-			if(empty($data[1]) || empty($data[3]))
-				continue;
+		$lines = file('data/sha1.inc.php');
+		$line_count = count($lines);
+		for($i = 1; $i < $line_count; $i++){
+			list($standard_sha1, $filename) = explode("\t", $lines[$i]);
+			$standard_sha1 = trim($standard_sha1);
+			$filename = trim($filename);
 
-			$standard_sha1 = $data[1];
-			$filename = $data[3];
-
-			if(file_exists($filename)){
+			if(file_exists(S_ROOT.$filename)){
 				$current_sha1 = self::FileSHA1($filename);
 				if($standard_sha1 != $current_sha1){
 					$modified_files[] = array(
@@ -54,7 +53,6 @@ class SystemFileModule extends AdminControlPanelModule{
 				$lost_files[] = $filename;
 			}
 		}
-		fclose($fp);
 
 		$standard_update_time = filemtime('data/sha1.inc.php');
 
