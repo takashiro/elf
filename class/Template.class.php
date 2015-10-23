@@ -121,6 +121,11 @@ class Template{
 			return lang($matches[1], $matches[2]);
 		}, $template);
 
+		$template = preg_replace_callback("/\{lang\s+([a-zA-Z0-9_]+?)\s+(.+?)\}/is", function($matches){
+			$matches[2] = Template::stripvtags($matches[2]);
+			return "<?php echo lang('$matches[1]', $matches[2]);?>";
+		}, $template);
+
 		//{template *template_name*}
 		$template = preg_replace_callback("/[\n\r\t]*\{template\s+([a-z0-9_]+)\}[\n\r\t]*/is", 'Template::parse_subtemplate', $template);
 		$template = preg_replace_callback("/[\n\r\t]*\{template\s+(.+?)\}[\n\r\t]*/i", 'Template::parse_subtemplate', $template);
@@ -180,7 +185,7 @@ class Template{
 		return '<?='.str_replace("\\\"", "\"", preg_replace("/\[([a-zA-Z0-9_\-\.\x7f-\xff]+)\]/s", "['\\1']", $matches[1])).'?>';
 	}
 
-	static public function stripvtags($expr, $statement) {
+	static public function stripvtags($expr, $statement = '') {
 		$expr = str_replace("\\\"", "\"", preg_replace("/\<\?\=(\\\$.+?)\?\>/s", "\\1", $expr));
 		$statement = str_replace("\\\"", "\"", $statement);
 		return $expr.$statement;
