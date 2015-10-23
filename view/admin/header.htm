@@ -33,7 +33,7 @@
 
 		<section class="main">
 			<ul class="menu">
-				<!--{loop $_G['module_list'] $module}-->
+				<!--{loop $cpmenu_list $module}-->
 					<!--{if $_G['admin']->hasPermission($module['name']) && !empty($module['admin_modules'])}-->
 					<li>
 						<a href="admin.php?mod=$module[name]">{echo lang('common', 'module_'.$module['name'])}</a>

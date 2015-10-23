@@ -1,0 +1,32 @@
+<!--{template header}-->
+
+<ol class="nav">
+	<li><a href="admin.php">管理面板</a></li>
+	<li><a href="admin.php?mod=system">系统</a></li>
+	<li>自定义</li>
+</ol>
+
+<div class="box list">
+	<form class="toast" action="$mod_url" method="post">
+		<table>
+			<thead>
+				<tr><td></td><td>名称</td><td>显示顺序</td></tr>
+			</thead>
+			<tbody>
+			<!--{loop $module_list $module}-->
+				<tr>
+					<td></td>
+					<td title="$module[name]">{lang common 'module_'.$module['name']}</td>
+					<td><input type="text" name="menu_order[{$module[name]}]" class="narrow number" value="$module[displayorder]" />
+				</tr>
+			<!--{/loop}-->
+			</tbody>
+		</table>
+
+		<div class="post_buttons">
+			<button type="submit">修改</button>
+		</div>
+	</form>
+</div>
+
+<!--{template footer}-->

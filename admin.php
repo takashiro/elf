@@ -102,8 +102,20 @@ require_once $module_path;
 if(!class_exists($classname, false)){
 	exit('Invalid module. Class not exist: '.$classname);
 }
-$module = new $classname;
 
+$cpmenu_list = array();
+$cpconfig = readdata('cpconfig');
+foreach($_G['module_list'] as $module){
+	if($module['admin_modules'])
+		$cpmenu_list[] = $module;
+}
+usort($cpmenu_list, function($m1, $m2) use($cpconfig) {
+	$m1_order = isset($cpconfig['menu_order'][$m1['name']]) ? $cpconfig['menu_order'][$m1['name']] : 0;
+	$m2_order = isset($cpconfig['menu_order'][$m2['name']]) ? $cpconfig['menu_order'][$m2['name']] : 0;
+	return $m1_order > $m2_order;
+});
+
+$module = new $classname;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'].'Action' : 'defaultAction';
 if(method_exists($module, $action)){
 	$module->$action();

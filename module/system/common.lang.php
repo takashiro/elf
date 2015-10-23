@@ -26,6 +26,7 @@ return array(
 	'module_system:cache' => '缓存',
 	'module_system:file' => '文件',
 	'module_system:database' => '数据库',
+	'module_system:cpconfig' => '后台设置',
 
 	'permission_system' => '系统设置',
 	'permission_system_comment' => '',
@@ -33,6 +34,7 @@ return array(
 	'permission_system:database' => '数据库校验',
 	'permission_system:file' => '文件校验',
 	'permission_system:mail' => '邮件设置',
+	'permission_system:cpconfig' => '后台设置',
 );
 
 ?>
