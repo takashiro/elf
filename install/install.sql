@@ -13,7 +13,6 @@ CREATE TABLE IF NOT EXISTS `pre_administrator` (
   `pwmd5` varchar(32) NOT NULL,
   `nickname` varchar(50) NOT NULL,
   `permissions` text NOT NULL,
-  `limitation` text NOT NULL,
   `logintime` int(11) unsigned NOT NULL,
   `realname` varchar(50) NOT NULL,
   `mobile` varchar(11) NOT NULL,
