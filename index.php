@@ -39,6 +39,11 @@ if(file_exists($module_path)){
 	require_once './core/init.inc.php';
 	define('MOD_NAME', $module[0]);
 	define('MOD_ROOT', S_ROOT.dirname($module_path).'/');
+
+	$_G['user'] = new User;
+	$_G['user']->login();
+	$_USER = $_G['user']->toReadable();
+
 	include $module_path;
 }else{
 	exit('illegal module id');

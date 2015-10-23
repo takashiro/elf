@@ -63,6 +63,7 @@ class AdminControlPanelModule{
 	public function defaultAction(){
 		exit('invalid action');
 	}
+
 }
 
 Administrator::LoadPermissions();

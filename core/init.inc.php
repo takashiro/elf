@@ -118,10 +118,6 @@ if(!empty($_CONFIG['cookiepre'])){
 $page = isset($_REQUEST['page']) ? max(1, intval($_REQUEST['page'])) : 1;
 $pagenum = 0;
 
-$_G['user'] = new User;
-$_G['user']->login();
-$_USER = $_G['user']->toReadable();
-
 //Debug模式
 if(!empty($_CONFIG['debugmode'])){
 	error_reporting(E_ALL);
