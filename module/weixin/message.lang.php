@@ -15,5 +15,5 @@ return array(
 
 	'wxuser' => '微信用户',
 	'unexpected_link_with_inadequate_parameters' => '啊哦，我们遇到了点意外（参数不足）。',
-	'expired_wxlogin_link' => '保护您个人信息的安全是果果坚持的原则，所以果果给您的一部分链接只有效5分钟噢。您可以重新操作一次（如再发送【商城】）来获取链接。',
+	'expired_wxlogin_link' => '保护您个人信息的安全是我们的原则，该链接涉及您的账号安全，仅有效5分钟噢。您需要重新点击相应按钮获取链接。',
 );
