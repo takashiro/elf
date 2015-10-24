@@ -3,6 +3,8 @@
 return array(
 	'successfully_updated_wxconnect_config' => '成功修改微信互联设置！',
 
+	'click_and_enter_site' => '点此进入',
+
 	'binding_require_user_logged_in' => '请先登录，然后再进行绑定操作。',
 	'expired_wxbind_link' => '该网页链接已失效，请重新进行绑定操作。',
 	'wxopenid_binded_to_another_account' => '该微信账号已经绑定其他账号，请先通过微信登录然后解绑，才能重新绑定。',
