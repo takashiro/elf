@@ -38,7 +38,11 @@ if(!file_exists($filePath)){
 	$report.= "Error Message: $errorMessage\r\n";
 	$report.= "Error File: $errorFile\r\n";
 	$report.= "Error Line: $errorLine\r\n";
-	$report.= "User ID: {$_G['user']->id}\r\n";
+	if(isset($_G['user'])){
+		$report.= "User ID: {$_G['user']->id}\r\n";
+	}elseif(isset($_G['admin'])){
+		$report.= "Admin ID: {$_G['admin']->id}\r\n";
+	}
 	$report.= "URL: $PHP_SELF";
 	if(!empty($_SERVER['QUERY_STRING'])){
 		$report.= '?';
