@@ -43,6 +43,7 @@ class SystemMainModule extends AdminControlPanelModule{
 			'refresh_template' => !empty($config['refresh_template']),
 			'head_element' => htmlspecialchars_decode($config['head_element']),
 			'icp' => htmlspecialchars($config['icp']),
+			'homemodule' => trim($config['homemodule']),
 			'jquery_cdn' => trim($config['jquery_cdn']),
 			'error_report_to' => trim($config['error_report_to']),
 		);

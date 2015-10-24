@@ -44,6 +44,10 @@ $(function(){
 			<th><label>用户界面风格：</label></th>
 			<td>{echo Template::select('system[style]', $user_style_list, $_CONFIG['style'])}</td>
 		</tr>
+		<tr>
+			<th><label>主页模块代号：</label></th>
+			<td><input type="text" name="system[homemodule]" value="$_CONFIG[homemodule]" /></td>
+		</tr>
 	</table>
 
 	<h2>开发选项</h2>
