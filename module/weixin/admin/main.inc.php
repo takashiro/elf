@@ -33,6 +33,10 @@ class WeixinMainModule extends AdminControlPanelModule{
 			'follow_guide_page',
 		);
 
+		$wxsns_fields = array(
+			'app_id', 'app_secret',
+		);
+
 		if($_POST){
 			$wxconnect = array();
 			$p = &$_POST['wxconnect'];
@@ -42,12 +46,24 @@ class WeixinMainModule extends AdminControlPanelModule{
 			$wxconnect['no_prompt_on_login'] = !empty($p['no_prompt_on_login']);
 			$wxconnect['encoding_mode'] = isset($p['encoding_mode']) ? intval($p['encoding_mode']) : WeixinServer::RAW_MESSAGE;
 			writedata('wxconnect', $wxconnect);
+
+			$wxsns = array();
+			foreach($wxsns_fields as $var){
+				$wxsns[$var] = isset($_POST['wxsns'][$var]) ? $_POST['wxsns'][$var] : '';
+			}
+			writedata('wxsns', $wxsns);
+
 			showmsg('successfully_updated_wxconnect_config', 'refresh');
 		}
 
 		$wxconnect = readdata('wxconnect');
 		foreach($wxconnect_fields as $var){
 			isset($wxconnect[$var]) || $wxconnect[$var] = '';
+		}
+
+		$wxsns = readdata('wxsns');
+		foreach($wxsns_fields as $var){
+			isset($wxsns[$var]) || $wxsns[$var] = '';
 		}
 
 		include view('config');

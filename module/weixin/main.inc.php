@@ -71,6 +71,7 @@ if($action == 'login'){
 			$user->wxunionid = $wxuser['unionid'];
 		}
 
+		//@to-do: remove this
 		if(!empty($_COOKIE['referrerid'])){
 			$referrerid = intval($_COOKIE['referrerid']);
 			rsetcookie('referrerid');

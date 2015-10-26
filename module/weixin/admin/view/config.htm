@@ -7,10 +7,9 @@
 </ol>
 
 <div class="box edit_form">
-	<h1>微信公众平台设置</h1>
-
 	<form class="toast" action="$mod_url" method="post">
 
+	<h2>微信公众平台设置</h2>
 	<table>
 		<tr>
 			<th><label>App ID：</label></th>
@@ -67,6 +66,18 @@
 		<tr>
 			<th><label>关注公众号提示链接：</label></th>
 			<td><input type="text" name="wxconnect[follow_guide_page]" value="$wxconnect[follow_guide_page]" class="wide" /></td>
+		</tr>
+	</table>
+
+	<h2>网站应用设置</h2>
+	<table>
+		<tr>
+			<th><label>App ID：</label></th>
+			<td><input type="text" name="wxsns[app_id]" value="$wxsns[app_id]" class="wide" /></td>
+		</tr>
+		<tr>
+			<th><label>App Secret：</label></th>
+			<td><input type="text" name="wxsns[app_secret]" value="$wxsns[app_secret]" class="wide" /></td>
 		</tr>
 	</table>
 
