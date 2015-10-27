@@ -29,14 +29,11 @@ class HomeModule extends AdminControlPanelModule{
 	}
 
 	public function defaultAction(){
-		global $_G;
+		global $_G, $cpmenu_list;
 
-		foreach(Administrator::$Permissions as $perm => $v){
-			if($perm == 'home' || $perm == 'cp')
-				continue;
-
-			if($_G['admin']->hasPermission($perm)){
-				redirect('admin.php?mod='.$perm);
+		foreach($cpmenu_list as $module){
+			if(!empty($module['admin_modules']) && $_G['admin']->hasPermission($module['name'])){
+				redirect('admin.php?mod='.$module['name']);
 			}
 		}
 
