@@ -31,6 +31,15 @@ return array(
 	'permission_weixin:autoreply_comment' => '',
 	'permission_weixin:menu' => '自定义菜单',
 	'permission_weixin:menu_comment' => '',
+
+	'weixin_menu_type_view' => '跳转URL',
+	'weixin_menu_type_click' => '点击事件',
+	'weixin_menu_type_scancode_push' => '扫码推事件',
+	'weixin_menu_type_scancode_waitmsg' => '扫码等待事件',
+	'weixin_menu_type_pic_sysphoto' => '弹出系统拍照发图',
+	'weixin_menu_type_pic_photo_or_album' => '弹出拍照或者相册发图',
+	'weixin_menu_type_pic_weixin' => '弹出微信相册发图器',
+	'weixin_menu_type_location_select' => '弹出地理位置选择器',
 );
 
 ?>

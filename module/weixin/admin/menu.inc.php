@@ -68,7 +68,7 @@ class WeixinMenuModule extends AdminControlPanelModule{
 			'location_select',
 		);
 		foreach($types as $type){
-			$item_types[$type] = lang('weixin', 'weixin_menu_type_'.$type);
+			$item_types[$type] = lang('common', 'weixin_menu_type_'.$type);
 		}
 
 		include view('menu');
