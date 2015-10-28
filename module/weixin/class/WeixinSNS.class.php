@@ -20,7 +20,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 takashiro@qq.com
 ************************************************************************/
 
-class WeixinAPI extends CUrl{
+class WeixinSNS extends CUrl{
 
 	protected $appId;
 	protected $appSecret;
