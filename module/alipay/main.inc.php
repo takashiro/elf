@@ -43,7 +43,6 @@ if(empty($_GET['querystring'])){
 			showmsg('inaccessible_if_not_logged_in', './?mod=user');
 		}
 
-		$_SERVER['QUERY_STRING'].= '&'.User::COOKIE_VAR.'='.urlencode($_COOKIE[User::COOKIE_VAR]);
 		rheader('Location: alipay'.base64_encode($_SERVER['QUERY_STRING']).'.htm');
 		exit;
 	}
