@@ -398,7 +398,7 @@ function runhooks($hookid, $arguments = array()){
 
 		global $_G;
 		foreach($_G['module_list'] as $module){
-			$classDir = S_ROOT.'module/'.$module['name'].'/class/';
+			$classDir = $module['root_path'].'class/';
 			if(is_dir($classDir)){
 				$extraClassFiles = scandir($classDir);
 				$classFiles = array_merge($classFiles, $extraClassFiles);
