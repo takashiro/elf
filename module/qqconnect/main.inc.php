@@ -77,7 +77,7 @@ if($action == 'login'){
 
 			$user->force_login();
 
-			showmsg('successfully_logged_in_via_qq', './?mod=product');
+			showmsg('successfully_logged_in_via_qq', 'index.php?mod=product');
 		}
 	}else{
 		$qc->qq_login();
@@ -85,7 +85,7 @@ if($action == 'login'){
 
 }elseif($action == 'unbind'){
 	if(!$_G['user']->isLoggedIn()){
-		showmsg('binding_require_user_logged_in', './?mod=user');
+		showmsg('binding_require_user_logged_in', 'index.php?mod=user');
 	}
 
 	if(!$_G['user']->qqopenid){
@@ -93,7 +93,7 @@ if($action == 'login'){
 	}
 
 	if(empty($_G['user']->account)){
-		showmsg('qqopenid_cannot_be_unbinded_with_empty_account', './?mod=user');
+		showmsg('qqopenid_cannot_be_unbinded_with_empty_account', 'index.php?mod=user');
 	}
 
 	if(empty($_GET['confirm'])){
@@ -102,7 +102,7 @@ if($action == 'login'){
 
 	$_G['user']->qqopenid = NULL;
 
-	showmsg('successfully_unbinded_qq', './?mod=order');
+	showmsg('successfully_unbinded_qq', 'index.php?mod=order');
 }
 
 ?>

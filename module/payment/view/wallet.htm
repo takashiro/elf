@@ -13,8 +13,8 @@ $(function(){
 			<div class="icon_home"></div>
 			<div class="account">$_USER[account]</div>
 			<ul class="operation">
-				<li><a href="./?mod=user">修改个人信息</a></li>
-				<li><a href="./?mod=user&action=logout">退出</a></li>
+				<li><a href="index.php?mod=user">修改个人信息</a></li>
+				<li><a href="index.php?mod=user&action=logout">退出</a></li>
 			</ul>
 		</div>
 
@@ -51,7 +51,7 @@ $(function(){
 		</div>
 
 		<!--{if !empty($prepaidreward)}-->
-		<!--{loop $prepaidreward $r}--><a href="./?mod=alipay&recharge=$r[minamount]" class="button" style="width:auto">充{$r[minamount]}<!--{if $r['maxamount'] > $r['minamount']}--> ~ {$r[maxamount]}<!--{/if}-->{echo Wallet::$PriceUnit}返{$r[reward]}{echo Wallet::$PriceUnit}</a> <!--{/loop}-->
+		<!--{loop $prepaidreward $r}--><a href="index.php?mod=alipay&recharge=$r[minamount]" class="button" style="width:auto">充{$r[minamount]}<!--{if $r['maxamount'] > $r['minamount']}--> ~ {$r[maxamount]}<!--{/if}-->{echo Wallet::$PriceUnit}返{$r[reward]}{echo Wallet::$PriceUnit}</a> <!--{/loop}-->
 		<!--{/if}-->
 
 		<div class="order_list">
@@ -79,10 +79,10 @@ $(function(){
 								{echo Wallet::$PaymentMethod[$l['paymentmethod']]}转入{$l[cost]}{echo Wallet::$PriceUnit}<br />
 								(<!--{if $l['tradestate']}-->{echo Wallet::$TradeState[$l['tradestate']]}<!--{else}-->等待付款<!--{/if}-->)
 								<!--{if !empty(Wallet::$PaymentInterface[$l['paymentmethod']]) && $l['tradestate'] != Wallet::TradeSuccess && $l['tradestate'] != Wallet::TradeFinished}-->
-								<a href="./?mod={echo Wallet::$PaymentInterface[$l['paymentmethod']]}&rechargeid=$l[id]">[继续]</a>
+								<a href="index.php?mod={echo Wallet::$PaymentInterface[$l['paymentmethod']]}&rechargeid=$l[id]">[继续]</a>
 								<!--{/if}-->
 							<!--{elseif $l['type'] == Wallet::OrderRefundLog || $l['type'] == Wallet::OrderPaymentLog}-->
-								<a href="./?mod=order&action=view&orderid=$l[orderid]">订单{echo Wallet::$LogType[$l['type']]}</a>
+								<a href="index.php?mod=order&action=view&orderid=$l[orderid]">订单{echo Wallet::$LogType[$l['type']]}</a>
 							<!--{/if}-->
 						</td>
 					</tr>
@@ -93,6 +93,6 @@ $(function(){
 	</div>
 </div>
 
-{eval echo Template::mpage($pagenum, $page, $limit, './?mod=payment')}
+{eval echo Template::mpage($pagenum, $page, $limit, 'index.php?mod=payment')}
 
 {template footer}

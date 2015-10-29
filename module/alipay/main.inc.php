@@ -40,21 +40,21 @@ if(empty($_GET['querystring'])){
 	if(empty($_GET['skipprotector']) && isWeixin()){
 		if(!$_G['user']->isLoggedIn()){
 			writelog('unexpected_result', '1: '.$_SERVER['HTTP_USER_AGENT'].' '.$_SERVER['QUERY_STRING']);
-			showmsg('inaccessible_if_not_logged_in', './?mod=user');
+			showmsg('inaccessible_if_not_logged_in', 'index.php?mod=user');
 		}
 
 		rheader('Location: alipay'.base64_encode($_SERVER['QUERY_STRING']).'.htm');
 		exit;
 	}
 }else{
-	$protected_url = './?mod=alipay&'.base64_decode($_GET['querystring']).'&skipprotector=1';
+	$protected_url = 'index.php?mod=alipay&'.base64_decode($_GET['querystring']).'&skipprotector=1';
 	include view('protector');
 	exit;
 }
 
 if(!$_G['user']->isLoggedIn()){
 	writelog('unexpected_result', '2: '.$_SERVER['HTTP_USER_AGENT'].' '.$_SERVER['QUERY_STRING']);
-	showmsg('inaccessible_if_not_logged_in', './?mod=user');
+	showmsg('inaccessible_if_not_logged_in', 'index.php?mod=user');
 }
 
 $paymentconfig = readdata('payment');
@@ -66,7 +66,7 @@ $_G['alipaytrade'] = array(
 	'out_trade_no' => '',
 	'subject' => '',
 	'total_fee' => 0.00,
-	'show_url' => './?mod=order',
+	'show_url' => 'index.php',
 );
 
 runhooks('alipay_started');

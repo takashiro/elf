@@ -23,7 +23,7 @@ takashiro@qq.com
 if(!defined('S_ROOT')) exit('access denied');
 
 if(!$_G['user']->isLoggedIn()){
-	redirect('./?mod=user');
+	redirect('index.php?mod=user');
 }
 
 $paymentconfig = readdata('payment');
@@ -37,7 +37,7 @@ if(empty($bestpay['key']) || empty($bestpay['merchantid'])){
 }
 
 if(!empty($_GET['ret'])){
-	showmsg('支付成功！', './?mod=product');
+	showmsg('支付成功！', 'index.php?mod=product');
 }
 
 $_G['bestpaytrade'] = array(

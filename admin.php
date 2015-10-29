@@ -89,7 +89,7 @@ if(file_exists($module_path)){
 		$module_path = $extra_module_path;
 		$classname = $mods[0].$mods[1].'Module';
 	}else{
-		exit('access denied');
+		exit('invalid module id');
 	}
 	unset($mods, $extra_module_path);
 }

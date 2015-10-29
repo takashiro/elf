@@ -140,13 +140,13 @@ if($action == 'login'){
 }else{
 	if($_G['user']->isLoggedIn()){
 		if(empty($_G['user']->account)){
-			showmsg('cannot_unbind_wxopenid_with_account_empty', './?mod=user');
+			showmsg('cannot_unbind_wxopenid_with_account_empty', 'index.php?mod=user');
 		}
 
 		$_G['user']->wxopenid = NULL;
 		showmsg('successfully_unbinded_wxopenid', 'refresh');
 	}else{
-		showmsg('binding_require_user_logged_in', './?mod=user');
+		showmsg('binding_require_user_logged_in', 'index.php?mod=user');
 	}
 }
 
