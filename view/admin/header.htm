@@ -40,7 +40,7 @@
 						<!--{if count($module['admin_modules']) > 1}-->
 						<ul class="submenu">
 						<!--{loop $module['admin_modules'] $submodule_name}-->
-							<!--{if $submodule_name != 'main'}-->
+							<!--{if $submodule_name != 'main' && $_G['admin']->hasPermission($module['name'].':'.$submodule_name)}-->
 							<li><a href="admin.php?mod={$module['name']}:{$submodule_name}">{echo lang('common', 'module_'.$module['name'].':'.$submodule_name)}</a></li>
 							<!--{/if}-->
 						<!--{/loop}-->
