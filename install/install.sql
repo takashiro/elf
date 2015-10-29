@@ -21,6 +21,14 @@ CREATE TABLE IF NOT EXISTS `pre_administrator` (
   UNIQUE KEY `account` (`account`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `pre_authkey`;
+CREATE TABLE IF NOT EXISTS `pre_authkey` (
+  `user` varchar(32) NOT NULL,
+  `key` varchar(32) NOT NULL,
+  `expiry` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`user`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `pre_user`;
 CREATE TABLE IF NOT EXISTS `pre_user` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
