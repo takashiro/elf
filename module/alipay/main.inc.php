@@ -25,10 +25,10 @@ if(!defined('S_ROOT')) exit('access denied');
 /* To make use of the following codes, you have to add the rewrite rules below.
 RewriteEngine On
 RewriteBase /
-RewriteRule ^alipay(.*)\.htm$ index.php?mod=alipay&querystring=$1
+RewriteRule ^weixinguard(.*)\.htm$ index.php?mod=alipay&get=$1
 */
 
-if(empty($_GET['querystring'])){
+if(empty($_GET['get'])){
 	function isWeixin(){
 		if(strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false)
 			return true;
@@ -43,11 +43,14 @@ if(empty($_GET['querystring'])){
 			showmsg('inaccessible_if_not_logged_in', 'index.php?mod=user');
 		}
 
-		rheader('Location: alipay'.base64_encode($_SERVER['QUERY_STRING']).'.htm');
+		$get = $_GET;
+		unset($get['mod']);
+		$get = http_build_query($get);
+		rheader('Location: weixinguard'.urlencode($get).'.htm');
 		exit;
 	}
 }else{
-	$protected_url = 'index.php?mod=alipay&'.base64_decode($_GET['querystring']).'&skipprotector=1';
+	$protected_url = 'index.php?mod=alipay&'.urldecode($_GET['get']).'&skipprotector=1';
 	include view('protector');
 	exit;
 }
