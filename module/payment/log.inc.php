@@ -20,38 +20,17 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 takashiro@qq.com
 ************************************************************************/
 
-if(!defined('S_ROOT')) exit('access denied');
+$limit = 10;
+$offset = ($page - 1) * $limit;
+$table = $db->select_table('userwalletlog');
+$pagenum = $table->result_first('COUNT(*)', "uid={$_USER['id']}");
+$walletlog = $table->fetch_all('*', "uid={$_USER['id']} ORDER BY dateline DESC LIMIT $offset,$limit");
 
-if(!$_G['user']->isLoggedIn()){
-	redirect('index.php?mod=user');
+$prepaidreward = $db->fetch_all("SELECT * FROM {$tpre}prepaidreward WHERE etime_start<=$timestamp AND etime_end>=$timestamp");
+foreach($prepaidreward as &$r){
+	foreach(array('minamount', 'maxamount', 'reward') as $var)
+		$r[$var] = floatval($r[$var]);
 }
+unset($r);
 
-$paymentconfig = readdata('payment');
-if(isset($_GET['orderid'])){
-	if(empty($paymentconfig['enabled_method'][Wallet::ViaWallet])){
-		showmsg('wallet_payment_is_disabled');
-	}
-
-	$order = new Order($_GET['orderid']);
-	if(!$order->exists() || $order->status == Order::Canceled){
-		showmsg('order_not_exist', 'back');
-	}
-
-	if(!empty($order->tradestate)){
-		//@todo: Judge payment method
-		showmsg('your_alipay_wallet_is_processing_the_order', 'back');
-	}
-
-	if($_G['user']->wallet < $order->totalprice){
-		showmsg('wallet_is_insufficient', 'back');
-	}
-
-	$wallet = new Wallet($_G['user']);
-	if(!$wallet->pay($order)){
-		showmsg('wallet_is_insufficient', 'back');
-	}
-
-	showmsg('order_is_successfully_paid', 'back');
-}
-
-include view('wallet');
+include view('log');
