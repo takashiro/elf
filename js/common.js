@@ -172,4 +172,9 @@ $(function(){
 		}
 		radio.click();
 	});
+
+	$('.mpage .current').click(function(e){
+		if($(this).attr('href') == '###')
+			e.preventDefault();
+	});
 });
