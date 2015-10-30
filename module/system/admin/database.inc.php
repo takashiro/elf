@@ -195,7 +195,7 @@ class SystemDatabaseModule extends AdminControlPanelModule{
 
 		if($s === null && $t !== null){
 			global $db;
-			$db->query("DROP TABLE `{$s->name}`");
+			$db->query("DROP TABLE `{$t->name}`");
 			showmsg('successfully_dropped_table', 'refresh');
 		}else{
 			showmsg('failed_to_drop_table', 'back');
