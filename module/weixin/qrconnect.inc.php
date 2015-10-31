@@ -45,25 +45,20 @@ if(empty($_GET['action'])){
 	if($api->hasError())
 		exit($api->getErrorMessage());
 
-	$user_info = $api->getUserInfo($result['access_token'], $result['openid']);
-	if($api->hasError())
-		exit($api->getErrorMessage());
+	if(empty($result['unionid'])){
+		showmsg('failed_to_login_for_no_unionid');
+	}
 
 	$user = new User;
-	$user->fetch('*', array('wxunionid' => $user_info['unionid']));
+	$user->fetch('*', array('wxunionid' => $result['unionid']));
 	if($user->id <= 0){
 		$user->account = null;
 		$user->pwmd5 = '';
 		$user->wxopenid = null;
 		$user->regtime = TIMESTAMP;
 		$user->logintime = TIMESTAMP;
-		$user->wxunionid = $user_info['unionid'];
-
-		if(isset($user_info['nickname'])){
-			$user->nickname = $user_info['nickname'];
-		}else{
-			$user->nickname = lang('message', 'wxuser');
-		}
+		$user->wxunionid = $result['unionid'];
+		$user->nickname = lang('message', 'wxuser');
 
 		//@to-do: remove this
 		if(!empty($_COOKIE['referrerid'])){
@@ -82,7 +77,7 @@ if(empty($_GET['action'])){
 		$user->insert('IGNORE');
 		if($db->affected_rows <= 0){
 			$user = new User;
-			$user->fetch('*', array('wxunionid' => $user_info['unionid']));
+			$user->fetch('*', array('wxunionid' => $result['unionid']));
 		}
 	}
 
