@@ -22,14 +22,14 @@ takashiro@qq.com
 
 return array(
 	'module_payment' => '支付',
-	'module_payment:userwallet' => '充值记录',
+	'module_payment:userwallet' => '用户钱包记录',
 	'module_payment:prepaidreward' => '充值奖励',
 
 	'permission_payment' => '支付设置',
 	'permission_payment_comment' => '',
 	'permission_payment:prepaidreward' => '充值奖励',
 	'permission_payment:prepaidreward_comment' => '',
-	'permission_payment:userwallet' => '用户钱包',
+	'permission_payment:userwallet' => '用户钱包记录',
 
 	'wallet_via_cash' => '现金支付',
 	'wallet_via_alipay' => '支付宝',

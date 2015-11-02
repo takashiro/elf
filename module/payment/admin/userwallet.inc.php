@@ -31,21 +31,37 @@ class PaymentUserWalletModule extends AdminControlPanelModule{
 	public function defaultAction(){
 		extract($GLOBALS, EXTR_SKIP | EXTR_REFS);
 
-		$condition = array('l.recharged=1');
+		$query_string = array();
+		$condition = array();
 
-		if(!empty($_REQUEST['time_start'])){
-			$time_start = rstrtotime($_REQUEST['time_start']);
+		if(isset($_GET['userid'])){
+			$userid = intval($_GET['userid']);
+			$condition[] = 'l.uid='.$userid;
+			$query_string['userid'] = $userid;
+		}
+
+		if(!empty($_GET['tradeid'])){
+			$tradeid = trim($_GET['tradeid']);
+			$condition[] = 'l.tradeid=\''.addslashes($tradeid).'\'';
+			$query_string['tradeid'] = $tradeid;
+			unset($_GET['time_start'], $_GET['time_end']);
+		}
+
+		if(!empty($_GET['time_start'])){
+			$time_start = rstrtotime($_GET['time_start']);
 			$condition[] = "l.dateline>=$time_start";
 		}else{
 			$time_start = '';
 		}
+		$query_string['time_start'] = $time_start;
 
-		if(!empty($_REQUEST['time_end'])){
-			$time_end = rstrtotime($_REQUEST['time_end']);
+		if(!empty($_GET['time_end'])){
+			$time_end = rstrtotime($_GET['time_end']);
 			$condition[] = "l.dateline<=$time_end";
 		}else{
 			$time_end = '';
 		}
+		$query_string['time_end'] = $time_end;
 
 		$condition = empty($condition) ? '1' : implode(' AND ', $condition);
 
@@ -64,11 +80,6 @@ class PaymentUserWalletModule extends AdminControlPanelModule{
 		$pagenum = $db->result_first("SELECT COUNT(*)
 			FROM {$tpre}userwalletlog l
 			WHERE $condition");
-
-		$stat = array(
-			'totaldelta' => $db->result_first("SELECT SUM(l.delta) FROM {$tpre}userwalletlog l WHERE $condition"),
-			'totalcost' => $db->result_first("SELECT SUM(l.cost) FROM {$tpre}userwalletlog l WHERE $condition"),
-		);
 
 		$totalwallet = array(
 			'amount' => $db->result_first("SELECT SUM(wallet) FROM {$tpre}user"),
