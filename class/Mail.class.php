@@ -268,6 +268,10 @@ class Mail{
 			}
 		}
 	}
+
+	static public function IsEnabled(){
+		return self::$Config['method'] != self::DISABLED;
+	}
 }
 
 Mail::LoadConfig();
