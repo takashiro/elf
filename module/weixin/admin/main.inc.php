@@ -29,7 +29,7 @@ class WeixinMainModule extends AdminControlPanelModule{
 
 		$wxconnect_fields = array(
 			'app_id', 'app_secret', 'account', 'token', 'aes_key',
-			'subscribe_text', 'entershop_keyword', 'bind_keyword', 'bind2_keyword',
+			'subscribe_text', 'entershop_keyword', 'bind_keyword',
 			'follow_guide_page',
 		);
 

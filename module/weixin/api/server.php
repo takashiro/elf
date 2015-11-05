@@ -92,26 +92,12 @@ if($request['MsgType'] == 'event'){
 
 if(!empty($targetKeyword)){
 	if(isset($wx['bind_keyword']) && Autoreply::MatchKeywords($wx['bind_keyword'], $targetKeyword)){
-		$words = explode("\n", $wx['bind2_keyword']);
-		foreach($words as &$word){
-			$word = trim($word);
-		}
-		unset($word);
+		if(User::Exist($request['FromUserName'], 'wxopenid'))
+			$weixin->replyTextMessage(lang('message', 'your_account_has_been_binded_please_login'));
 
-		if(isset($words[1])){
-			$final = array_pop($words);
-			$words = '【'.implode('】、【', $words).'】'.lang('message', 'or').'【'.$final.'】';
-		}else{
-			$words = $words[0];
-		}
-
-		$weixin->replyTextMessage(lang('message', 'if_not_logged_in_comma')."<a href=\"{$_G['root_url']}index.php?mod=user&action=login\">".lang('message', 'click_here_and_login')."</a>，".lang('message', 'and_reply').$words);
-	}
-
-	if(isset($wx['bind2_keyword']) && Autoreply::MatchKeywords($wx['bind2_keyword'], $targetKeyword)){
 		$user = $request['FromUserName'];
 		$key = Authkey::Generate($user);
-		$weixin->replyTextMessage("<a href=\"{$_G['root_url']}?mod=weixin&action=bind&user=$user&key=$key\">".lang('message', 'click_and_enter_site').'</a>');
+		$weixin->replyTextMessage("<a href=\"{$_G['root_url']}?mod=weixin&action=bind&user=$user&key=$key\">".lang('message', 'click_and_bind').'</a>');
 	}
 
 	if(isset($wx['entershop_keyword']) && Autoreply::MatchKeywords($wx['entershop_keyword'], $targetKeyword)){
