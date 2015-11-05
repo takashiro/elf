@@ -110,6 +110,10 @@ if(!empty($targetKeyword)){
 	if($reply != NULL){
 		$weixin->replyTextMessage($reply);
 	}
+
+	if($targetKeyword == 'openid'){
+		$weixin->replyTextMessage($request['FromUserName']);
+	}
 }
 
 ?>
