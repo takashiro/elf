@@ -37,6 +37,9 @@ if($in_wechat){
 }
 
 if(empty($_GET['action'])){
+	if($_G['user']->isLoggedIn())
+		redirect('index.php');
+
 	$parameters = array(
 		'appid' => $config['app_id'],
 		'redirect_uri' => $_G['root_url'].'index.php?mod=weixin:connect&action=login',
