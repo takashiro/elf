@@ -54,14 +54,23 @@ if($action == 'login'){
 	$open_id = $_GET['user'];
 	$user->fetch('*', array('wxopenid' => $open_id));
 	if($user->id <= 0){
+		$wx = new WeixinAPI;
+		$wxuser = $wx->getUserInfo($open_id);
+		if($wxuser && isset($wxuser['unionid'])){
+			$user->fetch('*', array('wxunionid' => $wxuser['unionid']));
+			if($user->id > 0){
+				$user->wxopenid = $open_id;
+			}
+		}
+	}
+
+	if($user->id <= 0){
 		$user->account = null;
 		$user->pwmd5 = '';
 		$user->wxopenid = $open_id;
 		$user->regtime = TIMESTAMP;
 		$user->logintime = TIMESTAMP;
 
-		$wx = new WeixinAPI;
-		$wxuser = $wx->getUserInfo($open_id);
 		if($wxuser && isset($wxuser['nickname'])){
 			$user->nickname = $wxuser['nickname'];
 		}else{
