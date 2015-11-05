@@ -128,18 +128,22 @@ if($action == 'login'){
 	}
 
 	if($authkey->matchOnce($_GET['key'])){
-		$_G['user']->wxopenid = $_GET['user'];
 
 		$wx = new WeixinAPI;
 		$wxuser = $wx->getUserInfo($_GET['user']);
 		if($wxuser){
 			if(isset($wxuser['nickname'])){
-				$user->nickname = $wxuser['nickname'];
+				$_G['user']->nickname = $wxuser['nickname'];
 			}
 			if(isset($wxuser['unionid'])){
-				$user->wxunionid = $wxuser['unionid'];
+				if(User::Exist($wxuser['unionid'], 'wxunionid')){
+					showmsg('wxopenid_binded_to_another_account');
+				}
+				$_G['user']->wxunionid = $wxuser['unionid'];
 			}
 		}
+
+		$_G['user']->wxopenid = $_GET['user'];
 
 		showmsg('successfully_binded_wxopenid', 'index.php');
 	}else{
@@ -153,6 +157,7 @@ if($action == 'login'){
 		}
 
 		$_G['user']->wxopenid = NULL;
+		$_G['user']->wxunionid = NULL;
 		showmsg('successfully_unbinded_wxopenid', 'refresh');
 	}else{
 		showmsg('binding_require_user_logged_in', 'index.php?mod=user');
