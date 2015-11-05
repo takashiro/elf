@@ -13,7 +13,7 @@ return array(
 	'invalid_wxbind_link' => '啊哦，我们遇到了点意外。本网页链接无效了，请回到微信重新操作。',
 	'cannot_unbind_wxopenid_with_account_empty' => '您的账号是通过微信登录自动注册的，需要先设定本站登录账号和密码才能解绑，否则会造成您的账号无法再次登录。',
 	'successfully_unbinded_wxopenid' => '成功解除该账号已绑定的微信账号！',
-	'your_account_has_been_binded_please_login' => '您的微信号已经绑定过，请先解绑，这样才能绑定到其他账号上哦~',
+	'your_account_has_been_binded_please_login' => '您的微信号已经绑定过，若您看见未绑定的提示，是因为绑定到别的账号了呢，请先解绑哦~',
 
 	'wxuser' => '微信用户',
 	'unexpected_link_with_inadequate_parameters' => '啊哦，我们遇到了点意外（参数不足）。',
