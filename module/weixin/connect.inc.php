@@ -27,7 +27,6 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false)
 	$in_wechat = true;
 elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'GT-I9500') !== false && strpos($_SERVER['HTTP_USER_AGENT'], 'MQQBrowser') !== false)
 	$in_wechat = true;
-$in_wechat = true;
 
 
 if($in_wechat){
