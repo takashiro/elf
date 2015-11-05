@@ -9,7 +9,7 @@
 <div class="box edit_form">
 	<form class="toast" action="$mod_url" method="post">
 
-	<h2>微信公众平台设置</h2>
+	<h2>主公众号设置</h2>
 	<table>
 		<tr>
 			<th><label>App ID：</label></th>
@@ -78,6 +78,18 @@
 		<tr>
 			<th><label>App Secret：</label></th>
 			<td><input type="text" name="wxsns[app_secret]" value="$wxsns[app_secret]" class="wide" /></td>
+		</tr>
+	</table>
+
+	<h2>服务号设置（若主公众号为订阅号）</h2>
+	<table>
+		<tr>
+			<th><label>App ID：</label></th>
+			<td><input type="text" name="wxsv[app_id]" value="$wxsv[app_id]" class="wide" /></td>
+		</tr>
+		<tr>
+			<th><label>App Secret：</label></th>
+			<td><input type="text" name="wxsv[app_secret]" value="$wxsv[app_secret]" class="wide" /></td>
 		</tr>
 	</table>
 

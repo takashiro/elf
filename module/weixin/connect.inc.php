@@ -22,24 +22,36 @@ takashiro@qq.com
 
 if(!defined('S_ROOT')) exit('access denied');
 
-$wxsns = readdata('wxsns');
+$in_wechat = false;
+if(strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false)
+	$in_wechat = true;
+elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'GT-I9500') !== false && strpos($_SERVER['HTTP_USER_AGENT'], 'MQQBrowser') !== false)
+	$in_wechat = true;
+$in_wechat = true;
+
+
+if($in_wechat){
+	$config = readdata('wxsv');
+}else{
+	$config = readdata('wxsns');
+}
 
 if(empty($_GET['action'])){
 	$parameters = array(
-		'appid' => $wxsns['app_id'],
-		'redirect_uri' => 'http://weifruit.cn/?mod=weixin:qrconnect&action=login',
+		'appid' => $config['app_id'],
+		'redirect_uri' => $_G['root_url'].'index.php?mod=weixin:connect&action=login',
 		'response_type' => 'code',
-		'scope' => 'snsapi_login',
+		'scope' => $in_wechat ? 'snsapi_base' : 'snsapi_login',
 	);
 
-	$url = 'https://open.weixin.qq.com/connect/qrconnect?'.http_build_query($parameters).'#wechat_redirect';
+	$url = 'https://open.weixin.qq.com/connect/'.($in_wechat ? 'oauth2/authorize' : 'qrconnect').'?'.http_build_query($parameters).'#wechat_redirect';
 	redirect($url);
 
 }elseif($_GET['action'] == 'login'){
 	if(empty($_GET['code']))
 		exit('Parameter code is required.');
 
-	$api = new WeixinSNS($wxsns['app_id'], $wxsns['app_secret']);
+	$api = new WeixinSNS($config['app_id'], $config['app_secret']);
 
 	$result = $api->getAccessToken($_GET['code']);
 	if($api->hasError())
@@ -82,7 +94,7 @@ if(empty($_GET['action'])){
 	}
 
 	$user->force_login();
-	showmsg('successfully_logged_in', 'index.php');
+	redirect('index.php');
 }
 
 showmsg('illegal_operation');
