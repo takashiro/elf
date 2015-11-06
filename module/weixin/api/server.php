@@ -41,6 +41,19 @@ if($request['MsgType'] == 'event'){
 		$weixin->replyTextMessage($wx['subscribe_text']);
 	}elseif($request['Event'] == 'CLICK'){
 		$targetKeyword = $request['EventKey'];
+	}elseif($request['Event'] == 'VIEW'){
+		if(strpos($request['EventKey'], 'weixin:connect') !== false){
+			$api = new WeixinAPI;
+			$info = $api->getUserInfo($request['FromUserName']);
+			if(isset($info['unionid'])){
+				$user = new User;
+				$user->fetch('*', array('wxunionid' => $info['unionid']));
+				if(empty($user->wxopenid)){
+					isset($info['openid']) && $user->wxopenid = $info['openid'];
+					isset($info['nickname']) && $user->nickname = $info['nickname'];
+				}
+			}
+		}
 	}elseif(strncmp($request['Event'], 'scancode_', 9) == 0){
 		$result = $request['ScanCodeInfo']['ScanResult'];
 		if(strncmp($result, $_G['root_url'], strlen($_G['root_url'])) == 0){
