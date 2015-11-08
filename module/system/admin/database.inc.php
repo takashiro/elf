@@ -387,14 +387,20 @@ class SystemDatabaseModule extends AdminControlPanelModule{
 
 		$standard_tables = array();
 
+		global $tpre;
 		foreach($sql as $sentence){
 			$t = new SqlTable;
 			$t->parse($sentence);
 			if($t->isValid()){
+				if($tpre != 'pre_' && strncmp($t->name, 'pre_', 4) == 0)
+					$t->name = $tpre.substr($t->name, 4);
 				$standard_tables[$t->name] = $t;
 			}else{
 				if(preg_match('/\s*ALTER\s+TABLE\s+`(\w+)`\s+ADD\s+(.*?)\s*(?:\;|$)/i', $sentence, $matches)){
 					$table_name = $matches[1];
+					if($tpre != 'pre_' && strncmp($table_name, 'pre_', 4) == 0)
+						$table_name = $tpre.substr($table_name, 4);
+
 					if(!isset($standard_tables[$table_name]))
 						continue;
 					$table = $standard_tables[$table_name];
@@ -416,12 +422,7 @@ class SystemDatabaseModule extends AdminControlPanelModule{
 			$table_name = $table[0];
 
 			$t = new SqlTable;
-
-			$pre_length = strlen($tpre);
-			if(strncmp($table_name, $tpre, $pre_length) == 0)
-				$t->name = 'pre_'.substr($table_name, $pre_length);
-			else
-				$t->name = $table_name;
+			$t->name = $table_name;
 
 			$config = $db->fetch_first("SHOW TABLE STATUS WHERE name='{$table_name}'");
 			$t->engine = $config['Engine'];
