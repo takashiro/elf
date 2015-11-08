@@ -20,28 +20,26 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 takashiro@qq.com
 ************************************************************************/
 
-return array(
-	'module_payment' => '支付',
-	'module_payment:userwallet' => '用户钱包记录',
-	'module_payment:prepaidreward' => '充值奖励',
+require_once '../../../core/init.inc.php';
 
-	'permission_payment' => '支付设置',
-	'permission_payment_comment' => '',
-	'permission_payment:prepaidreward' => '充值奖励',
-	'permission_payment:prepaidreward_comment' => '',
-	'permission_payment:userwallet' => '用户钱包记录',
+$input = file_get_contents('php://input');
+if(empty($input))
+	exit('access denied');
 
-	'wallet_via_cash' => '现金支付',
-	'wallet_via_alipay' => '支付宝',
-	'wallet_via_wallet' => '钱包余额',
-	'wallet_via_bestpay' => '翼支付',
-	'wallet_via_wechat' => '微信支付',
+$xml = new XML;
+$xml->loadXML($input);
+$xml = $xml->toArray();
+$input = $xml['xml'];
 
-	'wallet_waitbuyerpay' => '待付款',
-	'wallet_tradeclosed' => '关闭',
-	'wallet_tradesuccess' => '成功',
-	'wallet_tradepending' => '待收款',
-	'wallet_tradefinished' => '结束',
-);
+require_once '../class/WeChatPay.class.php';
+$api = new WeChatPay;
 
-?>
+if(!$api->checkSource($input))
+	exit('invalid source');
+
+if(!$api->checkSignature($input))
+	exit('invalid signature');
+
+runhooks('wechatpay_notified', array($input));
+
+echo '<xml><return_code>SUCCESS</return_code><return_msg>OK</return_msg></xml>';

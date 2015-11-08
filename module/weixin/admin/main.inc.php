@@ -38,7 +38,7 @@ class WeixinMainModule extends AdminControlPanelModule{
 		);
 
 		$wxsv_fields = array(
-			'app_id', 'app_secret',
+			'app_id', 'app_secret', 'mch_id', 'mch_key',
 		);
 
 		if($_POST){

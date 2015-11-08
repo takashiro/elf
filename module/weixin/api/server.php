@@ -128,5 +128,3 @@ if(!empty($targetKeyword)){
 		$weixin->replyTextMessage($request['FromUserName']);
 	}
 }
-
-?>

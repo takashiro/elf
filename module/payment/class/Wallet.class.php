@@ -128,40 +128,23 @@ class Wallet{
 
 	static public function __on_alipay_notified($out_trade_no, $trade_no, $trade_status){
 		$prefix_len = strlen(self::$AlipayTradeNoPrefix);
-		if(strncmp($out_trade_no, self::$AlipayTradeNoPrefix, $prefix_len) == 0){
-			global $db;
-			$id = substr($out_trade_no, $prefix_len);
-			$id = raddslashes($id);
+		if(strncmp($out_trade_no, self::$AlipayTradeNoPrefix, $prefix_len) != 0)
+			return;
 
-			$log = array(
-				'paymentmethod' => Wallet::ViaAlipay,
-				'tradeid' => $trade_no,
-				'tradestate' => Wallet::$TradeStateEnum[$trade_status],
-			);
-			$table = $db->select_table('userwalletlog');
-			$table->update($log, array('id' => $id));
+		global $db;
+		$id = substr($out_trade_no, $prefix_len);
+		$id = raddslashes($id);
 
-			if($log['tradestate'] == Wallet::TradeSuccess || $log['tradestate'] == Wallet::TradeFinished){
-				global $tpre;
-				$db->query("UPDATE {$tpre}userwalletlog SET recharged=1 WHERE id='$id'");
-				if($db->affected_rows > 0){
-					$log = $db->fetch_first("SELECT uid,cost FROM {$tpre}userwalletlog WHERE id='$id'");
-					$fee = $log['cost'];
-					$timestamp = TIMESTAMP;
-					$extrafee = $db->result_first("SELECT reward
-						FROM {$tpre}prepaidreward
-						WHERE minamount<=$fee AND maxamount>=$fee
-							AND etime_start<=$timestamp AND etime_end>=$timestamp
-						ORDER BY reward DESC
-						LIMIT 1");
-					$fee += $extrafee;
+		$log = array(
+			'paymentmethod' => Wallet::ViaAlipay,
+			'tradeid' => $trade_no,
+			'tradestate' => Wallet::$TradeStateEnum[$trade_status],
+		);
+		$table = $db->select_table('userwalletlog');
+		$table->update($log, array('id' => $id));
 
-					$db->query("UPDATE {$tpre}userwalletlog SET delta=$fee WHERE id='$id'");
-					$db->query("UPDATE {$tpre}user SET wallet=wallet+$fee WHERE id={$log['uid']}");
-
-					runhooks('user_wallet_changed', array($log['uid'], $log['cost']));
-				}
-			}
+		if($log['tradestate'] == Wallet::TradeSuccess || $log['tradestate'] == Wallet::TradeFinished){
+			self::TakeRechargeEffect($id);
 		}
 	}
 
@@ -224,40 +207,23 @@ class Wallet{
 
 	static public function __on_bestpay_notified($out_trade_no, $trade_no, $trade_status){
 		$prefix_len = strlen(self::$AlipayTradeNoPrefix);
-		if(strncmp($out_trade_no, self::$AlipayTradeNoPrefix, $prefix_len) == 0){
-			global $db;
-			$id = substr($out_trade_no, $prefix_len);
-			$id = raddslashes($id);
+		if(strncmp($out_trade_no, self::$AlipayTradeNoPrefix, $prefix_len) != 0)
+			return;
 
-			$log = array(
-				'paymentmethod' => Wallet::ViaBestpay,
-				'tradeid' => $trade_no,
-				'tradestate' => $trade_status == '0000' ? Wallet::TradeSuccess : Wallet::WaitBuyerPay,
-			);
-			$table = $db->select_table('userwalletlog');
-			$table->update($log, array('id' => $id));
+		global $db;
+		$id = substr($out_trade_no, $prefix_len);
+		$id = raddslashes($id);
 
-			if($log['tradestate'] == Wallet::TradeSuccess){
-				global $tpre;
-				$db->query("UPDATE {$tpre}userwalletlog SET recharged=1 WHERE id='$id'");
-				if($db->affected_rows > 0){
-					$log = $db->fetch_first("SELECT uid,cost FROM {$tpre}userwalletlog WHERE id='$id'");
-					$fee = $log['cost'];
-					$timestamp = TIMESTAMP;
-					$extrafee = $db->result_first("SELECT reward
-						FROM {$tpre}prepaidreward
-						WHERE minamount<=$fee AND maxamount>=$fee
-							AND etime_start<=$timestamp AND etime_end>=$timestamp
-						ORDER BY reward DESC
-						LIMIT 1");
-					$fee += $extrafee;
+		$log = array(
+			'paymentmethod' => Wallet::ViaBestpay,
+			'tradeid' => $trade_no,
+			'tradestate' => $trade_status == '0000' ? Wallet::TradeSuccess : Wallet::WaitBuyerPay,
+		);
+		$table = $db->select_table('userwalletlog');
+		$table->update($log, array('id' => $id));
 
-					$db->query("UPDATE {$tpre}userwalletlog SET delta=$fee WHERE id='$id'");
-					$db->query("UPDATE {$tpre}user SET wallet=wallet+$fee WHERE id={$log['uid']}");
-
-					runhooks('user_wallet_changed', array($log['uid'], $log['cost']));
-				}
-			}
+		if($log['tradestate'] == Wallet::TradeSuccess){
+			self::TakeRechargeEffect($id);
 		}
 	}
 
@@ -267,6 +233,107 @@ class Wallet{
 		//以异步通知为准，此处不处理只通知
 		if(strncmp($out_trade_no, self::$AlipayTradeNoPrefix, strlen(self::$AlipayTradeNoPrefix)) == 0)
 			showmsg('wallet_is_successfully_recharged', 'index.php?mod=payment');
+	}
+
+	static public function __on_wechatpay_started(){
+		if(isset($_GET['recharge'])){
+			$recharge = floatval($_GET['recharge']);
+			if($recharge <= 0)
+				showmsg('the_number_you_must_be_kidding_me', 'back');
+
+			global $_G, $db;
+
+			$log = array(
+				'uid' => $_G['user']->id,
+				'dateline' => TIMESTAMP,
+				'cost' => $recharge,
+				'type' => self::RechargeLog,
+				'paymentmethod' => Wallet::ViaWeChat,
+			);
+
+			$log['cost'] = round($log['cost'] * 100) / 100;
+
+			$table = $db->select_table('userwalletlog');
+			$table->insert($log);
+			$id = $table->insert_id();
+
+			//商户网站订单系统中唯一订单号，必填
+			$_G['wechatpaytrade']['out_trade_no'] = self::$AlipayTradeNoPrefix.$id;
+
+		}elseif(isset($_GET['rechargeid'])){
+			global $_G, $db;
+
+			$logid = intval($_GET['rechargeid']);
+			$table = $db->select_table('userwalletlog');
+			$log = $table->fetch_first('*', array('id' => $logid, 'type' => self::RechargeLog));
+
+			if(!empty($log['id']) && isset($log['cost']) && $log['cost'] > 0){
+				$_G['wechatpaytrade']['out_trade_no'] = self::$AlipayTradeNoPrefix.$log['id'];
+			}else{
+				showmsg('illegal_operation');
+			}
+		}
+	}
+
+	static public function __on_wechatpay_createorder(){
+		global $_G;
+		$trade = &$_G['wechatpaytrade'];
+		$prefix_len = strlen(self::$AlipayTradeNoPrefix);
+		if(strncmp($trade['out_trade_no'], self::$AlipayTradeNoPrefix, $prefix_len) != 0)
+			return;
+
+		$rechargeid = substr($trade['out_trade_no'], $prefix_len);
+
+		global $db;
+		$table = $db->select_table('userwalletlog');
+		$log = $table->fetch_first('*', 'id='.$rechargeid.' AND recharged=0');
+		if($log){
+			$trade['total_fee'] = $log['cost'];
+			$trade['subject'] = $_G['config']['sitename'].'充值'.$log['id'];
+			$trade['valid'] = true;
+		}
+	}
+
+	static public function __on_wechatpay_notified($trade){
+		$prefix_len = strlen(self::$AlipayTradeNoPrefix);
+		if(strncmp($trade['out_trade_no'], self::$AlipayTradeNoPrefix, $prefix_len) != 0)
+			return;
+
+		global $db;
+		$id = substr($trade['out_trade_no'], $prefix_len);
+		$id = raddslashes($id);
+
+		$log = array(
+			'paymentmethod' => Wallet::ViaWeChat,
+			'tradeid' => $trade['transaction_id'],
+			'tradestate' => Wallet::TradeSuccess,
+		);
+		$table = $db->select_table('userwalletlog');
+		$table->update($log, array('id' => $id));
+
+		self::TakeRechargeEffect($id);
+	}
+
+	static protected function TakeRechargeEffect($id){
+		global $db, $tpre;
+		$db->query("UPDATE {$tpre}userwalletlog SET recharged=1 WHERE id='$id'");
+		if($db->affected_rows > 0){
+			$log = $db->fetch_first("SELECT uid,cost FROM {$tpre}userwalletlog WHERE id='$id'");
+			$fee = $log['cost'];
+			$timestamp = TIMESTAMP;
+			$extrafee = $db->result_first("SELECT reward
+				FROM {$tpre}prepaidreward
+				WHERE minamount<=$fee AND maxamount>=$fee
+					AND etime_start<=$timestamp AND etime_end>=$timestamp
+				ORDER BY reward DESC
+				LIMIT 1");
+			$fee += $extrafee;
+
+			$db->query("UPDATE {$tpre}userwalletlog SET delta=$fee WHERE id='$id'");
+			$db->query("UPDATE {$tpre}user SET wallet=wallet+$fee WHERE id={$log['uid']}");
+
+			runhooks('user_wallet_changed', array($log['uid'], $log['cost']));
+		}
 	}
 
 	static public function __on_order_canceled($order){
@@ -302,6 +369,7 @@ Wallet::$PaymentMethod = array(
 	Wallet::ViaAlipay => lang('common', 'wallet_via_alipay'),
 	Wallet::ViaWallet => lang('common', 'wallet_via_wallet'),
 	Wallet::ViaBestpay => lang('common', 'wallet_via_bestpay'),
+	Wallet::ViaWeChat => lang('common', 'wallet_via_wechat'),
 );
 
 Wallet::$PaymentInterface = array(
@@ -309,6 +377,7 @@ Wallet::$PaymentInterface = array(
 	Wallet::ViaAlipay => 'alipay',
 	Wallet::ViaWallet => 'payment',
 	Wallet::ViaBestpay => 'bestpay',
+	Wallet::ViaWeChat => 'weixin:pay',
 );
 
 Wallet::$TradeState = array(

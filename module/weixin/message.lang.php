@@ -20,4 +20,7 @@ return array(
 	'expired_wxlogin_link' => '保护您个人信息的安全是我们的原则，该链接涉及您的账号安全，仅有效5分钟噢。您需要重新点击相应按钮获取链接。',
 
 	'failed_to_login_for_no_unionid' => '登录失败了……好像出了点网络问题诶，没有获取到微信unionid（不是程序员就忽略这个是什么吧，反正就是登录失败了QAQ）',
+
+	'inaccessible_if_not_logged_in' => '未登录状态下不能进行微信支付。',
+	'wechatpay_is_disabled' => '微信支付暂时关闭。',
 );

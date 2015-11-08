@@ -1,0 +1,25 @@
+<!--{template header}-->
+
+<script type="text/javascript" src="./3rdparty/jquery.qrcode.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$('#qrcode').qrcode('{$qrcode_url}');
+});
+</script>
+
+<div class="box">
+	<h1>{$_USER[account]}的付款二维码</h1>
+	<div class="content">
+		<div id="qrcode"></div>
+		<ul>
+		<!--{if strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') === false}-->
+			<li>打开微信，使用扫码功能对准上面的二维码付款。</li>
+			<li>若您使用的是手机浏览器，先使用截屏功能截图，然后通过微信选择相册扫码。</li>
+		<!--{else}-->
+			<li>请长按上面的二维码进行扫码付款。</li>
+		<!--{/if}-->
+		</ul>
+	</div>
+</div>
+
+<!--{template footer}-->
