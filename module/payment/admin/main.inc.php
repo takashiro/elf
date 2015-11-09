@@ -29,9 +29,32 @@ class PaymentMainModule extends AdminControlPanelModule{
 
 		if($_POST){
 			$payment = array();
+
+			$payment['enabled_method'] = array();
+
 			foreach(Wallet::$PaymentMethod as $methodid => $name){
-				$payment['enabled_method'][$methodid] = !empty($_POST['payment']['enabled_method'][$methodid]);
+				if(isset($_POST['payment']['method'][$methodid])){
+					$input = $_POST['payment']['method'][$methodid];
+					$payment['method'][$methodid] = array(
+						'id' => $methodid,
+						'enabled' => !empty($input['enabled']),
+						'recommended' => !empty($input['recommended']),
+						'displayorder' => !isset($input['displayorder']) ? 0 : intval($input['displayorder']),
+					);
+					$payment['enabled_method'][$methodid] = !empty($input['enabled']);
+				}else{
+					$payment['method'][$methodid] = array(
+						'id' => $methodid,
+						'enabled' => false,
+						'recommended' => false,
+						'displayorder' => 0,
+					);
+					$payment['enabled_method'][$methodid] = false;
+				}
 			}
+			usort($payment['method'], function($m1, $m2){
+				return $m1['displayorder'] > $m2['displayorder'];
+			});
 
 			@$alipay = array(
 				'partner' => trim($_POST['alipay']['partner']),
@@ -54,6 +77,18 @@ class PaymentMainModule extends AdminControlPanelModule{
 		$payment = readdata('payment');
 		$alipay = readdata('alipay');
 		$bestpay = readdata('bestpay');
+
+		foreach(Wallet::$PaymentMethod as $methodid => $name){
+			if(isset($payment['method'][$methodid]))
+				continue;
+
+			$payment['method'][$methodid] = array(
+				'id' => $methodid,
+				'enabled' => false,
+				'recommended' => false,
+				'displayorder' => 0,
+			);
+		}
 
 		include view('config');
 	}
