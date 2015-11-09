@@ -22,14 +22,10 @@ takashiro@qq.com
 
 define('S_ROOT', dirname(dirname(__FILE__)).'/');
 define('IN_ADMINCP', true);
-//error_reporting(0);//Debug
+error_reporting(0);//Debug
 
 if(PHP_VERSION < '5.5'){
 	exit('Elf Web App requires PHP 5.5 or later.');
-}
-
-if(!ini_get('short_open_tag')){
-	exit('Short open tag must be enabled.');
 }
 
 function __autoload($classname){
