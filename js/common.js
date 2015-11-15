@@ -173,6 +173,18 @@ $(function(){
 		radio.click();
 	});
 
+	var checkboxes = $('.checkbox_list label input[type="checkbox"]');
+	checkboxes.change(function(){
+		var input = $(this);
+		var label = input.parent();
+		if(input.is(':checked')){
+			label.addClass('checked');
+		}else{
+			label.removeClass('checked');
+		}
+	});
+	checkboxes.change();
+
 	$('.mpage .current').click(function(e){
 		if($(this).attr('href') == '###')
 			e.preventDefault();
