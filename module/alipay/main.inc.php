@@ -30,17 +30,12 @@ RewriteRule ^weixinguard(.*)\.htm$ index.php?mod=alipay&get=$1
 
 if(empty($_GET['get'])){
 	function isWeixin(){
-		if(strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false)
-			return true;
-		if(strpos($_SERVER['HTTP_USER_AGENT'], 'GT-I9500') !== false && strpos($_SERVER['HTTP_USER_AGENT'], 'MQQBrowser') !== false)
-			return true;
-		return false;
+		return strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false;
 	}
 
 	if(empty($_GET['skipprotector']) && isWeixin()){
 		if(!$_G['user']->isLoggedIn()){
-			writelog('unexpected_result', '1: '.$_SERVER['HTTP_USER_AGENT'].' '.$_SERVER['QUERY_STRING']);
-			showmsg('inaccessible_if_not_logged_in', 'index.php?mod=user');
+			showmsg('inaccessible_if_not_logged_in', 'index.php?mod=user&action=login');
 		}
 
 		$get = $_GET;
@@ -56,8 +51,7 @@ if(empty($_GET['get'])){
 }
 
 if(!$_G['user']->isLoggedIn()){
-	writelog('unexpected_result', '2: '.$_SERVER['HTTP_USER_AGENT'].' '.$_SERVER['QUERY_STRING']);
-	showmsg('inaccessible_if_not_logged_in', 'index.php?mod=user');
+	showmsg('inaccessible_if_not_logged_in', 'index.php?mod=user&action=login');
 }
 
 $paymentconfig = readdata('payment');

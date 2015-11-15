@@ -22,7 +22,7 @@ var mod_url = '$mod_url';
 				<!--{loop $menu['button'] $b}-->
 				<tr>
 					<td><input type="text" value="$b[name]" /></td>
-					<td>{echo Template::select('', $item_types, $b['type'])}</td>
+					<td><!--{if isset($b['type'])}-->{echo Template::select('', $item_types, $b['type'])}<!--{/if}--></td>
 					<td><input type="text" value="{if isset($b['key'])}$b[key]{elseif isset($b['url'])}$b[url]{/if}" /></td>
 					<td><button type="button" class="delete">删除</button></td>
 				</tr>
