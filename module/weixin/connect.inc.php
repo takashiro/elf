@@ -23,10 +23,12 @@ takashiro@qq.com
 if(!defined('S_ROOT')) exit('access denied');
 
 $in_wechat = false;
-if(strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false)
-	$in_wechat = true;
-elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'GT-I9500') !== false && strpos($_SERVER['HTTP_USER_AGENT'], 'MQQBrowser') !== false)
-	$in_wechat = true;
+if(isset($_SERVER['HTTP_USER_AGENT'])){
+	if(strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false)
+		$in_wechat = true;
+	elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'GT-I9500') !== false && strpos($_SERVER['HTTP_USER_AGENT'], 'MQQBrowser') !== false)
+		$in_wechat = true;
+}
 
 
 if($in_wechat){

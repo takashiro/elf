@@ -29,6 +29,8 @@ if(empty($input))
 $xml = new XML;
 $xml->loadXML($input);
 $xml = $xml->toArray();
+if(empty($xml['xml']))
+	exit('invalid input');
 $input = $xml['xml'];
 
 require_once '../class/WeChatPay.class.php';

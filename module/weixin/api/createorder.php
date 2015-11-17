@@ -29,6 +29,8 @@ if(empty($input))
 $xml = new XML;
 $xml->loadXML($input);
 $xml = $xml->toArray();
+if(empty($xml['xml']))
+	exit('invalid input');
 $input = $xml['xml'];
 
 require_once '../class/WeChatPay.class.php';
@@ -92,7 +94,7 @@ $reply = $xml->toArray();
 $reply = $reply['xml'];
 
 $result['return_code'] = 'SUCCESS';
-$result['result_code'] = $reply['result_code'];
+isset($reply['result_code']) && $result['result_code'] = $reply['result_code'];
 isset($reply['err_code_des']) && $result['err_code_des'] = $reply['err_code_des'];
 isset($reply['prepay_id']) && $result['prepay_id'] = $reply['prepay_id'];
 output_result();

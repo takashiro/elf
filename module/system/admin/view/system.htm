@@ -74,10 +74,10 @@ $(function(){
 		<tr>
 			<th><label>其他配置：</label></th>
 			<td>
-				{echo Template::checkbox('system[debugmode]', '开发模式', !empty($_CONFIG[debugmode]))}
-				{echo Template::checkbox('system[log_request]', '访问记录', !empty($_CONFIG[log_request]))}
-				{echo Template::checkbox('system[log_error]', '错误记录', !empty($_CONFIG[log_error]))}
-				{echo Template::checkbox('system[refresh_template]', '自动刷新模板', !empty($_CONFIG[refresh_template]))}
+				{echo Template::checkbox('system[debugmode]', '开发模式', !empty($_CONFIG['debugmode']))}
+				{echo Template::checkbox('system[log_request]', '访问记录', !empty($_CONFIG['log_request']))}
+				{echo Template::checkbox('system[log_error]', '错误记录', !empty($_CONFIG['log_error']))}
+				{echo Template::checkbox('system[refresh_template]', '自动刷新模板', !empty($_CONFIG['refresh_template']))}
 			</td>
 		</tr>
 		<tr>
