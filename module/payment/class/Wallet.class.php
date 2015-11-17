@@ -357,10 +357,10 @@ class Wallet{
 
 Wallet::$LogType = array(
 	Wallet::RechargeLog => lang('common', 'recharge'),
-	Wallet::OrderRefundLog => lang('common', 'order_refund'),
-	Wallet::OrderPaymentLog => lang('common', 'order_payment'),
+	Wallet::OrderRefundLog => lang('common', 'refund'),
+	Wallet::OrderPaymentLog => lang('common', 'payment'),
 	Wallet::TransferLog => lang('common', 'transfer'),
-	Wallet::OrderRewardLog => lang('common', 'order_reward'),
+	Wallet::OrderRewardLog => lang('common', 'reward'),
 );
 
 

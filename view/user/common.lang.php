@@ -10,6 +10,7 @@ return array(
 	'refund' => '退款',
 	'payment' => '支付',
 	'transfer' => '转账',
+	'reward' => '奖励',
 );
 
 ?>
