@@ -90,6 +90,53 @@ class PaymentUserWalletModule extends AdminControlPanelModule{
 		include view('userwallet_log');
 	}
 
+	public function updateTradeStateAction(){
+		if(empty($_GET['rechargeid']))
+			exit('invalid recharge id');
+
+		$rechargeid = intval($_GET['rechargeid']);
+		if($rechargeid <= 0)
+			exit('invalid recharge id');
+
+		require module('alipay/config');
+
+		$parameter = array(
+			'service' => 'single_trade_query',
+			'partner' => $alipay_config['partner'],
+			'out_trade_no' => 'W'.$orderid,
+			'_input_charset' => $alipay_config['input_charset'],
+		);
+
+		$alipaySubmit = new AlipaySubmit($alipay_config);
+		$html_text = $alipaySubmit->buildRequestHttp($parameter);
+
+		$doc = new XML;
+		$doc->loadXML($html_text, 'alipay');
+		$xml = $doc->toArray();
+		if(isset($xml['is_success']) && $xml['is_success'] == 'T'){
+			if(isset($xml['response']['trade'])){
+				$trade = $xml['response']['trade'];
+
+				$arguments = array(
+					//商户订单号
+					$trade['out_trade_no'],
+
+					//支付宝交易号
+					$trade['trade_no'],
+
+					//交易状态
+					$trade['trade_status'],
+				);
+
+				runhooks('alipay_notified', $arguments);
+			}
+
+			showmsg('successfully_updated_recharge_trade_state', 'refresh');
+		}
+
+		showmsg('order_not_exist_failed_to_update_recharge_trade_state', 'refresh');
+	}
+
 }
 
 ?>

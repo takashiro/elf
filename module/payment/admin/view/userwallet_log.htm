@@ -56,7 +56,16 @@
 				<td>$l[delta]</td>
 				<td><!--{if $l['type'] == Wallet::RechargeLog}-->$l[cost]<!--{else}-->-<!--{/if}--></td>
 				<td><!--{if $l['type'] == Wallet::RechargeLog}-->{echo Wallet::$PaymentMethod[$l['paymentmethod']]}<!--{else}-->-<!--{/if}--></td>
-				<td><!--{if $l['type'] == Wallet::RechargeLog}--><!--{if !empty($l['tradeid'])}-->$l[tradeid]<!--{else}-->等待付款<!--{/if}--><!--{else}-->-<!--{/if}--></td>
+				<td>
+					<!--{if $l['type'] == Wallet::RechargeLog}-->
+						<!--{if !empty($l['tradeid'])}-->$l[tradeid]<!--{else}-->等待付款<!--{/if}-->
+						<!--{if $l['paymentmethod'] == Wallet::ViaAlipay && $l['tradestate'] < 3}-->
+						<a href="admin.php?mod=payment:userwallet&action=updatetradestate&rechargeid=$l[id]">[更新]</a>
+						<!--{/if}-->
+					<!--{else}-->
+						-
+					<!--{/if}-->
+				</td>
 				<td><!--{if $l['type'] == Wallet::RechargeLog}-->-<!--{elseif $l['orderid']}--><a href="admin.php?mod=order&action=list&time_start=&time_end=&orderid=$l[orderid]">$l[orderid]</a><!--{/if}--></td>
 			</tr>
 			<!--{/loop}-->
