@@ -73,7 +73,40 @@ if(empty($_G['alipaytrade']['out_trade_no']) || empty($_G['alipaytrade']['subjec
 
 require_once module('alipay/config');
 if(empty($alipay_config['partner']) || empty($alipay_config['transport']) || empty($alipay_config['private_key_path']) || empty($alipay_config['ali_public_key_path']))
-showmsg('alipay_config_error');
+	showmsg('alipay_config_error');
+
+//构造要请求的参数数组，无需改动
+if(!empty($alipay_config['enable_single_trade_query']) && !empty($_GET['enable_trade_query'])){
+	$parameter = array(
+		'service' => 'single_trade_query',
+		'partner' => $alipay_config['partner'],
+		'out_trade_no' => $_G['alipaytrade']['out_trade_no'],
+		'_input_charset' => $alipay_config['input_charset'],
+	);
+
+	$alipaySubmit = new AlipaySubmit($alipay_config);
+	$html_text = $alipaySubmit->buildRequestHttp($parameter);
+
+	//解析XML
+	$doc = new XML;
+	$doc->loadXML($html_text, 'alipay');
+	$xml = $doc->toArray();
+	if(isset($xml['is_success']) && $xml['is_success'] == 'T' && isset($xml['response']['trade'])){
+		$trade = $xml['response']['trade'];
+		if($trade['trade_status'] == 'TRADE_SUCCESS' || $trade['trade_status'] == 'TRADE_FINISHED'){
+				$arguments = array(
+				//商户订单号
+				$trade['out_trade_no'],
+				//支付宝交易号
+				$trade['trade_no'],
+				//交易状态
+				$trade['trade_status'],
+			);
+			runhooks('alipay_callback_executed', $arguments);
+			exit;
+		}
+	}
+}
 
 //支付类型
 $payment_type = '1';

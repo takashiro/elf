@@ -61,6 +61,7 @@ class PaymentMainModule extends AdminControlPanelModule{
 				'transport' => trim($_POST['alipay']['transport']),
 				'private_key_path' => trim($_POST['alipay']['private_key_path']),
 				'ali_public_key_path' => trim($_POST['alipay']['ali_public_key_path']),
+				'enable_single_trade_query' => !empty($_POST['alipay']['enable_single_trade_query']),
 			);
 
 			@$bestpay = array(

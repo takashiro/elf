@@ -87,23 +87,20 @@ class AlipayNotify {
 			$responseTxt = 'true';
 			if (!empty($_GET['notify_id'])) {$responseTxt = $this->getResponse($_GET['notify_id']);}
 
-			//写日志记录
-			//if ($isSign) {
-			//	$isSignStr = 'true';
-			//}
-			//else {
-			//	$isSignStr = 'false';
-			//}
-			//$log_text = "responseTxt=".$responseTxt."\n return_url_log:isSign=".$isSignStr.",";
-			//$log_text = $log_text.createLinkString($_GET);
-			//logResult($log_text);
-
 			//验证
 			//$responsetTxt的结果不是true，与服务器设置问题、合作身份者ID、notify_id一分钟失效有关
 			//isSign的结果不是true，与安全校验码、请求时的参数格式（如：带自定义参数等）、编码格式有关
 			if (preg_match("/true$/i",$responseTxt) && $isSign) {
 				return true;
 			} else {
+				//写日志记录
+				$log_text = 'responseTxt='.$responseTxt.' return_url_log:isSign='.$isSign;
+				if(!empty($_SERVER['QUERY_STRING']))
+					$log_text.= ' GET='.$_SERVER['QUERY_STRING'];
+				if(!empty($_POST))
+					$log_text.= 'POST='.http_build_query($_POST);
+				writelog('alipay_notify', $log_text);
+
 				return false;
 			}
 		}
@@ -149,11 +146,9 @@ class AlipayNotify {
 	function getResponse($notify_id) {
 		$transport = strtolower(trim($this->alipay_config['transport']));
 		$partner = trim($this->alipay_config['partner']);
-		$veryfy_url = '';
-		if($transport == 'https') {
+		if($transport == 'https'){
 			$veryfy_url = $this->https_verify_url;
-		}
-		else {
+		}else{
 			$veryfy_url = $this->http_verify_url;
 		}
 		$veryfy_url = $veryfy_url."partner=" . $partner . "&notify_id=" . $notify_id;
