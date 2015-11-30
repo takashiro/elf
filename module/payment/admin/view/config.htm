@@ -50,7 +50,12 @@
 				<tr>
 					<th><label>传输协议：</label></th>
 					<td>{echo Template::radio('alipay[transport]', array('http' => 'http', 'https' => 'https'), $alipay['transport'])}</td>
-					<td class="tips">若本服务器通过https能访问到，请选择https，否则选择http</td>
+					<td class="tips">若能通过https访问支付宝，请选择https，否则选择http</td>
+				</tr>
+				<tr>
+					<th><label>开启订单状态查询：</label></th>
+					<td>{echo Template::radio('alipay[enable_single_trade_query]', array('否', '是'), !empty($alipay['enable_single_trade_query']))}</td>
+					<td class="tips">请先开通支付宝单次交易查询接口</td>
 				</tr>
 				<tr>
 					<th><label>本站私钥路径：</label></th>
