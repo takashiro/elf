@@ -108,7 +108,7 @@ class PaymentUserWalletModule extends AdminControlPanelModule{
 		$parameter = array(
 			'service' => 'single_trade_query',
 			'partner' => $alipay_config['partner'],
-			'out_trade_no' => 'W'.$orderid,
+			'out_trade_no' => 'W'.$rechargeid,
 			'_input_charset' => $alipay_config['input_charset'],
 		);
 
