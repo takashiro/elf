@@ -45,6 +45,11 @@ class PaymentUserWalletModule extends AdminControlPanelModule{
 			$condition[] = 'l.tradeid=\''.addslashes($tradeid).'\'';
 			$query_string['tradeid'] = $tradeid;
 			unset($_GET['time_start'], $_GET['time_end']);
+		}elseif(!empty($_GET['logid'])){
+			$logid = intval($_GET['logid']);
+			$condition[] = 'l.id='.$logid;
+			$query_string['logid'] = $logid;
+			unset($_GET['time_start'], $_GET['time_end']);
 		}
 
 		if(!empty($_GET['time_start'])){

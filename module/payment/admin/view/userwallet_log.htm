@@ -17,12 +17,22 @@
 
 	<h1>钱包记录</h1>
 
+	<div class="notice">
+		<ol>
+			<li>实际充入金额 = 赠费金额 + 原充入金额。</li>
+			<li>交易号是支付宝、微信支付等系统中每次交易的唯一编号。</li>
+			<li>订单号是本系统中的订单的唯一编号。</li>
+		</ol>
+	</div>
+
 	<form class="quick_search" action="admin.php" method="get">
 		<input type="hidden" name="mod" value="$mod" />
 		<!--{if isset($query_string['userid'])}-->
 		<input type="hidden" name="userid" value="$query_string[userid]" />
 		<!--{/if}-->
 		<dl>
+			<dt>订单号：</dt>
+			<dd><input type="text" name="logid" />
 			<dt>交易号：</dt>
 			<dd><input type="text" name="tradeid" />
 		</dl>
@@ -32,14 +42,6 @@
 		</dl>
 		<button type="submit" name="format" value="html">查找</button>
 	</form>
-
-	<div class="notice">
-		<ol>
-			<li>实际充入金额 = 赠费金额 + 原充入金额。</li>
-			<li>交易号是支付宝、微信支付等系统中每次交易的唯一编号。</li>
-			<li>订单号是本系统中的订单的唯一编号。</li>
-		</ol>
-	</div>
 
 	<div class="content">
 		<table>
