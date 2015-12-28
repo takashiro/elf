@@ -20,25 +20,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 takashiro@qq.com
 ************************************************************************/
 
-require_once '../../../core/init.inc.php';
-require_once module('alipay/config');
-
-//计算得出通知验证结果
-$alipayNotify = new AlipayNotify($alipay_config);
-$verify_result = $alipayNotify->verifyReturn();
-if($verify_result){//验证成功
-	$arguments = array(
-		//商户订单号
-		$_GET['out_trade_no'],
-		//支付宝交易号
-		$_GET['trade_no'],
-		//交易状态
-		$_GET['trade_status'],
-	);
-	runhooks('alipay_callback_executed', $arguments);
-
-}else{
-	showmsg('failed_to_retrieve_trade_state', 'index.php');
-}
-
-?>
+return array(
+	'failed_to_retrieve_trade_state' => '网络故障，无法取得付款状态。',
+);
