@@ -5,6 +5,7 @@ return array(
 	'period' => '。',
 
 	'mobile' => '手机',
+	'system' => '系统',
 
 	'recharge' => '充值',
 	'refund' => '退款',

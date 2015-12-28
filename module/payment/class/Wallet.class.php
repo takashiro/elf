@@ -26,6 +26,7 @@ class Wallet{
 	const OrderPaymentLog = 2;
 	const TransferLog = 3;
 	const OrderRewardLog = 4;
+	const AdminModLog = 5;
 
 	static public $LogType = array();
 
@@ -361,6 +362,7 @@ Wallet::$LogType = array(
 	Wallet::OrderPaymentLog => lang('common', 'payment'),
 	Wallet::TransferLog => lang('common', 'transfer'),
 	Wallet::OrderRewardLog => lang('common', 'reward'),
+	Wallet::AdminModLog => lang('common', 'system'),
 );
 
 
