@@ -67,7 +67,8 @@ while($current_dir != $target_dir){
 	$root_url = dirname($root_url);
 }
 $root_url !== '/' && $root_url.= '/';
-$_G['root_url'] = htmlspecialchars('http://'.$_SERVER['HTTP_HOST'].$root_url);
+$_G['root_url'] = htmlspecialchars('//'.$_SERVER['HTTP_HOST'].$root_url);
+$_G['site_url'] = $_SERVER['REQUEST_SCHEME'].':'.$_G['root_url'];
 unset($root_url, $current_dir, $target_dir);
 
 $_G['style'] = $_G['config']['style'];
