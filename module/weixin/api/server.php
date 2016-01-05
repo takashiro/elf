@@ -56,7 +56,7 @@ if($request['MsgType'] == 'event'){
 		}
 	}elseif(strncmp($request['Event'], 'scancode_', 9) == 0){
 		$result = $request['ScanCodeInfo']['ScanResult'];
-		if(strncmp($result, $_G['root_url'], strlen($_G['root_url'])) == 0){
+		if(strncmp($result, $_G['site_url'], strlen($_G['site_url'])) == 0){
 			if(strpos($result, 'referrerid=') !== false){
 				$referrerid = explode('referrerid=', $result);
 				$referrerid = $referrerid[1];
@@ -73,7 +73,7 @@ if($request['MsgType'] == 'event'){
 						if($user->id == $referrerid){
 							$user = $request['FromUserName'];
 							$key = Authkey::Generate($user);
-							$weixin->replyTextMessage("<a href=\"{$_G['root_url']}?mod=weixin&action=login&user=$user&key=$key\">".lang('message', 'click_and_enter_site').'</a>');
+							$weixin->replyTextMessage("<a href=\"{$_G['site_url']}?mod=weixin&action=login&user=$user&key=$key\">".lang('message', 'click_and_enter_site').'</a>');
 						}elseif($user->referrerid > 0){
 							$referrer = new User;
 							$referrer->fetch('id,nickname', array('id' => $user->referrerid));
@@ -89,7 +89,7 @@ if($request['MsgType'] == 'event'){
 					}else{
 						$user = $request['FromUserName'];
 						$key = Authkey::Generate($user);
-						$weixin->replyTextMessage("<a href=\"{$_G['root_url']}?mod=weixin&action=login&referrerid=$referrerid&user=$user&key=$key\">".lang('message', 'click_and_enter_site').'</a>');
+						$weixin->replyTextMessage("<a href=\"{$_G['site_url']}?mod=weixin&action=login&referrerid=$referrerid&user=$user&key=$key\">".lang('message', 'click_and_enter_site').'</a>');
 					}
 				}else{
 					$weixin->replyTextMessage(lang('message', 'invalid_qrcode'));
@@ -110,13 +110,13 @@ if(!empty($targetKeyword)){
 
 		$user = $request['FromUserName'];
 		$key = Authkey::Generate($user);
-		$weixin->replyTextMessage("<a href=\"{$_G['root_url']}?mod=weixin&action=bind&user=$user&key=$key\">".lang('message', 'click_and_bind').'</a>');
+		$weixin->replyTextMessage("<a href=\"{$_G['site_url']}?mod=weixin&action=bind&user=$user&key=$key\">".lang('message', 'click_and_bind').'</a>');
 	}
 
 	if(isset($wx['entershop_keyword']) && Autoreply::MatchKeywords($wx['entershop_keyword'], $targetKeyword)){
 		$user = $request['FromUserName'];
 		$key = Authkey::Generate($user);
-		$weixin->replyTextMessage("<a href=\"{$_G['root_url']}?mod=weixin&action=login&user=$user&key=$key\">".lang('message', 'click_and_enter_site').'</a>');
+		$weixin->replyTextMessage("<a href=\"{$_G['site_url']}?mod=weixin&action=login&user=$user&key=$key\">".lang('message', 'click_and_enter_site').'</a>');
 	}
 
 	$reply = Autoreply::Find($targetKeyword);

@@ -29,7 +29,7 @@ class Oauth{
 
     public function qq_login(){
         global $_G;
-        $callback = $_G['root_url'].'?mod=qqconnect&callback=1';
+        $callback = $_G['site_url'].'?mod=qqconnect&callback=1';
 
         $appid = $this->recorder->readInc("appid");
         $scope = $this->recorder->readInc("scope");
@@ -65,7 +65,7 @@ class Oauth{
         $keysArr = array(
             "grant_type" => "authorization_code",
             "client_id" => $this->recorder->readInc("appid"),
-            "redirect_uri" => urlencode($_G['root_url'].'?mod=qqconnect&callback=1'),
+            "redirect_uri" => urlencode($_G['site_url'].'?mod=qqconnect&callback=1'),
             "client_secret" => $this->recorder->readInc("appkey"),
             "code" => isset($_GET['code']) ? $_GET['code'] : '',
         );

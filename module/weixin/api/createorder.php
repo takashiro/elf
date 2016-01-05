@@ -81,7 +81,7 @@ if(empty($_G['wechatpaytrade']['valid'])){
 
 $reply = $api->createOrder(array(
 	'body' => $_G['wechatpaytrade']['subject'],
-	'notify_url' => $_G['root_url'].'module/weixin/api/notify.php',
+	'notify_url' => $_G['site_url'].'module/weixin/api/notify.php',
 	'openid' => $input['openid'],
 	'out_trade_no' => $input['product_id'],
 	'total_fee' => round($_G['wechatpaytrade']['total_fee'] * 100),

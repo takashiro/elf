@@ -43,7 +43,7 @@ if(empty($_GET['action'])){
 
 	$parameters = array(
 		'appid' => $config['app_id'],
-		'redirect_uri' => $_G['root_url'].'index.php?mod=weixin:connect&action=login',
+		'redirect_uri' => $_G['site_url'].'index.php?mod=weixin:connect&action=login',
 		'response_type' => 'code',
 		'scope' => $in_wechat ? 'snsapi_base' : 'snsapi_login',
 	);

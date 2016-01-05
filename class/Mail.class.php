@@ -58,7 +58,7 @@ class Mail{
 		global $_G;
 
 		//Convert all the relative URLs to absolute URLs
-		$content = preg_replace("/href\=\"(?!(http|https)\:\/\/)(.+?)\"/i", 'href="'.$_G['root_url'].'\\2"', $content);
+		$content = preg_replace("/href\=\"(?!(http|https)\:\/\/)(.+?)\"/i", 'href="'.$_G['site_url'].'\\2"', $content);
 
 		$content = "<html>
 			<head>

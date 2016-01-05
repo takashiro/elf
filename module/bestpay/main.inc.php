@@ -74,8 +74,8 @@ $encodetype = '1';								//加密方式
 $transdate = date('Ymd');						//交易日期
 $busicode = '0001';								//Transaction type, Consume
 
-$pagereturl = $_G['root_url'].'?mod=bestpay&ret=1';
-$bgreturl = $_G['root_url'].'module/bestpay/api/notify.php';
+$pagereturl = $_G['site_url'].'?mod=bestpay&ret=1';
+$bgreturl = $_G['site_url'].'module/bestpay/api/notify.php';
 $productdesc = $_G['bestpaytrade']['subject'];
 
 $productid = '0';
