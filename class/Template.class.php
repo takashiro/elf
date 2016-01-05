@@ -152,7 +152,7 @@ class Template{
 			);
 			$template = preg_replace(
 				"/([\n\r\t]*)\{if\s+(.+?)\}([\n\r]*)(.+?)([\n\r]*)\{\/if\}([\n\r\t]*)/is",
-				'\\1<?php if(\\2) { ?>\\3\\4\\5<? } ?>\\6',
+				'\\1<?php if(\\2) { ?>\\3\\4\\5<?php } ?>\\6',
 				$template
 			);
 		}
