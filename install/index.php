@@ -53,11 +53,6 @@ $_G['style'] = 'admin';
 $_G['timestamp'] = time();
 define('TIMESTAMP', $_G['timestamp']);
 
-if(file_exists(S_ROOT.'./data/install.lock')){
-	rheader('Content-Type:text/html; charset=utf-8');
-	exit('Elf Web App has been installed. ./data/install.lock must be removed before you reinstall the system.');
-}
-
 if($_POST){
 	if(empty($_POST['db']['name']))
 		exit('Please fill in database name.');
@@ -169,6 +164,15 @@ if($_POST){
 
 	exit('Elf Web App is successfully installed.');
 }
+
+$php_extension = array(
+	'mysqli' => class_exists('mysqli'),
+	'cURL' => function_exists('curl_init'),
+	'openssl' => function_exists('openssl_get_privatekey'),
+	'DOM' => class_exists('DOMDocument'),
+	'mcrypt' => function_exists('mcrypt_generic_init'),
+);
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -187,6 +191,19 @@ if($_POST){
 	</header>
 
 	<div class="content">
+		<h3>PHP扩展</h3>
+		<table>
+		<?php foreach($php_extension as $name => $installed){ ?>
+			<tr>
+				<th><?php echo $name;?>：</th>
+				<td><?php if($installed){ ?>已<?php }else{ ?>未<?php }?>安装</td>
+			</tr>
+		<?php } ?>
+		</table>
+
+	<?php if(file_exists(S_ROOT.'./data/install.lock')){ ?>
+		<p>Elf Web App has been installed. ./data/install.lock must be removed before you reinstall the system.</p>
+	<?php }else{ ?>
 		<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
 		<h3>数据库配置</h3>
 		<table>
@@ -247,6 +264,7 @@ if($_POST){
 		<button type="submit">开始安装</button>
 
 		</form>
+	<?php } ?>
 	</div>
 
 	<footer>
