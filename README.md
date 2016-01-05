@@ -32,7 +32,7 @@ Features
 * Error Reporter, record each run-time error as a report in data/error/
 * File-based data storage and cache
 * Simple but powerful template engine with statements like if, elseif, else, loop, echo and eval.
-* Frequently-used input elements like select, radio and checkbox can be output easily without foreach or many if statments
+* Frequently-used input elements like select, radio and checkbox can be output easily without foreach or many if statements
 * MySQL connection class
 * Automatically attached and removed cookie prefix to avoid cookie collision
 * Alipay via mobile webpage supported
