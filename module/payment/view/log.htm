@@ -38,6 +38,8 @@ $(function(){
 								<!--{/if}-->
 							<!--{elseif $l['type'] == Wallet::OrderRefundLog || $l['type'] == Wallet::OrderPaymentLog}-->
 								<a href="index.php?mod=order&action=view&orderid=$l[orderid]">订单{echo Wallet::$LogType[$l['type']]}</a>
+							<!--{elseif $l['type'] == Wallet::AdminModLog}-->
+								管理员操作
 							<!--{/if}-->
 						</td>
 					</tr>
