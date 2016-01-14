@@ -59,6 +59,7 @@ class PaymentMainModule extends AdminControlPanelModule{
 			@$alipay = array(
 				'partner' => trim($_POST['alipay']['partner']),
 				'transport' => trim($_POST['alipay']['transport']),
+				'notify_url' => trim($_POST['alipay']['notify_url']),
 				'private_key_path' => trim($_POST['alipay']['private_key_path']),
 				'ali_public_key_path' => trim($_POST['alipay']['ali_public_key_path']),
 				'enable_single_trade_query' => !empty($_POST['alipay']['enable_single_trade_query']),

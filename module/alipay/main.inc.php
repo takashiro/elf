@@ -113,7 +113,11 @@ $payment_type = '1';
 //必填，不能修改
 
 //服务器异步通知页面路径
-$notify_url = $_G['site_url'].'module/alipay/api/notify.php';
+if(empty($alipay_config['notify_url'])){
+	$notify_url = $_G['site_url'].'module/alipay/api/notify.php';
+}else{
+	$notify_url = $alipay_config['notify_url'];
+}
 //需http://格式的完整路径，不能加?id=123这类自定义参数
 
 //页面跳转同步通知页面路径
