@@ -20,26 +20,31 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 takashiro@qq.com
 ************************************************************************/
 
-return array(
-	'module_payment' => '支付',
-	'module_payment:userwallet' => '用户钱包记录',
-	'module_payment:prepaidreward' => '充值奖励',
+if(!defined('IN_ADMINCP')) exit('access denied');
 
-	'permission_payment' => '支付设置',
-	'permission_payment_comment' => '',
-	'permission_payment:prepaidreward' => '充值奖励',
-	'permission_payment:prepaidreward_comment' => '',
-	'permission_payment:userwallet' => '用户钱包记录',
+class BestpayMainModule extends AdminControlPanelModule{
 
-	'wallet_via_cash' => '现金支付',
-	'wallet_via_alipay' => '支付宝',
-	'wallet_via_wallet' => '钱包余额',
-	'wallet_via_bestpay' => '翼支付',
-	'wallet_via_wechat' => '微信支付',
+	public function defaultAction(){
+		extract($GLOBALS, EXTR_SKIP | EXTR_REFS);
 
-	'wallet_waitbuyerpay' => '待付款',
-	'wallet_tradeclosed' => '关闭',
-	'wallet_tradesuccess' => '成功',
-	'wallet_tradepending' => '待收款',
-	'wallet_tradefinished' => '结束',
-);
+		$fields = array(
+			'key',
+			'merchantid',
+		);
+
+		if($_POST){
+			$bestpay = array();
+			foreach($fields as $field){
+				$bestpay[$field] = isset($_POST['bestpay']['key']) ? trim($_POST['bestpay']['key']) : '';
+			}
+
+			writedata('bestpay', $bestpay);
+			showmsg('edit_succeed', 'refresh');
+		}
+
+		$bestpay = readdata('bestpay');
+
+		include view('config');
+	}
+
+}

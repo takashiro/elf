@@ -1,0 +1,53 @@
+<!--{template header}-->
+
+<ol class="nav">
+	<li><a href="admin.php">管理面板</a></li>
+	<li><a href="admin.php?mod=alipay">支付宝</a></li>
+	<li>设置</li>
+</ol>
+
+<div class="box">
+	<form class="toast" action="$mod_url" method="post">
+		<div class="edit_form">
+			<h2>支付宝设置</h2>
+			<table>
+				<tr>
+					<th><label>Partner ID：</label></th>
+					<td><input type="text" name="alipay[partner]" value="$alipay[partner]" style="width:18em" maxlength="16" /></td>
+					<td class="tips">该企业支付宝账号对应的合作身份者id，以2088开头的16位纯数字</td>
+				</tr>
+				<tr>
+					<th><label>传输协议：</label></th>
+					<td>{echo Template::radio('alipay[transport]', array('http' => 'http', 'https' => 'https'), $alipay['transport'])}</td>
+					<td class="tips">若能通过https访问支付宝，请选择https，否则选择http</td>
+				</tr>
+				<tr>
+					<th><label>开启订单状态查询：</label></th>
+					<td>{echo Template::radio('alipay[enable_single_trade_query]', array('否', '是'), !empty($alipay['enable_single_trade_query']))}</td>
+					<td class="tips">请先开通支付宝单次交易查询接口</td>
+				</tr>
+				<tr>
+					<th><label>自定义异步通知URL：</label></th>
+					<td><input type="text" name="alipay[notify_url]" value="$alipay[notify_url]" class="wide" /></td>
+					<td class="tips">设置此地址后默认URL失效，仅通知该自定义URL</td>
+				</tr>
+				<tr>
+					<th><label>本站私钥路径：</label></th>
+					<td>./data/alipay_private_key_<input type="text" name="alipay[private_key_path]" value="$alipay[private_key_path]" style="width:16em" />.pem</td>
+					<td class="tips">签名方式设置为“RSA”时必填</td>
+				</tr>
+				<tr>
+					<th><label>支付宝公钥路径：</label></th>
+					<td>./data/alipay_public_key_<input type="text" name="alipay[ali_public_key_path]" value="$alipay[ali_public_key_path]" style="width:16em" />.pem</td>
+					<td class="tips">签名方式设置为“RSA”时必填</td>
+				</tr>
+			</table>
+		</div>
+
+		<div class="post_buttons">
+			<button type="submit">修改设置</button>
+		</div>
+	</form>
+</div>
+
+<!--{template footer}-->

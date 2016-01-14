@@ -56,30 +56,11 @@ class PaymentMainModule extends AdminControlPanelModule{
 				return $m1['displayorder'] > $m2['displayorder'];
 			});
 
-			@$alipay = array(
-				'partner' => trim($_POST['alipay']['partner']),
-				'transport' => trim($_POST['alipay']['transport']),
-				'notify_url' => trim($_POST['alipay']['notify_url']),
-				'private_key_path' => trim($_POST['alipay']['private_key_path']),
-				'ali_public_key_path' => trim($_POST['alipay']['ali_public_key_path']),
-				'enable_single_trade_query' => !empty($_POST['alipay']['enable_single_trade_query']),
-			);
-
-			@$bestpay = array(
-				'key' => trim($_POST['bestpay']['key']),
-				'merchantid' => trim($_POST['bestpay']['merchantid']),
-			);
-
 			writedata('payment', $payment);
-			writedata('alipay', $alipay);
-			writedata('bestpay', $bestpay);
 			showmsg('edit_succeed', 'refresh');
 		}
 
 		$payment = readdata('payment');
-		$alipay = readdata('alipay');
-		$bestpay = readdata('bestpay');
-
 		foreach(Wallet::$PaymentMethod as $methodid => $name){
 			if(isset($payment['method'][$methodid]))
 				continue;
@@ -96,5 +77,3 @@ class PaymentMainModule extends AdminControlPanelModule{
 	}
 
 }
-
-?>

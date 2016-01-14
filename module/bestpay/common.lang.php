@@ -21,25 +21,5 @@ takashiro@qq.com
 ************************************************************************/
 
 return array(
-	'module_payment' => '支付',
-	'module_payment:userwallet' => '用户钱包记录',
-	'module_payment:prepaidreward' => '充值奖励',
-
-	'permission_payment' => '支付设置',
-	'permission_payment_comment' => '',
-	'permission_payment:prepaidreward' => '充值奖励',
-	'permission_payment:prepaidreward_comment' => '',
-	'permission_payment:userwallet' => '用户钱包记录',
-
-	'wallet_via_cash' => '现金支付',
-	'wallet_via_alipay' => '支付宝',
-	'wallet_via_wallet' => '钱包余额',
-	'wallet_via_bestpay' => '翼支付',
-	'wallet_via_wechat' => '微信支付',
-
-	'wallet_waitbuyerpay' => '待付款',
-	'wallet_tradeclosed' => '关闭',
-	'wallet_tradesuccess' => '成功',
-	'wallet_tradepending' => '待收款',
-	'wallet_tradefinished' => '结束',
+	'module_bestpay' => '翼支付',
 );
