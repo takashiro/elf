@@ -22,6 +22,10 @@ takashiro@qq.com
 
 require_once './core/init.inc.php';
 
+if(!empty($_CONFIG['site_closed'])){
+	showmsg($_CONFIG['site_close_reason']);
+}
+
 if(empty($_GET['mod']))
 	$_GET['mod'] = empty($_CONFIG['homemodule']) ? '' : $_CONFIG['homemodule'];
 

@@ -68,6 +68,11 @@ class AdminControlPanelModule{
 
 Administrator::LoadPermissions();
 
+if(!empty($_CONFIG['site_closed']) && !$_G['admin']->isSuperAdmin()){
+	rsetcookie('rcadmininfo');
+	showmsg($_CONFIG['site_close_reason']);
+}
+
 $mod = isset($_GET['mod']) ? trim($_GET['mod']) : 'home';
 $module_path = 'core/admin/'.$mod.'.inc.php';
 $mod_url = 'admin.php?mod='.$mod;

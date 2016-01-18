@@ -41,11 +41,13 @@ class SystemMainModule extends AdminControlPanelModule{
 			'log_request' => !empty($config['log_request']),
 			'log_error' => !empty($config['log_error']),
 			'refresh_template' => !empty($config['refresh_template']),
-			'head_element' => htmlspecialchars_decode($config['head_element']),
+			'head_element' => $config['head_element'],
 			'icp' => htmlspecialchars($config['icp']),
 			'homemodule' => trim($config['homemodule']),
 			'jquery_cdn' => trim($config['jquery_cdn']),
 			'error_report_to' => trim($config['error_report_to']),
+			'site_closed' => !empty($config['site_closed']),
+			'site_close_reason' => htmlspecialchars($config['site_close_reason']),
 		);
 
 		if($_POST){
