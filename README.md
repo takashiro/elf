@@ -44,6 +44,7 @@ Running Environment
 1. PHP 5.5
 2. MySQL 5
 3. Apache Or IIS
-4. PHP extension: cURL, openssl, mcrypt
+4. Alipay required extensions: cURL, DOM
+5. WeChat required extensions: openssl, mcrypt, DOM
 
 Run http://yoursitename/install and it will be working.
