@@ -140,8 +140,6 @@ header .profile .operation li{
 }
 
 .main{
-	padding-left: 110px;
-	position: relative;
 	background: #EBEBEB;
 }
 
@@ -150,9 +148,8 @@ header .profile .operation li{
 	font-size:13pt;
 	font-family: Arial, 宋体;
 	width: 110px;
-	position: absolute;
-	top: 0;
-	left: 0;
+	float: left;
+	background: #EBEBEB;
 }
 
 .main ul.menu > li{
@@ -198,6 +195,7 @@ header .profile .operation li{
 	background: white;
 	padding: 10px;
 	min-height: 607px;
+	margin-left: 110px;
 }
 
 ol.nav{
@@ -229,6 +227,8 @@ footer{
 	color: #CCC;
 	background: #333;
 	text-shadow:rgb(116, 116, 116) 0px 0px 8px;
+	float: left;
+	width: 100%;
 }
 
 .post_buttons{
