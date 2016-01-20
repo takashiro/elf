@@ -25,7 +25,7 @@ $_G = array();
 $_G['starttime'] = microtime(true);
 
 define('S_ROOT', dirname(dirname(__FILE__)).'/');
-define('S_VERSION', '3.0 beta');
+define('S_VERSION', '1.0.0');
 error_reporting(0);
 set_time_limit(0);
 
@@ -155,4 +155,5 @@ if(!defined('IN_ADMINCP')){
 	}
 }
 
-?>
+$app_inc = S_ROOT.'extension/app.inc.php';
+$_G['app'] = file_exists($app_inc) ? include $app_inc : array();
