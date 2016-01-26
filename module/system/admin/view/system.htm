@@ -85,14 +85,16 @@ $(function(){
 			<td><input type="text" id="cookiepre" name="system[error_report_to]" value="$_CONFIG[error_report_to]" /></td>
 		</tr>
 		<tr>
+			<th><label>头部附加代码：</label></th>
+			<td><textarea name="system[head_element]">$_CONFIG[head_element]</textarea></td>
+		</tr>
+		<tr>
 			<th><label>是否关站：</label></th>
 			<td>{echo Template::radio('system[site_closed]', array('否', '是'), !empty($_CONFIG['site_closed']))}</td>
 		</tr>
 		<tr>
 			<th><label>关站原因：</label></th>
-			<td>
-				<textarea name="system[site_close_reason]">$_CONFIG[site_close_reason]</textarea>
-			</td>
+			<td><textarea name="system[site_close_reason]">$_CONFIG[site_close_reason]</textarea></td>
 		</tr>
 	</table>
 
