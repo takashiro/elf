@@ -45,7 +45,7 @@ if(empty($_GET['action'])){
 		'appid' => $config['app_id'],
 		'redirect_uri' => $_G['site_url'].'index.php?mod=weixin:connect&action=login',
 		'response_type' => 'code',
-		'scope' => $in_wechat ? 'snsapi_base' : 'snsapi_login',
+		'scope' => $in_wechat ? 'snsapi_userinfo' : 'snsapi_login',
 	);
 
 	$url = 'https://open.weixin.qq.com/connect/'.($in_wechat ? 'oauth2/authorize' : 'qrconnect').'?'.http_build_query($parameters).'#wechat_redirect';
@@ -62,7 +62,9 @@ if(empty($_GET['action'])){
 		exit($api->getErrorMessage());
 
 	if(empty($result['unionid'])){
-		showmsg('failed_to_login_for_no_unionid');
+		$result = $api->getUserInfo($result['access_token'], $result['openid']);
+		if(empty($result['unionid']))
+			showmsg('failed_to_login_for_no_unionid');
 	}
 
 	$user = new User;
@@ -74,7 +76,7 @@ if(empty($_GET['action'])){
 		$user->regtime = TIMESTAMP;
 		$user->logintime = TIMESTAMP;
 		$user->wxunionid = $result['unionid'];
-		$user->nickname = lang('message', 'wxuser');
+		$user->nickname = empty($result['nickname']) ? lang('message', 'wxuser') : $result['nickname'];
 
 		//@to-do: remove this
 		if(!empty($_COOKIE['referrerid'])){

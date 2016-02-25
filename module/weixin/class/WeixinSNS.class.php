@@ -69,7 +69,7 @@ class WeixinSNS extends CUrl{
 	}
 
 	public function getUserInfo($access_token, $openid){
-		return $this->request('https://api.weixin.qq.com/sns/userinfo?access_token='.$access_token.'&openid='.$openid);
+		return $this->request('userinfo?access_token='.$access_token.'&openid='.$openid);
 	}
 
 }
