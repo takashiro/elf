@@ -23,10 +23,10 @@ CREATE TABLE IF NOT EXISTS `pre_administrator` (
 
 DROP TABLE IF EXISTS `pre_authkey`;
 CREATE TABLE IF NOT EXISTS `pre_authkey` (
-  `user` varchar(32) NOT NULL,
-  `key` varchar(32) NOT NULL,
+  `code` varchar(32) NOT NULL,
+  `authkey` varchar(32) NOT NULL,
   `expiry` int(11) unsigned NOT NULL,
-  PRIMARY KEY (`user`)
+  PRIMARY KEY (`code`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `pre_user`;

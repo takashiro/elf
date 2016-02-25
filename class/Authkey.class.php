@@ -22,18 +22,18 @@ takashiro@qq.com
 
 class Authkey extends DBObject{
 	const TABLE_NAME = 'authkey';
-	const PRIMARY_KEY = 'user';
+	const PRIMARY_KEY = 'code';
 
 	public static $ExpiryTime;
 
-	public function __construct($user){
+	public function __construct($code){
 		parent::__construct();
-		$this->fetch('*', array('user' => $user));
+		$this->fetch('*', array('code' => $code));
 	}
 
 	public function isExpired(){
 		if($this->expiry < TIMESTAMP){
-			if($this->user){
+			if($this->code){
 				$this->deleteFromDB();
 			}
 			return true;
@@ -42,7 +42,7 @@ class Authkey extends DBObject{
 	}
 
 	public function match($key){
-		return $this->key == $key;
+		return $this->authkey == $key;
 	}
 
 	public function matchOnce($key){
@@ -53,19 +53,19 @@ class Authkey extends DBObject{
 		return $result;
 	}
 
-	public static function Generate($user, $expiry = NULL){
+	public static function Generate($code, $expiry = NULL){
 		global $db;
 		$table = $db->select_table('authkey');
 
 		$authkey = array(
-			'user' => $user,
-			'key' => randomstr(32),
+			'code' => $code,
+			'authkey' => randomstr(32),
 			'expiry' => $expiry == NULL ? TIMESTAMP + self::$ExpiryTime : $expiry,
 		);
 
 		$table->insert($authkey, true);
 
-		return $authkey['key'];
+		return $authkey['authkey'];
 	}
 }
 
