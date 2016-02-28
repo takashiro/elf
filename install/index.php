@@ -54,6 +54,9 @@ $_G['timestamp'] = time();
 define('TIMESTAMP', $_G['timestamp']);
 
 if($_POST){
+	if(file_exists(S_ROOT.'./data/install.lock'))
+		exit('Elf Web App has been installed. ./data/install.lock must be removed before you reinstall the system.');
+
 	if(empty($_POST['db']['name']))
 		exit('Please fill in database name.');
 
