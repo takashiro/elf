@@ -1,3 +1,4 @@
+cd $(dirname "$0")
 echo '<?php exit;?>' > data/sha1.inc.php
 git ls-files -s | grep -v ".gitignore" | grep -v "sha1.sh" | cut -c8-47,50- >> data/sha1.inc.php
 
