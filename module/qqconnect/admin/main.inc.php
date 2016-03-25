@@ -32,6 +32,7 @@ class QQConnectMainModule extends AdminControlPanelModule{
 			isset($qqconnect[$var]) || $qqconnect[$var] = '';
 			isset($_POST['qqconnect'][$var]) && $qqconnect[$var] = $_POST['qqconnect'][$var];
 		}
+		$qqconnect['enabled'] = !empty($_POST['qqconnect']['enabled']);
 
 		if($_POST){
 			writedata('qqconnect', $qqconnect);

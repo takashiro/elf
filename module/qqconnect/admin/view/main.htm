@@ -12,6 +12,10 @@
 
 	<table>
 		<tr>
+			<th><label>是否启用：</label></th>
+			<td>{echo Template::radio('qqconnect[enabled]', array('否', '是'), !empty($qqconnect['enabled']))}</td>
+		</tr>
+		<tr>
 			<th><label>APP ID：</label></th>
 			<td><input type="text" name="qqconnect[appid]" value="$qqconnect[appid]" /></td>
 		</tr>
