@@ -24,6 +24,7 @@ takashiro@qq.com
 		var defaults = {
 			'edit' : '',
 			'delete' : '',
+			'submit_url' : '',
 			'primarykey' : 'id',
 			'noedit' : false,
 			'attr' : [],
@@ -31,6 +32,7 @@ takashiro@qq.com
 			'confirm_deletion_prompt' : '您确认删除吗？'
 		};
 
+		var editlist = this;
 		options = $.extend(defaults, options);
 
 		options.ajax_edit = options.edit + (options.edit.indexOf('?') == -1 ? '?' : '&') + 'ajax=1';
@@ -83,53 +85,60 @@ takashiro@qq.com
 					}
 				}
 			});
+		}
 
-			this.on('blur', 'tbody tr:not(:last-child) td input, tbody tr:not(:last-child) td textarea, tbody tr:not(:last-child) td select', function(e){
-				var input = $(e.target);
-				var td = input.parent();
-				var tr = td.parent();
-				var index = td.index();
-				var attr = options.attr[index];
-				var value = input.val();
+		this.on('blur', 'tbody tr:not(:last-child) td input, tbody tr:not(:last-child) td textarea, tbody tr:not(:last-child) td select', function(e){
+			var input = $(e.target);
+			var td = input.parent();
+			var tr = td.parent();
+			var index = td.index();
+			var attr = options.attr[index];
+			var value = input.val();
 
-				if(attr == ''){
-					return false;
+			if(attr == ''){
+				return false;
+			}
+
+			var data = {};
+			data[options.primarykey] = tr.data('primaryvalue');
+			data[attr] = value;
+
+			function show_result(data){
+				if(input.is('select')){
+					td.data('realvalue', value);
+					td.html(input.children(':selected').html());
+				}else{
+					td.html(value);
 				}
 
-				var data = {};
-				data[options.primarykey] = tr.data('primaryvalue');
-				data[attr] = value;
-
-				$.post(options.ajax_edit, data, function(data){
-					if(input.is('select')){
-						td.data('realvalue', value);
-						td.html(input.children(':selected').html());
-					}else{
-						td.html(value);
-					}
-
-					var tds = tr.children('td');
-					for(var i = 0; i < options.attr.length; i++){
-						var attr = options.attr[i];
-						if(typeof data[attr] != 'undefined'){
-							var current_input = tr.parent().children(':last-child').children().eq(i).find('input,select,textarea');
-							if(current_input.is('select')){
-								if(typeof data[attr] == 'boolean'){
-									data[attr] = data[attr] ? 1 : 0;
-								}
-								tds.eq(i).data('realvalue', data[attr]);
-								var current_input = current_input.clone();
-								current_input.val(data[attr]);
-								tds.eq(i).html(current_input.children(':selected').html());
-							}else{
-								tds.eq(i).html(data[attr]);
+				var tds = tr.children();
+				for(var i = 0; i < options.attr.length; i++){
+					var attr = options.attr[i];
+					if(typeof data[attr] != 'undefined'){
+						var current_input = tr.parent().children(':last-child').children().eq(i).find('input,select,textarea');
+						if(current_input.is('select')){
+							if(typeof data[attr] == 'boolean'){
+								data[attr] = data[attr] ? 1 : 0;
 							}
+							tds.eq(i).data('realvalue', data[attr]);
+							var current_input = current_input.clone();
+							current_input.val(data[attr]);
+							tds.eq(i).html(current_input.children(':selected').html());
+						}else{
+							tds.eq(i).html(data[attr]);
 						}
 					}
+				}
+			}
 
+			if(options.edit){
+				$.post(options.ajax_edit, data, function(data){
+					show_result(data);
 				}, 'json');
-			});
-		}
+			}else{
+				show_result(data);
+			}
+		});
 
 		this.on('click', '.add', function(e){
 			var button = $(e.target);
@@ -147,7 +156,7 @@ takashiro@qq.com
 				data[attr] = value;
 			}
 
-			$.post(options.ajax_edit, data, function(data){
+			function add_row(data){
 				new_tr.data('primaryvalue', data[options.primarykey]);
 
 				for(var i = 0; i < options.attr.length; i++){
@@ -170,7 +179,14 @@ takashiro@qq.com
 				new_tr.parent().append(empty_tr);
 
 				display_operations(new_tr.children('td:last-child'));
-			}, 'json');
+			}
+			if(options.edit){
+				$.post(options.ajax_edit, data, function(data){
+					add_row(data);
+				}, 'json');
+			}else{
+				add_row(data);
+			}
 		});
 
 		this.on('click', '.edit', function(e){
@@ -182,18 +198,65 @@ takashiro@qq.com
 		});
 
 		this.on('click', '.delete', function(e){
+			if(!confirm(options.confirm_deletion_prompt)){
+				return;
+			}
+
 			var button = $(e.target);
 			var tr = button.parent().parent();
-			var primaryvalue = tr.data('primaryvalue');
-			if(primaryvalue){
-				var data = {};
-				data[options.primarykey] = primaryvalue;
 
-				if(confirm(options.confirm_deletion_prompt)){
-					$.post(options.ajax_delete, data, function(){
-						tr.remove();
-					});
+			var primaryvalue = tr.data('primaryvalue');
+			var data = {};
+			if(primaryvalue){
+				data[options.primarykey] = primaryvalue;
+			}else{
+				tr.remove();
+				return;
+			}
+
+			if(options.delete){
+				$.post(options.ajax_delete, data, function(){
+					tr.remove();
+				});
+			}else{
+				tr.remove();
+			}
+		});
+
+		this.on('click', 'button.submit', function(){
+			var trs = editlist.find('tbody tr:not(:last-child)');
+			var content = [];
+			for(var i = 0; i < trs.length; i++){
+				var tr = trs.eq(i);
+				var tds = tr.children();
+				var row = {};
+				for(var j = 0; j < options.attr.length; j++){
+					var td = tds.eq(j);
+					var attr = options.attr[j];
+					if(!attr){
+						continue;
+					}
+					if(td.data('realvalue') != undefined){
+						row[attr] = td.data('realvalue');
+					}else{
+						row[attr] = td.text();
+					}
 				}
+				content.push(row);
+			}
+
+			var input = {};
+			editlist.find('.editlist_input').each(function(){
+				var name = $(this).attr('name');
+				var value = $(this).val();
+				input[name] = value;
+			});
+			input['content'] = content;
+
+			if(options.submit_url){
+				$.post(options.submit_url + '&ajax=1', JSON.stringify(input), function(result){
+					makeToast(result);
+				}, 'json');
 			}
 		});
 	}
