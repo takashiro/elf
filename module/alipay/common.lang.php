@@ -22,4 +22,6 @@ takashiro@qq.com
 
 return array(
 	'module_alipay' => '支付宝',
+
+	'permission_alipay' => '支付宝设置',
 );

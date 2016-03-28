@@ -22,4 +22,6 @@ takashiro@qq.com
 
 return array(
 	'module_bestpay' => '翼支付',
+
+	'permission_bestpay' => '翼支付设置',
 );
