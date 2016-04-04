@@ -246,7 +246,7 @@ takashiro@qq.com
 			}
 
 			var input = {};
-			editlist.find('.editlist_input').each(function(){
+			editlist.find('.editlist_input input, .editlist_input textarea, .editlist_input select').each(function(){
 				var name = $(this).attr('name');
 				var value = $(this).val();
 				input[name] = value;
