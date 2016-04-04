@@ -58,9 +58,10 @@ class Wallet{
 		$this->user = $user;
 	}
 
-	public function pay($order){
+	public function pay($order, $is_credit = false){
 		global $db, $tpre;
-		$db->query("UPDATE {$tpre}user SET wallet=wallet-{$order->totalprice} WHERE id={$this->user->id} AND wallet>={$order->totalprice}");
+		$extra = $is_credit ? '' : "AND wallet>={$order->totalprice}";
+		$db->query("UPDATE {$tpre}user SET wallet=wallet-{$order->totalprice} WHERE id={$this->user->id} $extra");
 		if($db->affected_rows > 0){
 			$order->tradestate = Wallet::TradeSuccess;
 			$order->paymentmethod = Wallet::ViaWallet;
