@@ -22,6 +22,7 @@ takashiro@qq.com
 
 
 require_once '../../core/init.inc.php';
+require_once 'class/Hanzi.class.php';
 
 
 //Administrator automatically logs in via cookie records
