@@ -2614,7 +2614,7 @@ INSERT INTO `pre_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
 ('宖', 'h', 'hong'),
 ('実', 's', 'shi'),
 ('宧', 'y', 'yi');
-INSERT INTO `hut_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
+INSERT INTO `pre_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
 ('宨', 't', 'tiao'),
 ('宩', 's', 'shi'),
 ('宬', 'c', 'cheng'),
@@ -5227,7 +5227,7 @@ INSERT INTO `hut_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
 ('栯', 'y', 'you'),
 ('栯', 'y', 'yu'),
 ('栰', 'f', 'fa');
-INSERT INTO `hut_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
+INSERT INTO `pre_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
 ('栱', 'g', 'gong'),
 ('栴', 'z', 'zhan'),
 ('栵', 'l', 'lie'),
@@ -7833,7 +7833,7 @@ INSERT INTO `hut_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
 ('琠', 't', 'tian'),
 ('琡', 's', 'shu'),
 ('琣', 'b', 'beng');
-INSERT INTO `hut_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
+INSERT INTO `pre_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
 ('琣', 'p', 'pei'),
 ('琤', 'c', 'cheng'),
 ('琧', 'e', 'e'),
@@ -10450,7 +10450,7 @@ INSERT INTO `hut_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
 ('箻', 'l', 'lv'),
 ('箼', 'w', 'wu'),
 ('箽', 'd', 'dong');
-INSERT INTO `hut_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
+INSERT INTO `pre_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
 ('箾', 's', 'shuo'),
 ('箾', 'x', 'xiao'),
 ('箾', 'q', 'qiao'),
@@ -13060,7 +13060,7 @@ INSERT INTO `hut_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
 ('蔫', 'n', 'nian'),
 ('拈', 'n', 'nian'),
 ('年', 'n', 'nian');
-INSERT INTO `hut_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
+INSERT INTO `pre_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
 ('碾', 'n', 'nian'),
 ('撵', 'n', 'nian'),
 ('捻', 'n', 'nian'),
@@ -15673,7 +15673,7 @@ INSERT INTO `hut_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
 ('绪', 'x', 'xu'),
 ('续', 'x', 'xu'),
 ('轩', 'x', 'xuan');
-INSERT INTO `hut_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
+INSERT INTO `pre_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
 ('喧', 'x', 'xuan'),
 ('宣', 'x', 'xuan'),
 ('悬', 'x', 'xuan'),
@@ -18287,7 +18287,7 @@ INSERT INTO `hut_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
 ('輘', 'l', 'ling'),
 ('輙', 'z', 'zhe'),
 ('輚', 'h', 'han');
-INSERT INTO `hut_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
+INSERT INTO `pre_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
 ('輛', 'l', 'liang'),
 ('輜', 'z', 'zi'),
 ('輝', 'h', 'hui'),
@@ -20901,7 +20901,7 @@ INSERT INTO `hut_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
 ('闋', 'q', 'que'),
 ('椤', 'l', 'luo'),
 ('棰', 'c', 'chui');
-INSERT INTO `hut_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
+INSERT INTO `pre_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
 ('椋', 'l', 'liang'),
 ('椁', 'g', 'guo'),
 ('楗', 'j', 'jian'),
@@ -23522,7 +23522,7 @@ INSERT INTO `hut_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
 ('鰓', 's', 'sai'),
 ('鰔', 'j', 'jian'),
 ('鰕', 'x', 'xia');
-INSERT INTO `hut_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
+INSERT INTO `pre_pinyin` (`hanzi`, `capital`, `pinyin`) VALUES
 ('鰖', 't', 'tuo'),
 ('鰗', 'h', 'hu'),
 ('鰘', 's', 'shi'),
