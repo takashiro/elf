@@ -92,5 +92,3 @@ if(!file_exists($filePath)){
 }
 
 return false;
-
-?>

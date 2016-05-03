@@ -160,5 +160,3 @@ class AlipayNotify {
 	//Alipay State
 	public static $TradeStateEnum;
 }
-
-?>

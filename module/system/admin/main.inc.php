@@ -65,5 +65,3 @@ class SystemMainModule extends AdminControlPanelModule{
 	}
 
 }
-
-?>

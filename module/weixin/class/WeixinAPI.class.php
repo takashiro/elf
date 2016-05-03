@@ -196,5 +196,3 @@ class WeixinAPI extends CUrl{
 		return $this->request('user/info?access_token='.$access_token.'&openid='.$wxopenid.'&lang=zh_CN');
 	}
 }
-
-?>

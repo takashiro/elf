@@ -275,5 +275,3 @@ class Mail{
 }
 
 Mail::LoadConfig();
-
-?>

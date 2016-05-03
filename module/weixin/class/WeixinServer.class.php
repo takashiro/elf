@@ -231,5 +231,3 @@ class WeixinServer{
 		return sha1($str);
 	}
 }
-
-?>

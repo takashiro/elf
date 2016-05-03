@@ -82,5 +82,3 @@ class SystemCacheModule extends AdminControlPanelModule{
 		include view('cache');
 	}
 }
-
-?>

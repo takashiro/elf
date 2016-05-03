@@ -49,5 +49,3 @@ class SystemMailModule extends AdminControlPanelModule{
 	}
 
 }
-
-?>

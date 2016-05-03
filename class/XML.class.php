@@ -139,5 +139,3 @@ class XML{
 		return $dom;
 	}
 }
-
-?>

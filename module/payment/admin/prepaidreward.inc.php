@@ -91,5 +91,3 @@ class PaymentPrepaidRewardModule extends AdminControlPanelModule{
 	}
 
 }
-
-?>

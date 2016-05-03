@@ -40,5 +40,3 @@ if(is_array($data)){
 }
 
 fclose($fp);
-
-?>

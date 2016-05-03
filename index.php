@@ -52,5 +52,3 @@ if(file_exists($module_path)){
 }else{
 	exit('illegal module id');
 }
-
-?>

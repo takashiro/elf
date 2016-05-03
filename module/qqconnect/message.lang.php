@@ -32,5 +32,3 @@ return array(
 	'successfully_unbinded_qq' => '成功解除与QQ的绑定。',
 	'binding_require_user_logged_in' => '请先登录，然后再进行绑定操作。',
 );
-
-?>

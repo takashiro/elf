@@ -50,5 +50,3 @@ class GeTuiConfigModule extends AdminControlPanelModule{
 	}
 
 }
-
-?>

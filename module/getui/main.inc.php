@@ -30,5 +30,3 @@ if(isset($_REQUEST['clientid'])){
 	$_G['user']->getuiclientid = $_REQUEST['clientid'];
 	exit('succeeded');
 }
-
-?>

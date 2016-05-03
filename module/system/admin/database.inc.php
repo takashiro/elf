@@ -477,5 +477,3 @@ class SystemDatabaseModule extends AdminControlPanelModule{
 	}
 
 }
-
-?>

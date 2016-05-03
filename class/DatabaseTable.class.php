@@ -179,5 +179,3 @@ class DatabaseTable{
 		return $sql;
 	}
 }
-
-?>

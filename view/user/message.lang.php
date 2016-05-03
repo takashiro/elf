@@ -7,5 +7,3 @@ return array(
 	'no_permission' => '抱歉，您没有权限进行该操作。',
 	'the_number_you_must_be_kidding_me' => '这金额……你一定是在逗我……',
 );
-
-?>

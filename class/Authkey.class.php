@@ -70,5 +70,3 @@ class Authkey extends DBObject{
 }
 
 Authkey::$ExpiryTime = 5 * 60;
-
-?>

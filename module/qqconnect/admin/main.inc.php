@@ -43,5 +43,3 @@ class QQConnectMainModule extends AdminControlPanelModule{
 	}
 
 }
-
-?>

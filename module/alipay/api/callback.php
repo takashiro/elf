@@ -40,5 +40,3 @@ if($verify_result){//验证成功
 }else{
 	showmsg('failed_to_retrieve_trade_state', 'index.php');
 }
-
-?>

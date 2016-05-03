@@ -26,5 +26,3 @@ return array(
 	'permission_qqconnect' => 'QQ互联设置',
 	'permission_qqconnect_comment' => '',
 );
-
-?>

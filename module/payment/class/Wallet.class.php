@@ -398,5 +398,3 @@ Wallet::$TradeStateEnum = array(
 	'TRADE_PENDING' => Wallet::TradePending,
 	'TRADE_FINISHED' => Wallet::TradeFinished,
 );
-
-?>

@@ -163,5 +163,3 @@ if($action == 'login'){
 		showmsg('binding_require_user_logged_in', 'index.php?mod=user');
 	}
 }
-
-?>

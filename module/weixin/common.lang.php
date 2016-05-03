@@ -41,5 +41,3 @@ return array(
 	'weixin_menu_type_pic_weixin' => '弹出微信相册发图器',
 	'weixin_menu_type_location_select' => '弹出地理位置选择器',
 );
-
-?>

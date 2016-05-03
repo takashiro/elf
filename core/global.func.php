@@ -429,5 +429,3 @@ function runhooks($hookid, $arguments = array()){
 		}
 	}
 }
-
-?>

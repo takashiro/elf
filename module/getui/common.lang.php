@@ -27,5 +27,3 @@ return array(
 	'permission_getui' => '个推发送消息',
 	'permission_getui:config' => '个推配置',
 );
-
-?>

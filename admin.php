@@ -127,5 +127,3 @@ if(method_exists($module, $action)){
 }else{
 	$module->defaultAction();
 }
-
-?>

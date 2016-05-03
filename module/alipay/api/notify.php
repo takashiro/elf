@@ -43,5 +43,3 @@ if($verify_result){//验证成功
     //验证失败
     exit('fail');
 }
-
-?>

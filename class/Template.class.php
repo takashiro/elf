@@ -344,5 +344,3 @@ class Template{
 		return $style_list;
 	}
 }
-
-?>

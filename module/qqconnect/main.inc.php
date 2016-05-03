@@ -104,5 +104,3 @@ if($action == 'login'){
 
 	showmsg('successfully_unbinded_qq', 'index.php?mod=order');
 }
-
-?>

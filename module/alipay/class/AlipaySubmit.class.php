@@ -162,4 +162,3 @@ class AlipaySubmit {
 		return $encrypt_key;
 	}
 }
-?>

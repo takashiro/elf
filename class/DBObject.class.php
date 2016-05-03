@@ -159,5 +159,3 @@ abstract class DBObject{
 		return $table->result_first('COUNT(*)');
 	}
 }
-
-?>

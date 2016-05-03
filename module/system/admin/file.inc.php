@@ -95,5 +95,3 @@ class SystemFileModule extends AdminControlPanelModule{
 		return sha1('blob '.strlen($data).chr(0).$data);
 	}
 }
-
-?>

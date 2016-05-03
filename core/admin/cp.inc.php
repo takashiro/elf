@@ -79,5 +79,3 @@ class CpModule extends AdminControlPanelModule{
 	}
 
 }
-
-?>

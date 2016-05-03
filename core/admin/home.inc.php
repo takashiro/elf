@@ -40,5 +40,3 @@ class HomeModule extends AdminControlPanelModule{
 		redirect('admin.php?mod=cp');
 	}
 }
-
-?>

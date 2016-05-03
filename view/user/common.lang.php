@@ -13,5 +13,3 @@ return array(
 	'transfer' => '转账',
 	'reward' => '奖励',
 );
-
-?>

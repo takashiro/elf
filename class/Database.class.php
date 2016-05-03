@@ -73,5 +73,3 @@ class Database extends mysqli{
 		return $row[0];
 	}
 }
-
-?>

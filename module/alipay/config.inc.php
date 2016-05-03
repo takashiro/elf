@@ -42,5 +42,3 @@ $alipay_config['input_charset'] = 'utf-8';
 //ca证书路径地址，用于curl中ssl校验
 //请保证cacert.pem文件在当前文件夹目录中
 $alipay_config['cacert'] = S_ROOT.'data/alipay_cacert.pem';
-
-?>

@@ -61,4 +61,3 @@ function rsaDecrypt($content, $private_key_path) {
     openssl_free_key($res);
     return $result;
 }
-?>

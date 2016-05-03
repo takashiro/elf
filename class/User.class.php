@@ -332,5 +332,3 @@ class User extends DBObject{
 		return ($this->trickflag & $trick) == $trick;
 	}
 }
-
-?>

@@ -61,5 +61,3 @@ if(!empty($_POST['UPTRANSEQ'])){
 }
 
 exit('fail');
-
-?>

@@ -66,5 +66,3 @@ class GeTuiMainModule extends AdminControlPanelModule{
 		include view('send');
 	}
 }
-
-?>

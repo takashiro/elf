@@ -36,5 +36,3 @@ return array(
 	'permission_system:mail' => '邮件设置',
 	'permission_system:cpconfig' => '后台设置',
 );
-
-?>

@@ -122,5 +122,3 @@ class Autoreply extends DBObject{
 		writecache('autoreply', NULL);
 	}
 }
-
-?>

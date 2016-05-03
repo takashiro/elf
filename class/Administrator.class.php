@@ -318,5 +318,3 @@ class Administrator extends User{
 
 	const DUPLICATED_ACCOUNT = -1;
 }
-
-?>

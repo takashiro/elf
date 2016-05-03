@@ -75,5 +75,3 @@ class WeixinMenuModule extends AdminControlPanelModule{
 	}
 
 }
-
-?>
