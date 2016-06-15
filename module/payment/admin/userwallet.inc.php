@@ -58,7 +58,6 @@ class PaymentUserWalletModule extends AdminControlPanelModule{
 		}else{
 			$time_start = '';
 		}
-		$query_string['time_start'] = $time_start;
 
 		if(!empty($_GET['time_end'])){
 			$time_end = rstrtotime($_GET['time_end']);
@@ -66,7 +65,6 @@ class PaymentUserWalletModule extends AdminControlPanelModule{
 		}else{
 			$time_end = '';
 		}
-		$query_string['time_end'] = $time_end;
 
 		$condition = empty($condition) ? '1' : implode(' AND ', $condition);
 
@@ -79,8 +77,14 @@ class PaymentUserWalletModule extends AdminControlPanelModule{
 			ORDER BY l.id DESC
 			LIMIT $offset, $limit");
 
-		$time_start && $time_start = rdate($time_start);
-		$time_end && $time_end = rdate($time_end);
+		if($time_start){
+			$time_start = rdate($time_start);
+			$query_string['time_start'] = $time_start;
+		}
+		if($time_end){
+			$time_end = rdate($time_end);
+			$query_string['time_end'] = $time_end;
+		}
 
 		$pagenum = $db->result_first("SELECT COUNT(*)
 			FROM {$tpre}userwalletlog l
