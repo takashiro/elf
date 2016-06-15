@@ -37,7 +37,7 @@ class Hanzi{
 			if(isset($capitals[$char])){
 				$result.= $capitals[$char];
 			}elseif(preg_match('/\w/', $char)){
-				$result.= $char;
+				$result.= strtolower($char);
 			}
 		}
 		return $result;
