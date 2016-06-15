@@ -142,8 +142,8 @@ takashiro@qq.com
 
 		this.on('click', '.add', function(e){
 			var button = $(e.target);
-			var new_tr = button.parent().parent();
-			var empty_tr = new_tr.clone();
+			var empty_tr = button.parent().parent();
+			var new_tr = empty_tr.clone();
 
 			var data = {};
 
@@ -162,7 +162,7 @@ takashiro@qq.com
 				for(var i = 0; i < options.attr.length; i++){
 					var attr = options.attr[i];
 					var td = new_tr.children().eq(i);
-					var input = td.find('input,select');
+					var input = empty_tr.children().eq(i).find('input,select,textarea');
 					if(input.is('select')){
 						if(typeof data[attr] == 'boolean'){
 							data[attr] = data[attr] ? 1 : 0;
@@ -171,12 +171,15 @@ takashiro@qq.com
 						td.html(input.find(':selected').html());
 						td.data('realvalue', data[attr]);
 					}else{
+						if(input.data('realvalue') != undefined){
+							td.data('realvalue', input.data('realvalue'));
+						}
 						td.html(data[attr]);
 					}
 				}
 
-				empty_tr.find('input:not([readonly]), select:not([readonly])').val('');
-				new_tr.parent().append(empty_tr);
+				empty_tr.find('input:not([readonly]), select:not([readonly]), textarea:not([readonly])').val('');
+				empty_tr.before(new_tr);
 
 				display_operations(new_tr.children('td:last-child'));
 			}
