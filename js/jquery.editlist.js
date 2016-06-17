@@ -149,7 +149,7 @@ takashiro@qq.com
 
 			for(var i = 0; i < options.attr.length; i++){
 				var attr = options.attr[i];
-				var td = new_tr.children().eq(i);
+				var td = empty_tr.children().eq(i);
 				var input = td.find('input,select,textarea');
 				var value = input.val();
 
@@ -161,6 +161,9 @@ takashiro@qq.com
 
 				for(var i = 0; i < options.attr.length; i++){
 					var attr = options.attr[i];
+					if(!attr){
+						continue;
+					}
 					var td = new_tr.children().eq(i);
 					var input = empty_tr.children().eq(i).find('input,select,textarea');
 					if(input.is('select')){
