@@ -29,7 +29,8 @@ takashiro@qq.com
 			'noedit' : false,
 			'attr' : [],
 			'buttons' : {'edit':'编辑', 'delete':'删除'},
-			'confirm_deletion_prompt' : '您确认删除吗？'
+			'confirm_deletion_prompt' : '您确认删除吗？',
+			'onSubmit' : function(){ return false; }
 		};
 
 		var editlist = this;
@@ -230,6 +231,13 @@ takashiro@qq.com
 		});
 
 		this.on('click', 'button.submit', function(){
+			if(typeof options.onSubmit == 'function'){
+				var broken = options.onSubmit();
+				if(broken){
+					return;
+				}
+			}
+
 			var trs = editlist.find('tbody tr:not(:last-child)');
 			var content = [];
 			for(var i = 0; i < trs.length; i++){
@@ -252,10 +260,12 @@ takashiro@qq.com
 			}
 
 			var input = {};
-			editlist.find('.editlist_input input, .editlist_input textarea, .editlist_input select').each(function(){
+			editlist.find('.editlist_input input, .editlist_input textarea, .editlist_input select, .editlist_input hidden').each(function(){
 				var name = $(this).attr('name');
-				var value = $(this).val();
-				input[name] = value;
+				if(name){
+					var value = $(this).val();
+					input[name] = value;
+				}
 			});
 			input['content'] = content;
 
