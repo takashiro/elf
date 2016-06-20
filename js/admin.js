@@ -39,6 +39,13 @@ function randomstr(length){
 }
 
 function makeToast(data){
+	if(typeof data == 'string'){
+		data = {
+			'message' : data,
+			'url_forward' : ''
+		};
+	}
+
 	var toast = $('<div class="toast"></div>');
 	toast.html(data.message);
 
