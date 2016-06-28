@@ -22,7 +22,7 @@ takashiro@qq.com
 
 define('S_ROOT', dirname(dirname(__FILE__)).'/');
 define('IN_ADMINCP', true);
-error_reporting(0);//Debug
+//error_reporting(0);//Debug
 
 if(PHP_VERSION < '5.5'){
 	exit('Elf Web App requires PHP 5.5 or later.');
@@ -98,7 +98,8 @@ if($_POST){
 	$db->connect($dbconfig['host'], $dbconfig['user'], $dbconfig['pw'], '', $dbconfig['pconnect']);
 	$db->set_table_prefix($dbconfig['tpre']);
 
-	$db->query("CREATE DATABASE IF NOT EXISTS `{$dbconfig['name']}` DEFAULT CHARSET utf8 COLLATE utf8_general_ci");
+	$db->query("DROP DATABASE IF EXISTS `{$dbconfig['name']}`");
+	$db->query("CREATE DATABASE `{$dbconfig['name']}` DEFAULT CHARSET utf8 COLLATE utf8_general_ci");
 	$databases = $db->fetch_all('SHOW DATABASES');
 	$database_exists = false;
 	foreach($databases as $d){
