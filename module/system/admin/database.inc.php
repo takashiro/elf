@@ -38,7 +38,7 @@ class SqlTableColumn{
 			}
 		}else{
 			$ext_sql = 'NOT NULL';
-			if($this->default_value){
+			if($this->default_value !== null){
 				$ext_sql.= ' DEFAULT \''.$this->default_value.'\'';
 			}
 		}
@@ -77,7 +77,7 @@ class SqlTable{
 	}
 
 	public function parseColumns($columns){
-		preg_match_all('/`(\w+)`\s+(\w+(?:\(\d+(?:,\d+)*\))?(?:\s+(?:unsigned|unsigned))?)(?:\s+((?:NOT\s+)?NULL))?(?:\s+DEFAULT\s+(\'.*?\'|NULL|CURRENT_TIMESTAMP))?(?:\s+(AUTO_INCREMENT))?\s*[,)]/i', $columns, $matches);
+		preg_match_all('/`(\w+)`\s+(\w+(?:\(\d+(?:,\d+)*\))?(?:\s+(?:unsigned|unsigned))?)(?:\s+((?:NOT\s+)?NULL))?(?:\s+(DEFAULT\s+(?:\'.*?\'|NULL|CURRENT_TIMESTAMP)))?(?:\s+(AUTO_INCREMENT))?\s*[,)]/i', $columns, $matches);
 
 		$column_num = count($matches[0]);
 		for($i = 0; $i < $column_num; $i++){
@@ -85,9 +85,11 @@ class SqlTable{
 			$c->name = $matches[1][$i];
 			$c->type = $matches[2][$i];
 			$c->accept_null = strcasecmp($matches[3][$i], 'NULL') == 0;
-			$c->default_value = trim($matches[4][$i], '\' ');
-			if(strcasecmp($c->default_value, 'NULL') == 0){
-				$c->accept_null = true;
+			if(strncasecmp($matches[4][$i], 'DEFAULT', 7) === 0){
+				$c->default_value = trim(substr($matches[4][$i], 7), '\' ');
+				if(strcasecmp($c->default_value, 'NULL') == 0){
+					$c->accept_null = true;
+				}
 			}
 			$c->extra = strtolower($matches[5][$i]);
 
