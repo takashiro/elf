@@ -41,6 +41,10 @@ class WeixinMainModule extends AdminControlPanelModule{
 			'app_id', 'app_secret', 'mch_id', 'mch_key',
 		);
 
+		$wxapp_fields = array(
+			'app_id', 'app_secret',
+		);
+
 		if($_POST){
 			$wxconnect = array();
 			$p = &$_POST['wxconnect'];
@@ -63,6 +67,12 @@ class WeixinMainModule extends AdminControlPanelModule{
 			}
 			writedata('wxsv', $wxsv);
 
+			$wxapp = array();
+			foreach($wxapp_fields as $var){
+				$wxapp[$var] = isset($_POST['wxapp'][$var]) ? $_POST['wxapp'][$var] : '';
+			}
+			writedata('wxapp', $wxapp);
+
 			showmsg('successfully_updated_wxconnect_config', 'refresh');
 		}
 
@@ -79,6 +89,11 @@ class WeixinMainModule extends AdminControlPanelModule{
 		$wxsv = readdata('wxsv');
 		foreach($wxsv_fields as $var){
 			isset($wxsv[$var]) || $wxsv[$var] = '';
+		}
+
+		$wxapp = readdata('wxapp');
+		foreach($wxapp_fields as $var){
+			isset($wxapp[$var]) || $wxapp[$var] = '';
 		}
 
 		include view('config');

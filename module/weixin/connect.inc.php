@@ -29,10 +29,13 @@ if(isset($_SERVER['HTTP_USER_AGENT'])){
 	elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'GT-I9500') !== false && strpos($_SERVER['HTTP_USER_AGENT'], 'MQQBrowser') !== false)
 		$in_wechat = true;
 }
+$is_client = !empty($_GET['is_client']);
 
 
 if($in_wechat){
 	$config = readdata('wxsv');
+}elseif($is_client){
+	$config = readdata('wxapp');
 }else{
 	$config = readdata('wxsns');
 }
