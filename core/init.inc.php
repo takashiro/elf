@@ -60,6 +60,7 @@ $_G['config']['db'] = include S_ROOT.'./data/dbconfig.inc.php';
 $_CONFIG = &$_G['config'];
 
 $root_url = dirname($PHP_SELF);
+$root_url == '\\' && $root_url = '';
 $current_dir = realpath(dirname($_SERVER['SCRIPT_FILENAME']));
 $target_dir = realpath(S_ROOT);
 while($current_dir != $target_dir){
