@@ -107,7 +107,7 @@ function popup_message(title, message){
 		if(val == 0){
 			this.hide();
 		}else{
-			this.css('display', 'inline');
+			this.show();
 		}
 	}
 })(jQuery);
@@ -115,8 +115,8 @@ function popup_message(title, message){
 $(function(){
 	$('input.number').each(function(){
 		var number_box = $('<div class="numberbox"></div>');
-		var increase_button = $('<button type="button" class="increase"></button>');
-		var decrease_button = $('<button type="button" class="decrease"></button>');
+		var increase_button = $('<button type="button" class="increase">+</button>');
+		var decrease_button = $('<button type="button" class="decrease">-</button>');
 		$(this).wrap(number_box);
 		$(this).before(decrease_button);
 		$(this).after(increase_button);
@@ -188,5 +188,16 @@ $(function(){
 	$('.mpage .current').click(function(e){
 		if($(this).attr('href') == '###')
 			e.preventDefault();
+	});
+
+	$('ul.nav li').each(function(){
+		var li = $(this);
+		var a = li.children('a');
+		var current_url = location.href;
+		current_url = current_url.substr(current_url.indexOf('/', current_url.indexOf('://') + 3) + 1);
+		if(a.attr('href').indexOf(current_url) === 0){
+			li.addClass('active');
+			return false;
+		}
 	});
 });
