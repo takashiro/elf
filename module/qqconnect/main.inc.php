@@ -22,6 +22,11 @@ takashiro@qq.com
 
 require_once MOD_ROOT.'3rdparty/qqConnectAPI.php';
 
+$config = readdata('qqconnect');
+if(empty($config) || empty($config['appid']) || empty($config['appkey'])){
+	showmsg('qqconnect_is_temporarily_unavailable', 'back');
+}
+
 $actions = array('login', 'unbind');
 $action = !empty($_GET['action']) && in_array($_GET['action'], $actions) ? $_GET['action'] : $actions[0];
 
@@ -85,7 +90,7 @@ if($action == 'login'){
 
 }elseif($action == 'unbind'){
 	if(!$_G['user']->isLoggedIn()){
-		showmsg('binding_require_user_logged_in', 'index.php?mod=user');
+		showmsg('binding_require_user_logged_in', 'index.php?mod=user:login');
 	}
 
 	if(!$_G['user']->qqopenid){
