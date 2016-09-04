@@ -23,7 +23,7 @@ takashiro@qq.com
 if(!defined('S_ROOT')) exit('access denied');
 
 if(!$_G['user']->isLoggedIn())
-	showmsg('inaccessible_if_not_logged_in', 'index.php?mod=user&action=login');
+	showmsg('inaccessible_if_not_logged_in', 'index.php?mod=user:login');
 
 $paymentconfig = readdata('payment');
 if(empty($paymentconfig['enabled_method'][Wallet::ViaWeChat])){

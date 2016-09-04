@@ -160,6 +160,6 @@ if($action == 'login'){
 		$_G['user']->wxunionid = NULL;
 		showmsg('successfully_unbinded_wxopenid', 'refresh');
 	}else{
-		showmsg('binding_require_user_logged_in', 'index.php?mod=user');
+		showmsg('binding_require_user_logged_in', 'index.php?mod=user:login');
 	}
 }

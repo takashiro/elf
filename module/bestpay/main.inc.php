@@ -23,7 +23,7 @@ takashiro@qq.com
 if(!defined('S_ROOT')) exit('access denied');
 
 if(!$_G['user']->isLoggedIn()){
-	redirect('index.php?mod=user');
+	redirect('index.php?mod=user:login');
 }
 
 $paymentconfig = readdata('payment');

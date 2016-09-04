@@ -35,7 +35,7 @@ if(empty($_GET['get'])){
 
 	if(empty($_GET['skipprotector']) && isWeixin()){
 		if(!$_G['user']->isLoggedIn()){
-			showmsg('inaccessible_if_not_logged_in', 'index.php?mod=user&action=login');
+			showmsg('inaccessible_if_not_logged_in', 'index.php?mod=user:login');
 		}
 
 		$get = $_GET;
@@ -51,7 +51,7 @@ if(empty($_GET['get'])){
 }
 
 if(!$_G['user']->isLoggedIn()){
-	showmsg('inaccessible_if_not_logged_in', 'index.php?mod=user&action=login');
+	showmsg('inaccessible_if_not_logged_in', 'index.php?mod=user:login');
 }
 
 $paymentconfig = readdata('payment');

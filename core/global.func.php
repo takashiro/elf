@@ -174,7 +174,7 @@ function showmsg($message, $url_forward = ''){
 */
 function redirect($url){
 	$url = addslashes($url);
-	rheader('Location: '.$url);
+	include view('redirect');
 	exit;
 }
 
