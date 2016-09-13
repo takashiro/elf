@@ -6,8 +6,8 @@ $(function(){
 });
 </script>
 
-<div class="box">
-	<h1>我的钱包</h1>
+<section class="box layout">
+	<header><i class="icon icon-money"></i>我的钱包</header>
 	<div class="content">
 
 		<div class="edit_form">
@@ -37,7 +37,7 @@ $(function(){
 				</div>
 
 				<div class="post_buttons">
-					<button type="submit">充值</button>
+					<button type="submit" class="big">充值</button>
 				</div>
 			</form>
 		</div>
@@ -46,6 +46,6 @@ $(function(){
 		<!--{loop $prepaidreward $r}--><a href="index.php?mod=alipay&recharge=$r[minamount]" class="button" style="width:auto">充{$r[minamount]}<!--{if $r['maxamount'] > $r['minamount']}--> ~ {$r[maxamount]}<!--{/if}-->{echo Wallet::$PriceUnit}返{$r[reward]}{echo Wallet::$PriceUnit}</a> <!--{/loop}-->
 		<!--{/if}-->
 	</div>
-</div>
+</section>
 
 {template footer}

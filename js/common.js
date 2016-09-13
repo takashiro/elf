@@ -162,15 +162,29 @@ $(function(){
 		});
 	});
 
-	$('.mselect').on('click', 'li', function(e){
-		var li = $(e.target);
-		var radio = li.children('input');
-		if (!radio.is(':disabled')){
+	$('ul.mselect li').click(function(){
+		var li = $(this);
+		var radio = li.children('input[type="radio"]');
+		if(!radio.is(':disabled')){
 			var mselect = li.parent();
 			mselect.children('li').removeClass('checked');
 			li.addClass('checked');
+			mselect.find('input[type="radio"]:checked').prop('checked', false).change();
+			radio.prop('checked', true).change();
 		}
-		radio.click();
+	});
+
+	$('ul.mselect').each(function(){
+		var ul = $(this);
+		var li = ul.children();
+		li.each(function(){
+			var input = li.find('input[type="radio"]');
+			if(input.is(':checked')){
+				$(this).addClass('checked');
+				return false;
+			}
+		});
+		li.eq(0).click();
 	});
 
 	var checkboxes = $('.checkbox_list label input[type="checkbox"]');
