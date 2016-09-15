@@ -26,10 +26,10 @@ if(!empty($_CONFIG['site_closed'])){
 	showmsg($_CONFIG['site_close_reason']);
 }
 
-if(empty($_GET['mod']))
-	$_GET['mod'] = empty($_CONFIG['homemodule']) ? '' : $_CONFIG['homemodule'];
+if(empty($_REQUEST['mod']))
+	$_REQUEST['mod'] = empty($_CONFIG['homemodule']) ? '' : $_CONFIG['homemodule'];
 
-$module = explode(':', $_GET['mod']);
+$module = explode(':', $_REQUEST['mod']);
 if(empty($module[0]) || !preg_match('/^\w+$/', $module[0])){
 	exit('illegal module id');
 }

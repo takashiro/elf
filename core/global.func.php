@@ -173,6 +173,7 @@ function showmsg($message, $url_forward = ''){
 	Redirect to $url using JavaScript. JavaScript redirect forces some browsers to refresh page caches.
 */
 function redirect($url){
+	extract($GLOBALS, EXTR_REFS | EXTR_OVERWRITE);
 	$url = addslashes($url);
 	include view('redirect');
 	exit;
