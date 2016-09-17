@@ -204,12 +204,13 @@ $(function(){
 			e.preventDefault();
 	});
 
+	var current_url = location.href;
+	var base_url = current_url.substr(0, current_url.lastIndexOf('/'));
 	$('ul.nav li').each(function(){
 		var li = $(this);
 		var a = li.children('a');
-		var current_url = location.href;
-		current_url = current_url.substr(current_url.indexOf('/', current_url.indexOf('://') + 3) + 1);
-		if(a.attr('href').indexOf(current_url) === 0){
+		var href = base_url + '/' + a.attr('href');
+		if(href == current_url){
 			li.addClass('active');
 			return false;
 		}
