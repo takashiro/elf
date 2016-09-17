@@ -96,6 +96,16 @@ class Template{
 		}
 	}
 
+	public function getModuleRoot(){
+		if(defined('MOD_NAME')){
+			$module_path = 'module/'.MOD_NAME.'/';
+			file_exists($module_path) || $module_path = 'extension/'.$module_path;
+			defined('IN_ADMINCP') && $module_path.= 'admin/';
+			return $module_path;
+		}
+		return '';
+	}
+
 	public function parse(){
 		$source_path = $this->getSourcePath();
 		$template = file_get_contents($source_path);
