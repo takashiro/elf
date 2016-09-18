@@ -122,10 +122,16 @@ $(function(){
 		$(this).after(increase_button);
 
 		$(this).change(function(){
+			var value = parseInt($(this).val(), 10);
+			if(value > 0){
+				decrease_button.css('visibility', 'visible');
+			}else{
+				decrease_button.css('visibility', 'hidden');
+			}
+
 			var maxvalue = $(this).data('maxvalue');
 			if(maxvalue){
 				maxvalue = parseInt(maxvalue, 10);
-				var value = parseInt($(this).val(), 10);
 				if(value > maxvalue){
 					$(this).val(maxvalue);
 				}
@@ -145,6 +151,8 @@ $(function(){
 			}
 			input.val(number);
 			input.change();
+
+			decrease_button.css('visibility', 'visible');
 		});
 
 		decrease_button.click(function(e){
@@ -156,10 +164,13 @@ $(function(){
 				number--;
 			}else{
 				number = '';
+				decrease_button.css('visibility', 'hidden');
 			}
 			input.val(number);
 			input.change();
 		});
+
+		$(this).change();
 	});
 
 	$('ul.mselect li').click(function(){
