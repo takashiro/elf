@@ -178,6 +178,24 @@ $php_extension = array(
 	'mcrypt' => function_exists('mcrypt_generic_init'),
 );
 
+$writable_directories = array(
+	'./data/',
+	'./data/attachment/',
+	'./data/cache/',
+	'./data/error/',
+	'./data/js/',
+	'./data/log/',
+	'./data/template/',
+);
+
+$directory_results = array();
+foreach($writable_directories as $dir){
+	$directory_results[] = array(
+		'path' => $dir,
+		'is_writable' => is_writable(S_ROOT.$dir),
+	);
+}
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -196,6 +214,16 @@ $php_extension = array(
 	</header>
 
 	<div class="content">
+		<h3>目录权限检查</h3>
+		<table>
+		<?php foreach($directory_results as $dir){ ?>
+			<tr>
+				<th><?php echo $dir['path'];?>：</th>
+				<td><?php if($dir['is_writable']){ ?>可写<?php }else{ ?>不可写<?php }?></td>
+			</tr>
+		<?php } ?>
+		</table>
+
 		<h3>PHP扩展</h3>
 		<table>
 		<?php foreach($php_extension as $name => $installed){ ?>
@@ -274,7 +302,7 @@ $php_extension = array(
 
 	<footer>
 		<div class="copyright">
-			<p><a href="###" target="_blank">Elf Web App</a>, Powered By <a href="http://takashiro.github.io" target="_blank">Kazuichi Takashiro</a></p>
+			<p><a href="###" target="_blank">Elf Web App</a>, Powered By <a href="http://takashiro.me" target="_blank">Kazuichi Takashiro</a></p>
 		</div>
 	</footer>
 
