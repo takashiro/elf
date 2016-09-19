@@ -88,8 +88,7 @@ if($_POST){
 	$_G['config'] = array_merge($config, $stconfig);
 	$_G['config']['db'] = $dbconfig;
 
-	$db = new Database;
-	$db->connect($dbconfig['host'], $dbconfig['user'], $dbconfig['pw'], '', $dbconfig['pconnect']);
+	$db = new Database($dbconfig['host'], $dbconfig['user'], $dbconfig['pw'], $dbconfig['name']);
 	$db->set_table_prefix($dbconfig['tpre']);
 
 	$db->query("DROP DATABASE IF EXISTS `{$dbconfig['name']}`");
