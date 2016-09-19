@@ -69,14 +69,10 @@ if($_POST){
 		'style' => 'default',
 		'refversion' => randomstr(3),
 	);
-	writeconfig('config', $config);
-	writeconfig('config_bak_'.randomstr(3), $config);
 
 	$stconfig = array(
 		'salt' => randomstr(32),
 	);
-	writeconfig('stconfig', $stconfig);
-	writeconfig('stconfig_bak_'.randomstr(3), $stconfig);
 
 	$dbconfig = array(
 		'type' => 'mysql',
@@ -88,8 +84,6 @@ if($_POST){
 		'name' => $_POST['db']['name'],
 		'pconnect' => intval($_POST['db']['pconnect']),
 	);
-	writeconfig('dbconfig', $dbconfig);
-	writeconfig('dbconfig_bak_'.randomstr(3), $dbconfig);
 
 	$_G['config'] = array_merge($config, $stconfig);
 	$_G['config']['db'] = $dbconfig;
@@ -162,6 +156,14 @@ if($_POST){
 	$admin->login($_POST['admin']['account'], $_POST['admin']['password']);
 	$admin->permissions = 'all';
 	unset($admin);
+
+	//保存配置
+	writeconfig('config', $config);
+	writeconfig('config_bak_'.randomstr(3), $config);
+	writeconfig('stconfig', $stconfig);
+	writeconfig('stconfig_bak_'.randomstr(3), $stconfig);
+	writeconfig('dbconfig', $dbconfig);
+	writeconfig('dbconfig_bak_'.randomstr(3), $dbconfig);
 
 	//安装标记
 	touch(S_ROOT.'./data/install.lock');
