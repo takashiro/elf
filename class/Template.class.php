@@ -90,9 +90,9 @@ class Template{
 	public function getTemplateRoot(){
 		global $_G;
 		if($this->style == 'default'){
-			return $_G['root_url'].'view/'.$this->type.'/';
+			return 'view/'.$this->type.'/';
 		}else{
-			return $_G['root_url'].'extension/view/'.$this->type.'/'.$this->style.'/';
+			return 'extension/view/'.$this->type.'/'.$this->style.'/';
 		}
 	}
 
@@ -213,7 +213,7 @@ class Template{
 		$th = $this;
 		$template = preg_replace_callback("/\{__{$const_regexp}__\}/s", function($matches) use(&$th){
 			$const = str_replace('_', '', $matches[1]);
-			return $th->{'get'.$const}();
+			return '<?php echo $_G[\'root_url\'];?>'.$th->{'get'.$const}();
 		}, $template);
 
 		$template = preg_replace("/\{$const_regexp\}/s", "<?php echo \\1;?>", $template);
