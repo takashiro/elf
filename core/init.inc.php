@@ -23,6 +23,7 @@ takashiro@qq.com
 //初始化一个自定义的全局变量，用于存储用户信息，缓存信息等等
 $_G = array();
 $_G['starttime'] = microtime(true);
+$_G['navtitle'] = '';
 
 define('S_ROOT', dirname(dirname(__FILE__)).'/');
 define('S_VERSION', '1.0.0');
