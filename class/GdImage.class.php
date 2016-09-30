@@ -107,6 +107,11 @@ class GdImage{
 		'bmp',
 		'webp',
 	);
+	const PNG = 1;
+	const JPG = 2;
+	const GIF = 3;
+	const BMP = 4;
+	const WEBP = 5;
 
 	public function getExtensionId(){
 		foreach(self::$ExtensionId as $id => $extension){

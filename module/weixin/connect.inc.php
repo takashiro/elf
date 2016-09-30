@@ -40,29 +40,40 @@ if($in_wechat){
 	$config = readdata('wxsns');
 }
 
-if(empty($_GET['action'])){
-	if($_G['user']->isLoggedIn())
-		redirect('index.php');
+if(empty($_GET['code'])){
+	$action = $_GET['action'] ?? 'login';
+	$actions = array('login', 'updateavatar');
+	$action = in_array($action, $actions) ? $action : $actions[0];
+	if($action == 'login' && $_G['user']->isLoggedIn()){
+		redirect($_GET['referrer'] ?? 'index.php');
+	}
+
+	$redirect_url = $_G['site_url'].'index.php?mod=weixin:connect&action='.$action;
+	$referrer = $_GET['referrer'] ?? '';
+	if($referrer){
+		$redirect_url.= '&referrer='.$referrer;
+	}
 
 	$parameters = array(
 		'appid' => $config['app_id'],
-		'redirect_uri' => $_G['site_url'].'index.php?mod=weixin:connect&action=login',
+		'redirect_uri' => $redirect_url,
 		'response_type' => 'code',
 		'scope' => $in_wechat ? 'snsapi_userinfo' : 'snsapi_login',
 	);
 
 	$url = 'https://open.weixin.qq.com/connect/'.($in_wechat ? 'oauth2/authorize' : 'qrconnect').'?'.http_build_query($parameters).'#wechat_redirect';
 	redirect($url);
+}
 
-}elseif($_GET['action'] == 'login'){
-	if(empty($_GET['code']))
-		exit('Parameter code is required.');
+$api = new WeixinSNS($config['app_id'], $config['app_secret']);
 
-	$api = new WeixinSNS($config['app_id'], $config['app_secret']);
+$result = $api->getAccessToken($_GET['code']);
+if($api->hasError())
+	exit($api->getErrorMessage());
 
-	$result = $api->getAccessToken($_GET['code']);
-	if($api->hasError())
-		exit($api->getErrorMessage());
+if($_GET['action'] == 'login'){
+	if($_G['user']->isLoggedIn())
+		redirect('index.php');
 
 	if(empty($result['unionid'])){
 		$result = $api->getUserInfo($result['access_token'], $result['openid']);
@@ -104,6 +115,28 @@ if(empty($_GET['action'])){
 
 	$user->force_login();
 	redirect('index.php');
+
+}elseif($_GET['action'] == 'updateavatar'){
+	if(!$_G['user']->isLoggedIn()){
+		redirect('index.php?mod=weixin:connect');
+	}
+
+	$result = $api->getUserInfo($result['access_token'], $result['openid']);
+	if(empty($result['headimgurl']))
+		showmsg('failed_to_fetch_avatar_url');
+
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $result['headimgurl']);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	$avatar_binary = curl_exec($ch);
+	curl_close($ch);
+
+	$_G['user']->avatar = GdImage::JPG;
+	$fp = fopen($_G['user']->getImage('avatar'), 'wb');
+	fwrite($fp, $avatar_binary);
+	fclose($fp);
+
+	showmsg('successfully_updated_your_avatar', $_GET['referrer'] ?? 'index.php');
 }
 
 showmsg('illegal_operation');

@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS `pre_user` (
   `logintime` int(11) unsigned NOT NULL,
   `loginkey` smallint(5) unsigned NOT NULL,
   `trickflag` int(11) unsigned NOT NULL,
+  `avatar` tinyint(4) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `account` (`account`),
   UNIQUE KEY `mobile` (`mobile`),

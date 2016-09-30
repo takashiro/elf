@@ -23,4 +23,5 @@ return array(
 
 	'inaccessible_if_not_logged_in' => '未登录状态下不能进行微信支付。',
 	'wechatpay_is_disabled' => '微信支付暂时关闭。',
+	'successfully_updated_your_avatar' => '成功更新了您的微信头像！',
 );

@@ -131,6 +131,7 @@ class User extends DBObject{
 			$attr['nickname'] = '';
 		}
 		isset($attr['id']) || $attr['id'] = 0;
+		$attr['avatar'] = $this->getImage('avatar');
 		return $attr;
 	}
 
