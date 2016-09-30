@@ -26,15 +26,15 @@ class GdImage{
 	private $type = null;
 
 	private static $TypeConfig = array(
-		IMAGETYPE_PNG => array(1, 'png', 'png'),
-		IMAGETYPE_JPEG => array(2, 'jpg', 'jpeg'),
-		IMAGETYPE_GIF => array(3, 'gif', 'gif'),
-		IMAGETYPE_BMP => array(4, 'bmp', 'wbmp'),
+		IMAGETYPE_PNG => array('png', 'png'),
+		IMAGETYPE_JPEG => array('jpg', 'jpeg'),
+		IMAGETYPE_GIF => array('gif', 'gif'),
+		IMAGETYPE_BMP => array('bmp', 'wbmp'),
 	);
-	const PNG = 1;
-	const JPG = 2;
-	const GIF = 3;
-	const BMP = 4;
+	const PNG = IMAGETYPE_PNG;
+	const JPG = IMAGETYPE_JPEG;
+	const GIF = IMAGETYPE_GIF;
+	const BMP = IMAGETYPE_BMP;
 
 	public function __construct($path){
 		if(!file_exists($path) || !is_readable($path)){
@@ -44,7 +44,7 @@ class GdImage{
 		$this->type = exif_imagetype($path);
 		if(isset(self::$TypeConfig[$this->type])){
 			$config = self::$TypeConfig[$this->type];
-			$func = 'imagecreatefrom'.$config[2];
+			$func = 'imagecreatefrom'.$config[1];
 			$this->image = $func($path);
 		}
 	}
@@ -62,7 +62,7 @@ class GdImage{
 	public function save($path, $type = null){
 		$type = $type ?? $this->type;
 		if(isset(self::$TypeConfig[$type])){
-			$func = 'image'.self::$TypeConfig[$type][2];
+			$func = 'image'.self::$TypeConfig[$type][1];
 			$func($this->image, $path);
 		}
 	}
@@ -98,14 +98,14 @@ class GdImage{
 	}
 
 	public function getExtension(){
-		return self::$TypeConfig[$this->type][1];
-	}
-
-	public function getExtensionId(){
 		return self::$TypeConfig[$this->type][0];
 	}
 
+	public function getExtensionId(){
+		return $this->type;
+	}
+
 	static public function Extension($id){
-		return self::$TypeConfig[$id][1] ?? '';
+		return self::$TypeConfig[$id][0] ?? '';
 	}
 }
