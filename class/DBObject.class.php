@@ -139,13 +139,15 @@ abstract class DBObject{
 				return false;
 			}
 
+			$dest_path = S_ROOT.'data/attachment/'.static::TABLE_NAME.'_'.$this->id.'_'.$attr.'.'.$image->getExtension();
 			if($width){
 				$height = $height ?? $width;
 				$image->thumb($width, $height);
+				$image->save($dest_path);
+			}else{
+				move_uploaded_file($_FILES[$var]['tmp_name'], $dest_path);
 			}
 
-			$dest_path = S_ROOT.'data/attachment/'.static::TABLE_NAME.'_'.$this->id.'_'.$attr.'.'.$image->getExtension();
-			$image->save($dest_path);
 			$this->$attr = $image->getExtensionId();
 
 			return true;
