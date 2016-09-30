@@ -139,7 +139,13 @@ abstract class DBObject{
 				return false;
 			}
 
-			$dest_path = S_ROOT.'data/attachment/'.static::TABLE_NAME.'_'.$this->id.'_'.$attr.'.'.$image->getExtension();
+			$new_extension = $image->getExtensionId();
+			if($new_extension != $this->$attr){
+				$this->removeImage($attr);
+				$this->$attr = $image->getExtensionId();
+			}
+
+			$dest_path = $this->getImage($attr);
 			if($width){
 				$height = $height ?? $width;
 				$image->thumb($width, $height);
@@ -148,8 +154,6 @@ abstract class DBObject{
 				move_uploaded_file($_FILES[$var]['tmp_name'], $dest_path);
 			}
 
-			$this->$attr = $image->getExtensionId();
-
 			return true;
 		}
 
@@ -157,8 +161,10 @@ abstract class DBObject{
 	}
 
 	function removeImage($attr){
-		@unlink(S_ROOT.$this->getImage($attr));
-		$this->$attr = 0;
+		if($this->hasImage($attr)){
+			@unlink(S_ROOT.$this->getImage($attr));
+			$this->$attr = 0;
+		}
 	}
 
 	function hasImage($attr){

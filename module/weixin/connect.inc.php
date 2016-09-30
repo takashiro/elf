@@ -141,7 +141,10 @@ if($_GET['action'] == 'login'){
 	if(empty($result['headimgurl']))
 		showmsg('failed_to_fetch_avatar_url');
 
-	$_G['user']->avatar = GdImage::JPG;
+	if($_G['user']->avatar != GdImage::JPG){
+		$_G['user']->removeImage('avatar');
+		$_G['user']->avatar = GdImage::JPG;
+	}
 	downloadfile($result['headimgurl'], $_G['user']->getImage('avatar'));
 
 	showmsg('successfully_updated_your_avatar', $_GET['referrer'] ?? 'index.php');
