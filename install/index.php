@@ -24,8 +24,8 @@ define('S_ROOT', dirname(dirname(__FILE__)).'/');
 define('IN_ADMINCP', true);
 //error_reporting(0);//Debug
 
-if(PHP_VERSION < '5.5'){
-	exit('Elf Web App requires PHP 5.5 or later.');
+if(PHP_VERSION < '7.0'){
+	exit('Elf Web App requires PHP 7.0 or later.');
 }
 
 function __autoload($classname){

@@ -41,7 +41,7 @@ Features
 
 Running Environment
 -------------------
-1. PHP 5.5
+1. PHP 7.0
 2. MySQL 5
 3. Apache Or IIS
 4. Alipay required extensions: cURL, DOM
