@@ -130,6 +130,42 @@ abstract class DBObject{
 		$this->attr = $this->oattr = array();
 	}
 
+	function uploadImage($var, $attr = null){
+		$attr = $attr ?? $var;
+
+		if($this->id && !empty($_FILES[$var]) && $_FILES[$var]['error'] == 0){
+			$image = new GdImage($_FILES[$var]['tmp_name']);
+			if(!$image->isValid()){
+				return false;
+			}
+
+			$dest_path = S_ROOT.'data/attachment/'.static::TABLE_NAME.'_'.$this->id.'_'.$attr.'.'.$image->getExtension();
+			$image->save($dest_path);
+			$this->$attr = $image->getExtensionId();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	function removeImage($attr){
+		@unlink(S_ROOT.$this->getImage($attr));
+		$this->$attr = 0;
+	}
+
+	function hasImage($attr){
+		return $this->$attr > 0;
+	}
+
+	function getImage($attr){
+		if(!empty($this->$attr)){
+			return 'data/attachment/'.static::TABLE_NAME.'_'.$this->id.'_'.$attr.'.'.GdImage::Extension($this->$attr);
+		}else{
+			return '';
+		}
+	}
+
 	static public function Delete($id, $extra = ''){
 		$id = intval($id);
 
