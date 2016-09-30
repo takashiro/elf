@@ -23,22 +23,28 @@ takashiro@qq.com
 class GdImage{
 
 	private $image = null;
-	private $extension = '';
+	private $type = null;
+
+	private static $TypeConfig = array(
+		IMAGETYPE_PNG => array(1, 'png', 'png'),
+		IMAGETYPE_JPEG => array(2, 'jpg', 'jpeg'),
+		IMAGETYPE_GIF => array(3, 'gif', 'gif'),
+		IMAGETYPE_BMP => array(4, 'bmp', 'wbmp'),
+	);
+	const PNG = 1;
+	const JPG = 2;
+	const GIF = 3;
+	const BMP = 4;
 
 	public function __construct($path){
 		if(!file_exists($path) || !is_readable($path)){
 			return;
 		}
 
-		$file_info = pathinfo($path);
-		$this->extension = strtolower($file_info['extension']);
-		if($this->extension == 'jpg' || $this->extension == 'jpeg'){
-			$this->image = imagecreatefromjpeg($path);
-			$this->extension = 'jpg';
-		}elseif($this->extension == 'bmp'){
-			$this->image = imagecreatefromwbmp($path);
-		}else{
-			$func = 'imagecreatefrom'.$this->extension;
+		$this->type = exif_imagetype($path);
+		if(isset(self::$TypeConfig[$this->type])){
+			$config = self::$TypeConfig[$this->type];
+			$func = 'imagecreatefrom'.$config[2];
 			$this->image = $func($path);
 		}
 	}
@@ -50,17 +56,13 @@ class GdImage{
 	}
 
 	public function isValid(){
-		return $image !== null;
+		return $this->image !== null;
 	}
 
 	public function save($path, $type = null){
-		$type = $type ?? $this->extension;
-		if($type == 'jpg'){
-			imagejpeg($this->image, $path);
-		}elseif($type == 'bmp'){
-			imagewbmp($this->image, $path);
-		}else{
-			$func = 'image'.$type;
+		$type = $type ?? $this->type;
+		if(isset(self::$TypeConfig[$type])){
+			$func = 'image'.self::$TypeConfig[$type][2];
 			$func($this->image, $path);
 		}
 	}
@@ -96,33 +98,14 @@ class GdImage{
 	}
 
 	public function getExtension(){
-		return $this->extension;
+		return self::$TypeConfig[$this->type][1];
 	}
 
-	private static $ExtensionId = array(
-		'',
-		'png',
-		'jpg',
-		'gif',
-		'bmp',
-		'webp',
-	);
-	const PNG = 1;
-	const JPG = 2;
-	const GIF = 3;
-	const BMP = 4;
-	const WEBP = 5;
-
 	public function getExtensionId(){
-		foreach(self::$ExtensionId as $id => $extension){
-			if($extension == $this->extension){
-				return $id;
-			}
-		}
-		return -1;
+		return self::$TypeConfig[$this->type][0];
 	}
 
 	static public function Extension($id){
-		return self::$ExtensionId[$id] ?? '';
+		return self::$TypeConfig[$id][1] ?? '';
 	}
 }

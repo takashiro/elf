@@ -130,13 +130,18 @@ abstract class DBObject{
 		$this->attr = $this->oattr = array();
 	}
 
-	function uploadImage($var, $attr = null){
+	function uploadImage($var, $attr = null, $width = null, $height = null){
 		$attr = $attr ?? $var;
 
 		if($this->id && !empty($_FILES[$var]) && $_FILES[$var]['error'] == 0){
 			$image = new GdImage($_FILES[$var]['tmp_name']);
 			if(!$image->isValid()){
 				return false;
+			}
+
+			if($width){
+				$height = $height ?? $width;
+				$image->thumb($width, $height);
 			}
 
 			$dest_path = S_ROOT.'data/attachment/'.static::TABLE_NAME.'_'.$this->id.'_'.$attr.'.'.$image->getExtension();
