@@ -71,6 +71,18 @@ $result = $api->getAccessToken($_GET['code']);
 if($api->hasError())
 	exit($api->getErrorMessage());
 
+function downloadfile($url, $localpath){
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	$avatar_binary = curl_exec($ch);
+	curl_close($ch);
+
+	$fp = fopen($localpath, 'wb');
+	fwrite($fp, $avatar_binary);
+	fclose($fp);
+}
+
 if($_GET['action'] == 'login'){
 	if($_G['user']->isLoggedIn())
 		redirect('index.php');
@@ -91,6 +103,10 @@ if($_GET['action'] == 'login'){
 		$user->logintime = TIMESTAMP;
 		$user->wxunionid = $result['unionid'];
 		$user->nickname = empty($result['nickname']) ? lang('message', 'wxuser') : $result['nickname'];
+		if(!empty($result['headimgurl'])){
+			$user->avatar = GdImage::JPG;
+			downloadfile($result['headimgurl'], $user->getImage('avatar'));
+		}
 
 		//@to-do: remove this
 		if(!empty($_COOKIE['referrerid'])){
@@ -125,16 +141,8 @@ if($_GET['action'] == 'login'){
 	if(empty($result['headimgurl']))
 		showmsg('failed_to_fetch_avatar_url');
 
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, $result['headimgurl']);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	$avatar_binary = curl_exec($ch);
-	curl_close($ch);
-
 	$_G['user']->avatar = GdImage::JPG;
-	$fp = fopen($_G['user']->getImage('avatar'), 'wb');
-	fwrite($fp, $avatar_binary);
-	fclose($fp);
+	downloadfile($result['headimgurl'], $_G['user']->getImage('avatar'));
 
 	showmsg('successfully_updated_your_avatar', $_GET['referrer'] ?? 'index.php');
 }
