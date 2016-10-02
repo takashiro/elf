@@ -176,6 +176,7 @@ $php_extension = array(
 	'openssl' => function_exists('openssl_get_privatekey'),
 	'DOM' => class_exists('DOMDocument'),
 	'mcrypt' => function_exists('mcrypt_generic_init'),
+	'EXIF' => function_exists('exif_imagetype'),
 );
 
 $writable_directories = array(
