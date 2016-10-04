@@ -101,6 +101,43 @@ function popup_message(title, message){
 	wrapper.fadeIn();
 }
 
+function makeToast(data){
+	if(typeof data == 'string'){
+		data = {
+			'message' : data,
+			'url_forward' : ''
+		};
+	}
+
+	var toast = $('<div class="toast"></div>');
+	toast.html(data.message);
+	toast.appendTo($('body'));
+
+	toast.css({
+		'top' : ($(window).height() - toast.outerHeight()) / 2,
+		'left' : ($(window).width() - toast.outerWidth()) / 2
+	});
+	toast.animate({
+		top : '-=40px',
+		opacity : 1
+	}, 300);
+
+	setTimeout(function(){
+		toast.fadeOut(500, function(){
+			toast.remove();
+			if(data.url_forward){
+				if(data.url_forward == 'refresh'){
+					location.reload();
+				}else if(data.url_forward == 'back'){
+					toast.remove();
+				}else{
+					location.href = data.url_forward;
+				}
+			}
+		});
+	}, 1500);
+}
+
 (function($){
 	$.fn.numbernotice = function(val){
 		this.text(val);

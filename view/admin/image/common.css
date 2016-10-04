@@ -412,10 +412,7 @@ div.toast{
 	border: #D6E9C6 1px solid;
 	color: #3C763D;
 	position: fixed;
-	top: 0;
-	left: 0;
 	width: 50%;
-	margin: 23% 0 0 25%;
 	padding: 1em;
 }
 

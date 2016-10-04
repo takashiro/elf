@@ -38,39 +38,6 @@ function randomstr(length){
 	return str;
 }
 
-function makeToast(data){
-	if(typeof data == 'string'){
-		data = {
-			'message' : data,
-			'url_forward' : ''
-		};
-	}
-
-	var toast = $('<div class="toast"></div>');
-	toast.html(data.message);
-
-	toast.appendTo($('body'));
-	toast.animate({
-		top : '-=40px',
-		opacity : 1
-	}, 300);
-
-	setTimeout(function(){
-		toast.fadeOut(500, function(){
-			toast.remove();
-			if(data.url_forward){
-				if(data.url_forward == 'refresh'){
-					location.reload();
-				}else if(data.url_forward == 'back'){
-					toast.remove();
-				}else{
-					location.href = data.url_forward;
-				}
-			}
-		});
-	}, 1500);
-}
-
 $(function(){
 	$('.menu > li > .submenu').each(function(){
 		var submenu = $(this);
