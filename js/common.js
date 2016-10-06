@@ -263,4 +263,18 @@ $(function(){
 			return false;
 		}
 	});
+
+	$('form.toast').submit(function(){
+		var form = $(this);
+		var data = form.serialize();
+		var url = form.attr('action');
+		if(url == '###'){
+			url = location.href;
+		}
+		url += (url.indexOf('?') >= 0 ? '&' : '?') + 'ajaxform=1';
+		$.post(url, data, function(response){
+			makeToast(response);
+		}, 'json');
+		return false;
+	});
 });
