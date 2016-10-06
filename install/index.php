@@ -91,8 +91,6 @@ if($_POST){
 	$db = new Database($dbconfig['host'], $dbconfig['user'], $dbconfig['pw'], $dbconfig['name']);
 	$db->set_table_prefix($dbconfig['tpre']);
 
-	$db->query("DROP DATABASE IF EXISTS `{$dbconfig['name']}`");
-	$db->query("CREATE DATABASE `{$dbconfig['name']}` DEFAULT CHARSET utf8 COLLATE utf8_general_ci");
 	$databases = $db->fetch_all('SHOW DATABASES');
 	$database_exists = false;
 	foreach($databases as $d){
