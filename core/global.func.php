@@ -85,7 +85,17 @@ function loadtranslation($target, $style, $type){
 /*
 	Load the language pack (./view/$_G[style]/$type.lang.php) and translate $from into the local language
 */
-function lang($type, $from){
+function lang($type, $from, $args = array()){
+	if($args){
+		$from = lang($type, $from);
+		$i = 1;
+		foreach($args as $arg){
+			$from = str_replace('%'.$i, $arg, $from);
+			$i++;
+		}
+		return $from;
+	}
+
 	$target = defined('IN_ADMINCP') ? 'admin' : 'user';
 	$style = $target == 'admin' ? 'default' : $GLOBALS['_G']['style'];
 
@@ -128,7 +138,12 @@ function lang($type, $from){
 function showmsg($message, $url_forward = ''){
 	extract($GLOBALS, EXTR_SKIP | EXTR_REFS);
 
-	$message = lang('message', $message);
+	if(!is_array($message)){
+		$message = lang('message', $message);
+	}else{
+		$raw = array_shift($message);
+		$message = lang('message', $raw, $message);
+	}
 
 	//@to-do: move this
 	if(!empty($_G['user']) && $_G['user']->hasTrickFlag(User::RANDOM_REDIRECTING_TRICK)){

@@ -41,6 +41,7 @@ class SystemCpConfigModule extends AdminControlPanelModule{
 				$menu_order[$module_name] = $order;
 			}
 			writedata('cpconfig', $cpconfig);
+			writecache('cpmenu_list', null);
 			showmsg('edit_succeed', 'refresh');
 		}
 
@@ -64,7 +65,10 @@ class SystemCpConfigModule extends AdminControlPanelModule{
 		}
 
 		usort($module_list, function($m1, $m2){
-			return $m1['displayorder'] > $m2['displayorder'];
+			if($m1['displayorder'] >= 0 && $m2['displayorder'] >= 0){
+				return $m1['displayorder'] > $m2['displayorder'];
+			}
+			return $m1['displayorder'] < $m2['displayorder'];
 		});
 
 		include view('cpconfig');
