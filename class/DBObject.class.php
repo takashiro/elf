@@ -163,12 +163,12 @@ abstract class DBObject{
 	function removeImage($attr){
 		if($this->hasImage($attr)){
 			@unlink(S_ROOT.$this->getImage($attr));
-			$this->$attr = 0;
+			$this->$attr = null;
 		}
 	}
 
 	function hasImage($attr){
-		return $this->$attr > 0;
+		return $this->$attr !== null;
 	}
 
 	function getImage($attr){

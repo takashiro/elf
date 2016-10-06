@@ -1,5 +1,5 @@
 
-ALTER TABLE `pre_user` ADD `wallet` decimal(9,2) NOT NULL;
+ALTER TABLE `pre_user` ADD `wallet` decimal(9,2) NOT NULL DEFAULT '0.0';
 
 DROP TABLE IF EXISTS `pre_prepaidreward`;
 CREATE TABLE IF NOT EXISTS `pre_prepaidreward` (
