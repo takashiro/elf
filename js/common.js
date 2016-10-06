@@ -277,4 +277,18 @@ $(function(){
 		}, 'json');
 		return false;
 	});
+
+	$('a.toast').click(function(e){
+		e.preventDefault();
+		var url = $(e.target).attr('href');
+		if(url == '###'){
+			url = location.href;
+		}
+		url += (url.indexOf('?') >= 0 ? '&' : '?') + 'ajaxform=1';
+		if(url){
+			$.get(url, {}, function(response){
+				makeToast(response);
+			}, 'json');
+		}
+	});
 });

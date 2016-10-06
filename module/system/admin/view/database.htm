@@ -10,18 +10,6 @@
 .standard{color:green;}
 .current{color:red;}
 </style>
-<script type="text/javascript">
-$(function(){
-	$('a.toast').click(function(e){
-		e.preventDefault();
-		if(confirm('您确定要' + $(this).html() + '吗？')){
-			$.get($(this).attr('href') + '&ajax=1', {}, function(result){
-				makeToast(result);
-			}, 'json');
-		}
-	});
-});
-</script>
 
 <div class="box list">
 	<h2>Table Overhead</h2>
