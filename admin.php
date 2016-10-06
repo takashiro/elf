@@ -48,8 +48,14 @@ $_ADMIN = $_G['admin']->toReadable();
 //Include the requested module
 class AdminControlPanelModule{
 
+	protected $display_order = 0;
+
 	public function getAlias(){
 		return '';
+	}
+
+	public function getDisplayOrder(){
+		return $this->display_order;
 	}
 
 	public function getPermissions(){

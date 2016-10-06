@@ -46,7 +46,19 @@ class SystemCpConfigModule extends AdminControlPanelModule{
 
 		foreach($_G['module_list'] as $module){
 			if($module['admin_modules']){
-				$module['displayorder'] = isset($menu_order[$module['name']]) ? $menu_order[$module['name']] : 0;
+				if(isset($menu_order[$module['name']])){
+					$module['displayorder'] = $menu_order[$module['name']];
+				}else{
+					$main_module = $module['root_path'].'admin/main.inc.php';
+					if(file_exists($main_module)){
+						require_once $main_module;
+						$class_name = $module['name'].'MainModule';
+						$main_module = new $class_name;
+						$module['displayorder'] = $main_module->getDisplayOrder();
+					}else{
+						$module['displayorder'] = 0;
+					}
+				}
 				$module_list[] = $module;
 			}
 		}

@@ -24,6 +24,10 @@ if(!defined('IN_ADMINCP')) exit('access denied');
 
 class SystemMainModule extends AdminControlPanelModule{
 
+	public function __construct(){
+		$this->display_order = 30;
+	}
+
 	public function defaultAction(){
 		extract($GLOBALS, EXTR_SKIP | EXTR_REFS);
 

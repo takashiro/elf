@@ -24,6 +24,10 @@ if(!defined('IN_ADMINCP')) exit('access denied');
 
 class QQConnectMainModule extends AdminControlPanelModule{
 
+	public function __construct(){
+		$this->display_order = 23;
+	}
+
 	public function defaultAction(){
 		extract($GLOBALS, EXTR_SKIP | EXTR_REFS);
 

@@ -24,6 +24,10 @@ if(!defined('IN_ADMINCP')) exit('access denied');
 
 class GeTuiMainModule extends AdminControlPanelModule{
 
+	public function __construct(){
+		$this->display_order = 25;
+	}
+
 	public function defaultAction(){
 		if($_POST){
 			$config = readdata('getuiconfig');
