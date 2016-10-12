@@ -156,7 +156,7 @@
 							<td class="current">{echo $c->extra}</td>
 							<td><a class="toast" href="$mod_url&action=dropcolumn&table=$table_name&column={echo $c->name}">[删除]</a></td>
 						</tr>
-						<!--{elseif $c != $s->columns[$column_name]}-->
+						<!--{elseif !self::ColumnEqual($c, $s->columns[$column_name])}-->
 						<!--{eval $d = $s->columns[$column_name];}-->
 						<tr>
 							<th></th>

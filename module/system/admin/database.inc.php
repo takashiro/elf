@@ -31,7 +31,7 @@ class SqlTableColumn{
 
 	public function toSql(){
 		if($this->accept_null){
-			if($this->default_value == 'NULL'){
+			if($this->default_value === null){
 				$ext_sql = 'DEFAULT NULL';
 			}else{
 				$ext_sql = 'NULL DEFAULT \''.$this->default_value.'\'';
@@ -89,6 +89,7 @@ class SqlTable{
 				$c->default_value = trim(substr($matches[4][$i], 7), '\' ');
 				if(strcasecmp($c->default_value, 'NULL') == 0){
 					$c->accept_null = true;
+					$c->default_value = null;
 				}
 			}
 			$c->extra = strtolower($matches[5][$i]);
@@ -265,7 +266,7 @@ class SystemDatabaseModule extends AdminControlPanelModule{
 	public function alterColumnAction(){
 		self::CheckTargetColumn($table, $column, $s, $t);
 
-		if($t !== null && $s !== null && $t != $s){
+		if($t !== null && $s !== null && !self::ColumnEqual($t, $s)){
 			$subsql = $s->toSql();
 			global $db;
 			$db->query("ALTER TABLE `$table` CHANGE `$column` $subsql");
@@ -439,11 +440,6 @@ class SystemDatabaseModule extends AdminControlPanelModule{
 				$c->accept_null = $column['Null'] != 'NO';
 				$c->default_value = $column['Default'];
 				$c->extra = $column['Extra'];
-
-				if($c->accept_null && $c->default_value === null){
-					$c->default_value = 'NULL';
-				}
-
 				$t->columns[$c->name] = $c;
 			}
 
@@ -476,6 +472,18 @@ class SystemDatabaseModule extends AdminControlPanelModule{
 		}
 
 		return $current_tables;
+	}
+
+	public static function ColumnEqual($c1, $c2){
+		if($c1 != $c2){
+			return false;
+		}
+		if($c1->default_value === null){
+			return $c2->default_value === null;
+		}elseif($c2->default_value === null){
+			return $c1->default_value === null;
+		}
+		return true;
 	}
 
 }
