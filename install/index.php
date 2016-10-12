@@ -104,6 +104,8 @@ if($_POST){
 	}
 	$db->select_db($dbconfig['name']);
 
+	$db->query('SET NAMES '.$dbconfig['charset']);
+
 
 	$sql_files = array('install.sql');
 	$module_list = loadmodule();
