@@ -23,24 +23,37 @@ takashiro@qq.com
 class Hanzi{
 	static public function ToCapital($str){
 		$chars = self::utf8_str_split($str);
+		$chars[] = null;
 
 		$capitals = array();
 		global $db;
 		$table = $db->select_table('pinyin');
-		$rows = $table->fetch_all('hanzi,capital', 'hanzi IN (\''.implode('\',\'', $chars).'\')');
+		$rows = $table->fetch_all('DISTINCT hanzi,capital', 'hanzi IN (\''.implode('\',\'', $chars).'\')');
 		foreach($rows as $r){
-			$capitals[$r['hanzi']] = $r['capital'];
+			$capitals[$r['hanzi']][] = $r['capital'];
 		}
 
-		$result = '';
+		$results = array('');
 		foreach($chars as $char){
 			if(isset($capitals[$char])){
-				$result.= $capitals[$char];
-			}elseif(preg_match('/\w/', $char)){
-				$result.= strtolower($char);
+				$backup = $results;
+				$results = array();
+				foreach($capitals[$char] as $capital) {
+					$cur = $backup;
+					foreach($cur as &$result){
+						$result.= $capital;
+					}
+					unset($result);
+					$results = array_merge($results, $cur);
+				}
+			}elseif(preg_match('/^\w$/', $char)){
+				foreach($results as &$result){
+					$result.= strtolower($char);
+				}
+				unset($result);
 			}
 		}
-		return $result;
+		return $results;
 	}
 
 	private static function utf8_str_split($str,$split_len = 1){
