@@ -21,7 +21,7 @@ takashiro@qq.com
 ************************************************************************/
 
 class Hanzi{
-	static public function ToCapital($str){
+	static public function ToAcronym($str){
 		$chars = self::utf8_str_split($str);
 		$chars[] = null;
 

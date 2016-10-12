@@ -34,18 +34,28 @@ if(!$_G['admin']->isLoggedIn() || !$_G['admin']->isSuperAdmin()){
 	exit('access denied');
 }
 
-if(isset($_GET['table']) && isset($_GET['from']) && isset($_GET['to'])){
-	$table = $tpre.trim($_GET['table']);
-	$from = trim($_GET['from']);
-	$to = trim($_GET['to']);
+if(isset($_GET['table']) && isset($_GET['field']) && isset($_GET['key'])){
+	$table = addslashes(trim($_GET['table']));
+	$field = addslashes(trim($_GET['field']));
+	$key = addslashes(trim($_GET['key']));
 }else{
 	exit('invalid input');
 }
 
-$query = $db->query("SELECT `$from` FROM `$table`");
+$query = $db->query("SELECT `$key`,`$field` FROM `{$tpre}{$table}`");
 while($row = $query->fetch_array()){
-	$capital = Hanzi::ToCapital($row[0]);
-	$db->query("UPDATE $table SET `$to`='$capital' WHERE `$from`='{$row[0]}'");
+	$id = addslashes($row[0]);
+	$acronyms = Hanzi::ToAcronym($row[1]);
+
+	$table = $db->select_table($table.'acronym');
+	$table->delete("`$key`='$id' AND `$field` IS NOT NULL");
+	foreach($acronyms as $acronym){
+		$row = array(
+			$key => $id,
+			$field => $acronym,
+		);
+		$table->insert($row);
+	}
 }
 
 exit('ok');
