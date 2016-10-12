@@ -35,19 +35,19 @@ if(!$_G['admin']->isLoggedIn() || !$_G['admin']->isSuperAdmin()){
 }
 
 if(isset($_GET['table']) && isset($_GET['field']) && isset($_GET['key'])){
-	$table = addslashes(trim($_GET['table']));
+	$tablename = addslashes(trim($_GET['table']));
 	$field = addslashes(trim($_GET['field']));
 	$key = addslashes(trim($_GET['key']));
 }else{
 	exit('invalid input');
 }
 
-$query = $db->query("SELECT `$key`,`$field` FROM `{$tpre}{$table}`");
+$query = $db->query("SELECT `$key`,`$field` FROM `{$tpre}{$tablename}`");
 while($row = $query->fetch_array()){
 	$id = addslashes($row[0]);
 	$acronyms = Hanzi::ToAcronym($row[1]);
 
-	$table = $db->select_table($table.'acronym');
+	$table = $db->select_table($tablename.'acronym');
 	$table->delete("`$key`='$id' AND `$field` IS NOT NULL");
 	foreach($acronyms as $acronym){
 		$row = array(
