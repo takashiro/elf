@@ -30,7 +30,8 @@ takashiro@qq.com
 			'attr' : [],
 			'buttons' : {'edit':'编辑', 'delete':'删除'},
 			'confirm_deletion_prompt' : '您确认删除吗？',
-			'onSubmit' : function(){ return false; }
+			'onSubmit' : function(){ return false; },
+			'onSucceed' : function(result){ makeToast(result); }
 		};
 
 		var editlist = this;
@@ -270,9 +271,7 @@ takashiro@qq.com
 			input['content'] = content;
 
 			if(options.submit_url){
-				$.post(options.submit_url + '&ajax=1', JSON.stringify(input), function(result){
-					makeToast(result);
-				}, 'json');
+				$.post(options.submit_url + '&ajax=1', JSON.stringify(input), options.onSucceed, 'json');
 			}
 		});
 	}
