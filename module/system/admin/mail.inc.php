@@ -40,6 +40,10 @@ class SystemMailModule extends AdminControlPanelModule{
 				}
 			}
 
+			if(!empty($_POST['new_auth_password'])){
+				$mailconfig['auth_password'] = $_POST['new_auth_password'];
+			}
+
 			writedata('mailconfig', $mailconfig);
 
 			showmsg('successfully_updated_system_config', 'back');
