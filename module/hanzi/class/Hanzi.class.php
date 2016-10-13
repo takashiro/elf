@@ -21,6 +21,25 @@ takashiro@qq.com
 ************************************************************************/
 
 class Hanzi{
+
+	static public function UpdateAcronym($table_name, $condition, $field, $value){
+		global $db;
+		$table = $db->select_table($table_name.'acronym');
+		$table->delete($condition);
+
+		foreach(self::ToAcronym($value) as $acronym){
+			$row = $condition;
+			$row[$field] = $acronym;
+			$table->insert($row);
+		}
+	}
+
+	static public function QueryAcronym($table_name, $field, $value, $fields = 'id'){
+		global $tpre;
+		$value = addslashes($value);
+		return "SELECT $fields FROM {$tpre}{$table_name}acronym WHERE `$field` LIKE '$value%'";
+	}
+
 	static public function ToAcronym($str){
 		$chars = self::utf8_str_split($str);
 		$chars[] = null;
@@ -31,6 +50,9 @@ class Hanzi{
 		$rows = $table->fetch_all('DISTINCT hanzi,capital', 'hanzi IN (\''.implode('\',\'', $chars).'\')');
 		foreach($rows as $r){
 			$capitals[$r['hanzi']][] = $r['capital'];
+		}
+		if(empty($capitals)){
+			return array();
 		}
 
 		$results = array('');
@@ -53,6 +75,11 @@ class Hanzi{
 				unset($result);
 			}
 		}
+
+		while(empty($results[0])){
+			array_shift($results[0]);
+		}
+
 		return $results;
 	}
 
