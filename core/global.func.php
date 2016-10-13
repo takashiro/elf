@@ -135,7 +135,7 @@ function lang($type, $from, $args = array()){
 /*
 	short for "show message". It displays a prompt and exit the script, and then redirect to $url_forward in a few seconds.
 */
-function showmsg($message, $url_forward = ''){
+function showmsg($message, $url_forward = '', $extra = null){
 	extract($GLOBALS, EXTR_SKIP | EXTR_REFS);
 
 	if(!is_array($message)){
@@ -179,7 +179,11 @@ function showmsg($message, $url_forward = ''){
 
 		include view('show_message');
 	}else{
-		echo json_encode(array('message' => $message, 'url_forward' => $url_forward));
+		$response = array('message' => $message, 'url_forward' => $url_forward);
+		if($extra !== null){
+			$response['extra'] = $extra;
+		}
+		echo json_encode($response);
 	}
 	exit;
 }
