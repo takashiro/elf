@@ -1,5 +1,16 @@
 <!--{template header}-->
 
+<style>
+section.layout .content{
+	text-align: center;
+	padding: 0 30px;
+}
+
+#qrcode{
+	margin: 30px auto;
+}
+</style>
+
 <!--{if strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') === false}-->
 	<script type="text/javascript" src="./3rdparty/jquery.qrcode.min.js"></script>
 	<script type="text/javascript">
@@ -8,18 +19,16 @@
 	});
 	</script>
 
-	<div class="box">
-		<h1>{$_USER[account]}的付款二维码</h1>
+	<section class="box layout">
+		<header>{$_USER[account]}的付款二维码</header>
 		<div class="content">
 			<div id="qrcode"></div>
 			<ul>
 				<li>打开微信，使用扫码功能对准上面的二维码付款。</li>
 				<li>若您使用的是手机浏览器，先使用截屏功能截图，然后通过微信选择相册扫码。</li>
-
-				<li>请长按上面的二维码进行扫码付款。</li>
 			</ul>
 		</div>
-	</div>
+	</section>
 <!--{else}-->
 	<script type="text/javascript">
 	$(function(){
@@ -31,8 +40,8 @@
 	});
 	</script>
 
-	<div class="box">
-		<h1>{$_USER[account]}的付款二维码</h1>
+	<section class="box layout">
+		<header>{$_USER[account]}的付款二维码</header>
 		<div class="content">
 			<div id="prompt">正在生成二维码……</div>
 			<div><img id="qrcode" src="index.php?mod=qrcode&text={echo urlencode($qrcode_url)}" /></div>
@@ -40,7 +49,7 @@
 				<li>请长按上面的二维码，然后选择“扫描二维码”进行付款。</li>
 			</ul>
 		</div>
-	</div>
+	</section>
 <!--{/if}-->
 
 <!--{template footer}-->
