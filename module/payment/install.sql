@@ -18,13 +18,13 @@ CREATE TABLE IF NOT EXISTS `pre_userwalletlog` (
   `uid` mediumint(8) unsigned NOT NULL,
   `dateline` int(11) unsigned NOT NULL,
   `type` tinyint(4) unsigned NOT NULL,
-  `delta` decimal(9,2) NOT NULL,
+  `delta` decimal(9,2) NOT NULL DEFAULT '0.00',
   `cost` decimal(9,2) NOT NULL,
-  `recharged` tinyint(1) NOT NULL,
-  `orderid` mediumint(8) unsigned NOT NULL,
+  `recharged` tinyint(1) NOT NULL DEFAULT '0',
+  `orderid` mediumint(8) unsigned NULL,
   `paymentmethod` tinyint(4) NOT NULL,
-  `tradeid` varchar(255) NOT NULL,
-  `tradestate` tinyint(4) NOT NULL,
+  `tradeid` varchar(255) NULL,
+  `tradestate` tinyint(4) NULL,
   PRIMARY KEY (`id`),
   KEY `uid` (`uid`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
