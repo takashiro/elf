@@ -483,7 +483,7 @@ class SystemDatabaseModule extends AdminControlPanelModule{
 		}elseif($c2->default_value === null){
 			return $c1->default_value === null;
 		}
-		return true;
+		return $c1->default_value == $c2->default_value;
 	}
 
 }
