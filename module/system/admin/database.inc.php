@@ -64,7 +64,7 @@ class SqlTable{
 	}
 
 	public function parse($sentence){
-		if(!preg_match('/CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?`(\w+)`\s+(\(.*?\))\s+ENGINE\=(MyISAM|InnoDB)\s+DEFAULT\s+CHARSET\=(\w+)/is', $sentence, $matches))
+		if(!preg_match('/CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?`(\w+)`\s+(\(.*?\))\s+ENGINE\=([a-z_]+)\s+DEFAULT\s+CHARSET\=(\w+)/is', $sentence, $matches))
 			return;
 
 		if(!$this->parseColumns($matches[2]))
