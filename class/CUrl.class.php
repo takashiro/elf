@@ -36,8 +36,9 @@ class CUrl{
 		curl_setopt($this->ch, CURLOPT_TIMEOUT, 60);
 		curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($this->ch, CURLOPT_COOKIESESSION, true);
-		curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, true);
+		curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt($this->ch, CURLOPT_CAINFO, S_ROOT.'data/ssl_cacert.pem');
 		curl_setopt($this->ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 2.0.50727; InfoPath.1; CIBA)');
 
 		$cookie_file = S_ROOT.'data/cookie/'.User::ip();
