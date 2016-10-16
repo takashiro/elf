@@ -31,7 +31,6 @@ class Alipay extends CUrl{
         $this->server = 'https://openapi.alipay.com/gateway.do';
 
         $this->config = readdata('alipay');
-        $this->config['seller_id']	= $this->config['partner'];
     }
 
     public function createOrder($out_trade_no, $total_amount, $subject, $body = null){

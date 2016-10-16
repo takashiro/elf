@@ -35,11 +35,6 @@ class AlipayMainModule extends AdminControlPanelModule{
 			'app_id',
 			'private_key',
 			'ali_public_key',
-			'partner',
-			'transport',
-			'notify_url',
-			'private_key_path',
-			'ali_public_key_path',
 		);
 
 		if($_POST){
