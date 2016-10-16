@@ -1,39 +1,40 @@
 <?php
 
-/* *
- * 功能：支付宝服务器异步通知页面
- * 版本：3.3
- * 日期：2012-07-23
- * 说明：
- * 以下代码只是为了方便商户测试而提供的样例代码，商户可以根据自己网站的需要，按照技术文档编写,并非一定要使用该代码。
- * 该代码仅供学习和研究支付宝接口使用，只是提供一个参考。
+/***********************************************************************
+Elf Web App
+Copyright (C) 2013-2015  Kazuichi Takashiro
 
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
 
- *************************页面功能说明*************************
- * 创建该页面文件时，请留心该页面文件中无任何HTML代码及空格。
- * 该页面不能在本机电脑测试，请到服务器上做测试。请确保外部可以访问该页面。
- * 该页面调试工具请使用写文本函数logResult，该函数已被默认关闭，见alipay_notify_class.php中的函数verifyNotify
- * 如果没有收到该页面返回的 success 信息，支付宝会在24小时内按一定的时间策略重发通知
- */
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+takashiro@qq.com
+************************************************************************/
 
 require_once '../../../core/init.inc.php';
-require_once module('alipay/config');
+require_once '../class/Alipay.class.php';
 error_reporting(E_ALL);
 
-//计算得出通知验证结果
-$alipayNotify = new AlipayNotify($alipay_config);
-$verify_result = $alipayNotify->verifyNotify();
-
-if($verify_result){//验证成功
+$alipay = new Alipay;
+if($data = $alipay->receiveNotification()){//验证成功
 	$arguments = array(
 		//商户订单号
-		$_POST['out_trade_no'],
+		$data['out_trade_no'],
 
 		//支付宝交易号
-		$_POST['trade_no'],
+		$data['trade_no'],
 
 		//交易状态
-		$_POST['trade_status'],
+		$data['trade_status'],
 	);
 
 	runhooks('alipay_notified', $arguments);
@@ -41,5 +42,6 @@ if($verify_result){//验证成功
 
 }else{
     //验证失败
+	writelog('alipay_notify', json_encode($_POST));
     exit('fail');
 }

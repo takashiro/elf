@@ -107,25 +107,11 @@ class PaymentUserWalletModule extends AdminControlPanelModule{
 		if($rechargeid <= 0)
 			exit('invalid recharge id');
 
-		require module('alipay/config');
-
-		$parameter = array(
-			'service' => 'single_trade_query',
-			'partner' => $alipay_config['partner'],
-			'out_trade_no' => 'W'.$rechargeid,
-			'_input_charset' => $alipay_config['input_charset'],
-		);
-
-		$alipaySubmit = new AlipaySubmit($alipay_config);
-		$html_text = $alipaySubmit->buildRequestHttp($parameter);
-
-		$doc = new XML;
-		$doc->loadXML($html_text, 'alipay');
-		$xml = $doc->toArray();
-		if(isset($xml['is_success']) && $xml['is_success'] == 'T'){
-			if(isset($xml['response']['trade'])){
-				$trade = $xml['response']['trade'];
-
+		$alipay = new Alipay;
+		$result = $alipay->queryOrder('W'.$rechargeid, false);
+		if(isset($result['alipay_trade_query_response'])){
+			if(isset($result['alipay_trade_query_response']['trade_status'])){
+				$trade = $result['alipay_trade_query_response'];
 				$arguments = array(
 					//商户订单号
 					$trade['out_trade_no'],
@@ -136,7 +122,6 @@ class PaymentUserWalletModule extends AdminControlPanelModule{
 					//交易状态
 					$trade['trade_status'],
 				);
-
 				runhooks('alipay_notified', $arguments);
 			}
 

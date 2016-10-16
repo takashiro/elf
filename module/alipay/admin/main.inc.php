@@ -32,6 +32,9 @@ class AlipayMainModule extends AdminControlPanelModule{
 		extract($GLOBALS, EXTR_SKIP | EXTR_REFS);
 
 		$fields = array(
+			'app_id',
+			'private_key',
+			'ali_public_key',
 			'partner',
 			'transport',
 			'notify_url',

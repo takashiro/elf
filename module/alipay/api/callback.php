@@ -21,22 +21,29 @@ takashiro@qq.com
 ************************************************************************/
 
 require_once '../../../core/init.inc.php';
-require_once module('alipay/config');
+require_once '../class/Alipay.class.php';
 
-//计算得出通知验证结果
-$alipayNotify = new AlipayNotify($alipay_config);
-$verify_result = $alipayNotify->verifyReturn();
-if($verify_result){//验证成功
-	$arguments = array(
-		//商户订单号
-		$_GET['out_trade_no'],
-		//支付宝交易号
-		$_GET['trade_no'],
-		//交易状态
-		$_GET['trade_status'],
-	);
-	runhooks('alipay_callback_executed', $arguments);
+$alipay = new Alipay;
+if($_GET){
+    if(isset($_GET['trade_no'])){
+        $data = $alipay->queryOrder($_GET['trade_no']);
+    }elseif(isset($_GET['out_trade_no'])){
+        $data = $alipay->queryOrder($_GET['out_trade_no']);
+    }
 
+    if(!isset($data['alipay_trade_query_response']['trade_status'])){
+        showmsg('failed_to_retrieve_trade_state', 'index.php');
+    }
+
+    $arguments = array(
+        //商户订单号
+        $_GET['out_trade_no'],
+        //支付宝交易号
+        $_GET['trade_no'],
+        //交易状态
+        $data['alipay_trade_query_response']['trade_status'],
+    );
+    runhooks('alipay_callback_executed', $arguments);
 }else{
-	showmsg('failed_to_retrieve_trade_state', 'index.php');
+    showmsg('failed_to_retrieve_trade_state', 'index.php');
 }

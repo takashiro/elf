@@ -12,6 +12,21 @@
 			<h2>支付宝设置</h2>
 			<table>
 				<tr>
+					<th><label>APP ID：</label></th>
+					<td><input type="text" name="alipay[app_id]" value="$alipay[app_id]" style="width:18em" maxlength="16" /></td>
+					<td class="tips"></td>
+				</tr>
+				<tr>
+					<th><label>本站私钥：</label></th>
+					<td><textarea name="alipay[private_key]">$alipay[private_key]</textarea></td>
+					<td class="tips"></td>
+				</tr>
+				<tr>
+					<th><label>支付宝公钥：</label></th>
+					<td><textarea name="alipay[ali_public_key]">$alipay[ali_public_key]</textarea></td>
+					<td class="tips"></td>
+				</tr>
+				<tr>
 					<th><label>Partner ID：</label></th>
 					<td><input type="text" name="alipay[partner]" value="$alipay[partner]" style="width:18em" maxlength="16" /></td>
 					<td class="tips">该企业支付宝账号对应的合作身份者id，以2088开头的16位纯数字</td>
