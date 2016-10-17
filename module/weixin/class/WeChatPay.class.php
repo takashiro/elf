@@ -26,12 +26,21 @@ class WeChatPay extends CUrl{
 	protected $appSecret;
 	protected $merchantId;
 	protected $merchantKey;
+	protected $tradeType = 'NATIVE';
 
 	public function __construct($config = null){
 		parent::__construct();
 		$this->setServer('https://api.mch.weixin.qq.com/');
 
-		$config === null && $config = readdata('wxsv');
+		if($config === null){
+			if(!empty($_GET['is_client']) || empty($_SERVER['HTTP_USER_AGENT']) || strpos($_SERVER['HTTP_USER_AGENT'], 'NativeApp') !== false){
+				$config = readdata('wxapp');
+				$this->tradeType = 'APP';
+			}else{
+				$config = readdata('wxsv');
+				$this->tradeType = 'NATIVE';
+			}
+		}
 
 		isset($config['app_id']) && $this->appId = $config['app_id'];
 		isset($config['app_secret']) && $this->appSecret = $config['app_secret'];
@@ -47,17 +56,17 @@ class WeChatPay extends CUrl{
 		return $this->merchantId;
 	}
 
-	public function createOrder($data){
+	public function createOrder($out_trade_no, $total_fee, $subject){
+		global $_G;
 		$data = array(
 			'appid' => $this->appId,
-			'body' => $data['body'],
 			'mch_id' => $this->merchantId,
-			'notify_url' => $data['notify_url'],
-			'openid' => $data['openid'],
-			'out_trade_no' => $data['out_trade_no'],
+			'body' => $subject,
+			'notify_url' => $_G['site_url'].'module/weixin/api/notify.php',
+			'out_trade_no' => $out_trade_no,
 			'spbill_create_ip' => User::ip(),
-			'total_fee' => $data['total_fee'],
-			'trade_type' => $data['trade_type'],
+			'total_fee' => round($total_fee * 100),
+			'trade_type' => $this->tradeType,
 		);
 
 		$this->signData($data);
@@ -68,7 +77,12 @@ class WeChatPay extends CUrl{
 		}
 		$content.= '</xml>';
 
-		return $this->request('pay/unifiedorder', $content);
+		$reply = $this->request('pay/unifiedorder', $content);
+		$xml = new XML;
+		$xml->loadXML($reply);
+		$reply = $xml->toArray();
+		$reply = $reply['xml'];
+		return $reply;
 	}
 
 	public function signData(&$data){
@@ -98,4 +112,5 @@ class WeChatPay extends CUrl{
 
 		return $sign == $this->generateSignature($data);
 	}
+
 }

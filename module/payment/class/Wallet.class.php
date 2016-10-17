@@ -260,7 +260,10 @@ class Wallet{
 			$id = $table->insert_id();
 
 			//商户网站订单系统中唯一订单号，必填
-			$_G['wechatpaytrade']['out_trade_no'] = self::$AlipayTradeNoPrefix.$id;
+			$trade = &$_G['wechatpaytrade'];
+			$trade['out_trade_no'] = self::$AlipayTradeNoPrefix.$id;
+			$trade['total_fee'] = $recharge;
+			$trade['subject'] = $_G['config']['sitename'].'充值'.$id;
 
 		}elseif(isset($_GET['rechargeid'])){
 			global $_G, $db;
@@ -270,7 +273,10 @@ class Wallet{
 			$log = $table->fetch_first('*', array('id' => $logid, 'type' => self::RechargeLog));
 
 			if(!empty($log['id']) && isset($log['cost']) && $log['cost'] > 0){
-				$_G['wechatpaytrade']['out_trade_no'] = self::$AlipayTradeNoPrefix.$log['id'];
+				$trade = &$_G['wechatpaytrade'];
+				$trade['out_trade_no'] = self::$AlipayTradeNoPrefix.$log['id'];
+				$trade['total_fee'] = $log['cost'];
+				$trade['subject'] = $_G['config']['sitename'].'充值'.$log['id'];
 			}else{
 				showmsg('illegal_operation');
 			}

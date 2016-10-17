@@ -79,19 +79,8 @@ if(empty($_G['wechatpaytrade']['valid'])){
 	output_result();
 }
 
-$reply = $api->createOrder(array(
-	'body' => $_G['wechatpaytrade']['subject'],
-	'notify_url' => $_G['site_url'].'module/weixin/api/notify.php',
-	'openid' => $input['openid'],
-	'out_trade_no' => $input['product_id'],
-	'total_fee' => round($_G['wechatpaytrade']['total_fee'] * 100),
-	'trade_type' => 'NATIVE',
-));
-
-$xml = new XML;
-$xml->loadXML($reply);
-$reply = $xml->toArray();
-$reply = $reply['xml'];
+$trade = &$_G['wechatpaytrade'];
+$reply = $api->createOrder($trade['out_trade_no'], $trade['total_fee'], $trade['subject']);
 
 $result['return_code'] = 'SUCCESS';
 isset($reply['result_code']) && $result['result_code'] = $reply['result_code'];

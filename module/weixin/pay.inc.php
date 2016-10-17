@@ -32,6 +32,8 @@ if(empty($paymentconfig['enabled_method'][Wallet::ViaWeChat])){
 
 $_G['wechatpaytrade'] = array(
 	'out_trade_no' => '',
+	'subject' => '',
+	'total_fee' => 0.00,
 );
 
 runhooks('wechatpay_started');
@@ -39,20 +41,10 @@ runhooks('wechatpay_started');
 if(empty($_G['wechatpaytrade']['out_trade_no']))
 	showmsg('illegal_operation');
 
-$config = readdata('wxsv');
-
-$nonce_str = randomstr(32);
-$arguments = array(
-	'appid' => $config['app_id'],
-	'mch_id' => $config['mch_id'],
-	'product_id' => $_G['wechatpaytrade']['out_trade_no'],
-	'time_stamp' => TIMESTAMP,
-	'nonce_str' => $nonce_str,
-);
-ksort($arguments);
-$arguments = http_build_query($arguments);
-$sign = strtoupper(md5($arguments.'&key='.$config['mch_key']));
-
-$qrcode_url = 'weixin://wxpay/bizpayurl?sign='.$sign.'&'.$arguments;
+$trade = &$_G['wechatpaytrade'];
+require_once MOD_ROOT.'class/WeChatPay.class.php';
+$wechat = new WeChatPay;
+$reply = $wechat->createOrder($trade['out_trade_no'], $trade['total_fee'], $trade['subject']);
+$qrcode_url = $reply['code_url'];
 
 include view('pay_qrcode');
