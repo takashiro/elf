@@ -50,7 +50,7 @@ if($wechat->getTradeType() == 'APP'){
 	$response = array(
 		'appid' => $wechat->getAppId(),
 		'partnerid' => $wechat->getMerchantId(),
-		'prepayid' => 'prepay_id',
+		'prepayid' => $reply['prepay_id'],
 		'package' => 'Sign=WXPay',
 		'timestamp' => TIMESTAMP + 8 * 3600,
 	);
