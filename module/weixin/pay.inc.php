@@ -45,6 +45,19 @@ $trade = &$_G['wechatpaytrade'];
 require_once MOD_ROOT.'class/WeChatPay.class.php';
 $wechat = new WeChatPay;
 $reply = $wechat->createOrder($trade['out_trade_no'], $trade['total_fee'], $trade['subject']);
-$qrcode_url = $reply['code_url'];
 
-include view('pay_qrcode');
+if($wechat->getTradeType() == 'APP'){
+	$response = array(
+		'appid' => $wechat->getAppId(),
+		'partnerid' => $wechat->getMerchantId(),
+		'prepayid' => 'prepay_id',
+		'package' => 'Sign=WXPay',
+		'timestamp' => TIMESTAMP + 8 * 3600,
+	);
+	$wechat->signData($response);
+	echo json_encode($response);
+	exit;
+}else{
+	$qrcode_url = $reply['code_url'];
+	include view('pay_qrcode');
+}

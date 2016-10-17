@@ -56,6 +56,10 @@ class WeChatPay extends CUrl{
 		return $this->merchantId;
 	}
 
+	public function getTradeType(){
+		return $this->tradeType;
+	}
+
 	public function createOrder($out_trade_no, $total_fee, $subject){
 		global $_G;
 		$data = array(
