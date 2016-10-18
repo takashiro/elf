@@ -44,6 +44,20 @@ class AlipayMainModule extends AdminControlPanelModule{
 				$alipay[$field] = isset($_POST['alipay'][$field]) ? trim($_POST['alipay'][$field]) : '';
 			}
 
+			if($alipay['private_key']){
+				$res = openssl_get_privatekey($alipay['private_key']);
+				if(!$res){
+					showmsg('invalid_private_key', 'back');
+				}
+			}
+
+			if($alipay['ali_public_key']){
+				$res = openssl_get_publickey($alipay['ali_public_key']);
+				if(!$res){
+					showmsg('invalid_ali_public_key', 'back');
+				}
+			}
+
 			writedata('alipay', $alipay);
 			showmsg('edit_succeed', 'refresh');
 		}

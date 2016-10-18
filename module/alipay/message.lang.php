@@ -22,4 +22,6 @@ takashiro@qq.com
 
 return array(
 	'failed_to_retrieve_trade_state' => '网络故障，无法取得付款状态。',
+	'invalid_private_key' => '您输入的私钥无效，请重新输入。',
+	'invalid_ali_public_key' => '您输入的支付宝公钥无效，请重新输入。',
 );
