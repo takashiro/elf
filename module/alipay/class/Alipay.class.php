@@ -82,7 +82,7 @@ class Alipay extends CUrl{
             'sign_type' => 'RSA',
             'timestamp' => rdate(TIMESTAMP, 'Y-m-d H:i:s'),
             'version' => '1.0',
-            'notify_url' => $_G['site_url'].'module/alipay/api/notify.php',
+            'notify_url' => !empty($this->config['notify_url']) ? $this->config['notify_url'] : $_G['site_url'].'module/alipay/api/notify.php',
             'biz_content' => $data ? json_encode($data) : '',
         );
 
