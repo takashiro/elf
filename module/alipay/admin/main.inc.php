@@ -43,7 +43,6 @@ class AlipayMainModule extends AdminControlPanelModule{
 			foreach($fields as $field){
 				$alipay[$field] = isset($_POST['alipay'][$field]) ? trim($_POST['alipay'][$field]) : '';
 			}
-			$alipay['enable_single_trade_query'] = !empty($_POST['alipay']['enable_single_trade_query']);
 
 			writedata('alipay', $alipay);
 			showmsg('edit_succeed', 'refresh');
