@@ -26,11 +26,15 @@ class Alipay extends CUrl{
 
     protected $config;
 
-    public function __construct(){
+    public function __construct($config = null){
         parent::__construct();
         $this->server = 'https://openapi.alipay.com/gateway.do';
 
-        $this->config = readdata('alipay');
+        if($config === null){
+            $this->config = readdata('alipay');
+        }else{
+            $this->config = $config;
+        }
     }
 
     public function createOrder($out_trade_no, $total_amount, $subject, $body = null){
