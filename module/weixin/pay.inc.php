@@ -53,8 +53,9 @@ if($wechat->getTradeType() == 'APP'){
 		'prepayid' => $reply['prepay_id'],
 		'package' => 'Sign=WXPay',
 		'timestamp' => TIMESTAMP + 8 * 3600,
+		'noncestr' => randomstr(32),
 	);
-	$wechat->signData($response);
+	$response['sign'] = $wechat->generateSignature($response);
 	echo json_encode($response);
 	exit;
 }else{
