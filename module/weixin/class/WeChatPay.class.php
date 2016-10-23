@@ -72,6 +72,9 @@ class WeChatPay extends CUrl{
 			'total_fee' => round($total_fee * 100),
 			'trade_type' => $this->tradeType,
 		);
+		if($this->tradeType == 'APP'){
+			$data['notify_url'].= '?is_client=1';
+		}
 
 		$this->signData($data);
 
