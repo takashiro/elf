@@ -47,8 +47,14 @@ class Alipay extends CUrl{
             'product_code' => 'QUICK_WAP_PAY',
         );
 
-        $request = $this->createRequest('alipay.trade.wap.pay', $data);
-        $this->redirectRequest($request);
+        if(self::IsClient()){
+			$request = $this->createRequest('alipay.trade.app.pay', $data);
+			echo http_build_query($request);
+			exit;
+		}else{
+			$request = $this->createRequest('alipay.trade.wap.pay', $data);
+			$this->redirectRequest($request);
+		}
     }
 
     public function queryOrder($trade_no, $is_trade_no = true){
@@ -128,6 +134,10 @@ class Alipay extends CUrl{
         openssl_free_key($res);
         return $result;
     }
+
+	private static function IsClient(){
+		return !empty($_GET['is_client']) || (!empty($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], 'NativeApp') !== false);
+	}
 
     private static function ParseSignContent($data){
         ksort($data);
