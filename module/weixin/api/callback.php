@@ -29,6 +29,8 @@ if(isset($_GET['transaction_id'])){
 }elseif(isset($_GET['out_trade_no'])){
 	$id = trim($_GET['out_trade_no']);
 	$is_transaction_id = false;
+}else{
+	exit('illegal operation');
 }
 
 require_once '../class/WeChatPay.class.php';

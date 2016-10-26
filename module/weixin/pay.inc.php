@@ -42,8 +42,20 @@ if(empty($_G['wechatpaytrade']['out_trade_no']))
 	showmsg('illegal_operation');
 
 $trade = &$_G['wechatpaytrade'];
+
 require_once MOD_ROOT.'class/WeChatPay.class.php';
 $wechat = new WeChatPay;
+
+if(!empty($_GET['enable_trade_query'])){
+	$reply = $wechat->queryOrder($trade['out_trade_no'], false);
+	if($reply && isset($reply['return_code']) && $reply['return_code'] == 'SUCCESS'){
+		if(isset($reply['trade_state']) && $reply['trade_state'] == 'SUCCESS'){
+			runhooks('wechatpay_callback_executed', array($reply));
+			exit;
+		}
+	}
+}
+
 $reply = $wechat->createOrder($trade['out_trade_no'], $trade['total_fee'], $trade['subject']);
 
 if($wechat->getTradeType() == 'APP'){
