@@ -24,4 +24,7 @@ return array(
 	'inaccessible_if_not_logged_in' => '未登录状态下不能进行微信支付。',
 	'wechatpay_is_disabled' => '微信支付暂时关闭。',
 	'successfully_updated_your_avatar' => '成功更新了您的微信头像！',
+
+	'failed_to_query_order_due_to_network_error' => '由于网络原因，暂未查询到您的订单信息，请稍后重试。',
+	'order_has_not_been_paid' => '微信支付未完成。',
 );

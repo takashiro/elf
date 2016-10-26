@@ -78,18 +78,28 @@ class WeChatPay extends CUrl{
 
 		$this->signData($data);
 
-		$content = '<xml>';
-		foreach($data as $key => $value){
-			$content.= '<'.$key.'>'.$value.'</'.$key.'>';
-		}
-		$content.= '</xml>';
-
-		$reply = $this->request('pay/unifiedorder', $content);
+		$reply = $this->request('pay/unifiedorder', self::ParseXml($data));
 		$xml = new XML;
 		$xml->loadXML($reply);
 		$reply = $xml->toArray();
 		$reply = $reply['xml'];
 		return $reply;
+	}
+
+	public function queryOrder($id, $is_transaction_id = true){
+		$data = array(
+			'appid' => $this->appId,
+			'mch_id' => $this->merchantId,
+			($is_transaction_id ? 'transaction_id' : 'out_trade_no') => $id,
+		);
+
+		$this->signData($data);
+
+		$reply = $this->request('pay/orderquery', self::ParseXml($data));
+		$xml = new XML;
+		$xml->loadXML($reply);
+		$reply = $xml->toArray();
+		return $reply['xml'];
 	}
 
 	public function signData(&$data){
@@ -118,6 +128,15 @@ class WeChatPay extends CUrl{
 		unset($data['sign']);
 
 		return $sign == $this->generateSignature($data);
+	}
+
+	static protected function ParseXml($data){
+		$content = '<xml>';
+		foreach($data as $key => $value){
+			$content.= '<'.$key.'>'.$value.'</'.$key.'>';
+		}
+		$content.= '</xml>';
+		return $content;
 	}
 
 }

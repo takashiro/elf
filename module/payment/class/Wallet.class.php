@@ -309,7 +309,7 @@ class Wallet{
 
 		global $db;
 		$id = substr($trade['out_trade_no'], $prefix_len);
-		$id = raddslashes($id);
+		$id = intval($id);
 
 		$log = array(
 			'paymentmethod' => Wallet::ViaWeChat,
@@ -320,6 +320,31 @@ class Wallet{
 		$table->update($log, array('id' => $id));
 
 		self::TakeRechargeEffect($id);
+	}
+
+	static public function __on_wechatpay_callback_executed($trade){
+		$prefix_len = strlen(self::$AlipayTradeNoPrefix);
+		if(strncmp($trade['out_trade_no'], self::$AlipayTradeNoPrefix, $prefix_len) != 0)
+			return;
+
+		if($trade['trade_state'] == 'SUCCESS'){
+			global $db;
+			$id = substr($trade['out_trade_no'], $prefix_len);
+			$id = intval($id);
+
+			$log = array(
+				'paymentmethod' => Wallet::ViaWeChat,
+				'tradeid' => $trade['transaction_id'],
+				'tradestate' => Wallet::TradeSuccess,
+			);
+			$table = $db->select_table('userwalletlog');
+			$table->update($log, array('id' => $id));
+
+			self::TakeRechargeEffect($id);
+			showmsg('wallet_is_successfully_recharged', 'index.php?mod=payment');
+		}else{
+			showmsg('wallet_is_not_recharged', 'index.php?mod=payment');
+		}
 	}
 
 	static protected function TakeRechargeEffect($id){

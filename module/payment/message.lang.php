@@ -10,4 +10,5 @@ return array(
 	'wallet_is_insufficient' => '钱包余额不足了惹……',
 	'bestpay_is_disabled' => '啊哦……翼支付被禁用了惹……',
 	'wechatpay_is_disabled' => '啊哦……微信支付被禁用了惹……',
+	'wallet_is_not_recharged' => '支付失败……',
 );
