@@ -54,7 +54,7 @@ if(!$_G['user']->isLoggedIn()){
 	showmsg('inaccessible_if_not_logged_in', 'index.php?mod=user:login');
 }
 
-$paymentconfig = readdata('payment');
+$paymentconfig = Wallet::ReadConfig();
 if(empty($paymentconfig['enabled_method'][Wallet::ViaAlipay])){
 	showmsg('alipay_is_disabled');
 }

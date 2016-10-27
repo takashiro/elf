@@ -80,6 +80,20 @@ class Wallet{
 		return false;
 	}
 
+	static public function ReadConfig(){
+		$config = readdata('payment');
+		if(!empty($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false){
+			foreach($config['method'] as &$method){
+				if($method['id'] == self::ViaAlipay){
+					$method['enabled'] = false;
+				}
+			}
+			unset($method);
+			$config['enabled_method'][self::ViaAlipay] = false;
+		}
+		return $config;
+	}
+
 	static protected $AlipayTradeNoPrefix = 'W';
 	static public function __on_alipay_started(){
 		if(isset($_GET['recharge'])){

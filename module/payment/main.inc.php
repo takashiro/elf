@@ -26,7 +26,7 @@ if(!$_G['user']->isLoggedIn()){
 	redirect('index.php?mod=user:login');
 }
 
-$paymentconfig = readdata('payment');
+$paymentconfig = Wallet::ReadConfig();
 if(isset($_GET['orderid'])){
 	if(empty($paymentconfig['enabled_method'][Wallet::ViaWallet])){
 		showmsg('wallet_payment_is_disabled');

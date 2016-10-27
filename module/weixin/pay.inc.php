@@ -25,7 +25,7 @@ if(!defined('S_ROOT')) exit('access denied');
 if(!$_G['user']->isLoggedIn())
 	showmsg('inaccessible_if_not_logged_in', 'index.php?mod=user:login');
 
-$paymentconfig = readdata('payment');
+$paymentconfig = Wallet::ReadConfig();
 if(empty($paymentconfig['enabled_method'][Wallet::ViaWeChat])){
 	showmsg('wechatpay_is_disabled');
 }

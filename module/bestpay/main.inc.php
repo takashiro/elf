@@ -26,7 +26,7 @@ if(!$_G['user']->isLoggedIn()){
 	redirect('index.php?mod=user:login');
 }
 
-$paymentconfig = readdata('payment');
+$paymentconfig = Wallet::ReadConfig();
 if(empty($paymentconfig['enabled_method'][Wallet::ViaBestpay])){
 	showmsg('bestpay_is_disabled');
 }
