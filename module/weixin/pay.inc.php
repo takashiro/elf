@@ -68,6 +68,7 @@ if($wechat->getTradeType() == 'APP'){
 		'noncestr' => randomstr(32),
 	);
 	$response['sign'] = $wechat->generateSignature($response);
+	$response['out_trade_no'] = $trade['out_trade_no'];
 	echo json_encode($response);
 	exit;
 }else{
