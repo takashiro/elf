@@ -34,7 +34,14 @@ if(empty($xml['xml']))
 $input = $xml['xml'];
 
 require_once '../class/WeChatPay.class.php';
-$api = new WeChatPay;
+$wxapp = readdata('wxapp');
+$api = null;
+if($wxapp['app_id'] == $input['appid']){
+	$api = new WeChatPay($wxapp);
+}else{
+	$wxsv = readdata('wxsv');
+	$api = new WeChatPay($wxsv);
+}
 
 if(!$api->checkSource($input))
 	exit('invalid source');
