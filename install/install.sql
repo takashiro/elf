@@ -11,12 +11,12 @@ CREATE TABLE IF NOT EXISTS `pre_administrator` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(15) NOT NULL,
   `pwmd5` varchar(32) NOT NULL,
-  `nickname` varchar(50) NOT NULL,
-  `permissions` text NOT NULL,
-  `logintime` int(11) unsigned NOT NULL,
-  `realname` varchar(50) NOT NULL,
-  `mobile` varchar(11) NOT NULL,
-  `loginkey` smallint(5) unsigned NOT NULL,
+  `nickname` varchar(50) NULL,
+  `permissions` text NULL,
+  `logintime` int(11) unsigned NULL,
+  `realname` varchar(50) NULL,
+  `mobile` varchar(11) NULL,
+  `loginkey` smallint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `account` (`account`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
