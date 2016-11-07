@@ -84,7 +84,7 @@ class Mail{
 			if(empty(self::$Config['systemname'])){
 				return self::$Config['systemmail'];
 			}else{
-				return self::$Config['systemname'].' <'.self::$Config['systemmail'].'>';
+				return self::Base64Encode(self::$Config['systemname']).' <'.self::$Config['systemmail'].'>';
 			}
 		}else{
 			return $this->from;
