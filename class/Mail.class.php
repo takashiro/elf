@@ -196,7 +196,7 @@ class Mail{
 		$email_content = $this->getEncodedContent();
 
 		$headers = $this->getHeaders().'Message-ID: <'.rdate(TIMESTAMP, 'YmdHs').'.'.substr(md5($email_content.microtime()), 0, 6).rand(100000, 999999).'@'.$_SERVER['HTTP_HOST'].'>'.self::$Config['delimiter'];
-		fputs($fp, "Date: ".rdate(TIMESTAMP, 'r')."\r\n");
+		fputs($fp, "Date: ".rdate(TIMESTAMP, 'D, d M Y H:i:s').' '.(TIMEZONE > 0 ? '+' : '').sprintf('%02d', TIMEZONE)."00\r\n");
 		fputs($fp, "To: ".$email_to."\r\n");
 		fputs($fp, "Subject: ".self::Base64Encode($this->title)."\r\n");
 		fputs($fp, $headers);
