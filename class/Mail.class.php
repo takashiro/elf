@@ -116,7 +116,7 @@ class Mail{
 		$email_to = self::EncodeAddress($email_to);
 
 		if(!$fp = self::SocketOpen(self::$Config['server'], self::$Config['port'], $errno, $errstr, 30)) {
-			self::WriteLog("CONNECT - Unable to connect to the SMTP server");
+			self::WriteLog("CONNECT - Unable to connect to the SMTP server, $errno: $errstr");
 			return false;
 		}
 		stream_set_blocking($fp, true);
@@ -239,7 +239,7 @@ class Mail{
 	}
 
 	static protected function SocketOpen($hostname, $port = 80, &$errno, &$errstr, $timeout = 15){
-		$fp = '';
+		$fp = null;
 		if(function_exists('fsockopen')){
 			$fp = @fsockopen($hostname, $port, $errno, $errstr, $timeout);
 		}elseif(function_exists('pfsockopen')){
