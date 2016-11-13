@@ -75,6 +75,10 @@ class Wallet{
 			);
 			$table = $db->select_table('userwalletlog');
 			$table->insert($log);
+
+			global $_G;
+			$_G['user']->lastpaymentmethod = Wallet::ViaAlipay;
+
 			return true;
 		}
 		return false;
@@ -91,6 +95,18 @@ class Wallet{
 			unset($method);
 			$config['enabled_method'][self::ViaAlipay] = false;
 		}
+
+		global $_G;
+		if($_G['user']->isLoggedIn() && $_G['user']->lastpaymentmethod !== null){
+			foreach($config['method'] as $i => $method){
+				if($method['id'] == $_G['user']->lastpaymentmethod){
+					array_splice($config['method'], $i, 1);
+					array_unshift($config['method'], $method);
+					break;
+				}
+			}
+		}
+
 		return $config;
 	}
 

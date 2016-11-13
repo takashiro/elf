@@ -71,6 +71,8 @@ runhooks('alipay_started');
 if(empty($_G['alipaytrade']['out_trade_no']) || empty($_G['alipaytrade']['subject']) || !is_numeric($_G['alipaytrade']['total_fee']))
 	showmsg('illegal_operation');
 
+$_G['user']->lastpaymentmethod = Wallet::ViaAlipay;
+
 require_once MOD_ROOT.'class/Alipay.class.php';
 $alipay = new Alipay;
 $alipay->createOrder($_G['alipaytrade']['out_trade_no'], $_G['alipaytrade']['total_fee'], $_G['alipaytrade']['subject']);

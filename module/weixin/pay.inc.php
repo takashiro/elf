@@ -58,6 +58,8 @@ if(!empty($_GET['enable_trade_query'])){
 
 $reply = $wechat->createOrder($trade['out_trade_no'], $trade['total_fee'], $trade['subject']);
 
+$_G['user']->lastpaymentmethod = Wallet::ViaAlipay;
+
 if($wechat->getTradeType() == 'APP'){
 	$response = array(
 		'appid' => $wechat->getAppId(),

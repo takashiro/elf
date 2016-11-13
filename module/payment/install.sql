@@ -1,5 +1,6 @@
 
 ALTER TABLE `pre_user` ADD `wallet` decimal(9,2) NOT NULL DEFAULT '0.0';
+ALTER TABLE `pre_user` ADD `lastpaymentmethod` tinyint(4) unsigned NULL;
 
 DROP TABLE IF EXISTS `pre_prepaidreward`;
 CREATE TABLE IF NOT EXISTS `pre_prepaidreward` (
