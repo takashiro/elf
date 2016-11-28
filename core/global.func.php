@@ -409,9 +409,9 @@ function writelog($logfile, $data){
 	include S_ROOT.'core/writelog.inc.php';
 }
 
-function runhooks($hookid, $arguments = array()){
+function readhooks(){
 	$hookScripts = readcache('hookscript');
-	if($hookScripts === NULL){
+	if($hookScripts === null){
 		$hookScripts = array();
 
 		$classFiles = scandir(S_ROOT.'class/');
@@ -441,9 +441,16 @@ function runhooks($hookid, $arguments = array()){
 
 		writecache('hookscript', $hookScripts);
 	}
+	return $hookScripts;
+}
 
-	if(isset($hookScripts[$hookid])){
-		foreach($hookScripts[$hookid] as $className){
+function runhooks($hookid, $arguments = array()){
+	static $hooks = null;
+	if($hooks === null){
+		$hooks = readhooks();
+	}
+	if(isset($hooks[$hookid])){
+		foreach($hooks[$hookid] as $className){
 			$func = $className.'::__on_'.$hookid;
 			call_user_func_array($func, $arguments);
 		}
