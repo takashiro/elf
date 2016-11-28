@@ -110,8 +110,9 @@ class Wallet{
 		return $config;
 	}
 
-	static protected $AlipayTradeNoPrefix = 'W';
-	static public function __on_alipay_started(){
+	const TRADE_PREFIX = 'W';
+
+	static public function __on_trade_started($method){
 		if(isset($_GET['recharge'])){
 			global $_G, $db;
 
@@ -120,7 +121,7 @@ class Wallet{
 				'dateline' => TIMESTAMP,
 				'cost' => floatval($_GET['recharge']),
 				'type' => self::RechargeLog,
-				'paymentmethod' => Wallet::ViaAlipay,
+				'paymentmethod' => $method,
 			);
 
 			$log['cost'] = round($log['cost'] * 100) / 100;
@@ -130,14 +131,10 @@ class Wallet{
 				$table->insert($log);
 				$id = $table->insert_id();
 
-				//商户网站订单系统中唯一订单号，必填
-				$_G['alipaytrade']['out_trade_no'] = self::$AlipayTradeNoPrefix.$id;
-
-				//订单名称
-				$_G['alipaytrade']['subject'] = $_G['config']['sitename'].'充值'.$id;
-
-				//付款金额
-				$_G['alipaytrade']['total_fee'] = $log['cost'];
+				$trade = &$_G['trade'];
+				$trade['out_trade_no'] = self::TRADE_PREFIX.$id;
+				$trade['subject'] = $_G['config']['sitename'].$trade['out_trade_no'];
+				$trade['total_fee'] = $log['cost'];
 			}else{
 				showmsg('the_number_you_must_be_kidding_me', 'back');
 			}
@@ -149,28 +146,28 @@ class Wallet{
 			$log = $table->fetch_first('*', array('id' => $logid, 'type' => self::RechargeLog));
 
 			if(!empty($log['id']) && isset($log['cost']) && $log['cost'] > 0){
-				$_G['alipaytrade']['out_trade_no'] = self::$AlipayTradeNoPrefix.$log['id'];
-				$_G['alipaytrade']['subject'] = $_G['config']['sitename'].'充值'.$log['id'];
-				$_G['alipaytrade']['total_fee'] = $log['cost'];
+				$trade = &$_G['trade'];
+				$trade['out_trade_no'] = self::TRADE_PREFIX.$log['id'];
+				$trade['subject'] = $_G['config']['sitename'].$trade['out_trade_no'];
+				$trade['total_fee'] = $log['cost'];
 			}else{
 				showmsg('illegal_operation');
 			}
 		}
 	}
 
-	static public function __on_alipay_notified($out_trade_no, $trade_no, $trade_status){
-		$prefix_len = strlen(self::$AlipayTradeNoPrefix);
-		if(strncmp($out_trade_no, self::$AlipayTradeNoPrefix, $prefix_len) != 0)
+	static public function __on_trade_notified($id, $method, $trade_id, $trade_status, $extra){
+		if(strncmp($id, self::TRADE_PREFIX, 1) != 0){
 			return;
+		}
 
 		global $db;
-		$id = substr($out_trade_no, $prefix_len);
-		$id = raddslashes($id);
+		$id = intval(substr($id, 1));
 
 		$log = array(
-			'paymentmethod' => Wallet::ViaAlipay,
-			'tradeid' => $trade_no,
-			'tradestate' => Wallet::$TradeStateEnum[$trade_status],
+			'paymentmethod' => $method,
+			'tradeid' => $trade_id,
+			'tradestate' => $trade_status,
 		);
 		$table = $db->select_table('userwalletlog');
 		$table->update($log, array('id' => $id));
@@ -180,201 +177,13 @@ class Wallet{
 		}
 	}
 
-	static public function __on_alipay_callback_executed($out_trade_no, $trade_no, $result){
-		global $_G;
-
-		//以异步通知为准，此处不处理只通知
-		if(strncmp($out_trade_no, self::$AlipayTradeNoPrefix, strlen(self::$AlipayTradeNoPrefix)) == 0){
-			self::__on_alipay_notified($out_trade_no, $trade_no, $result);
-			showmsg('wallet_is_successfully_recharged', 'index.php?mod=payment');
-		}
-	}
-
-	static public function __on_bestpay_started(){
-		if(isset($_GET['recharge'])){
-			global $_G, $db;
-
-			$log = array(
-				'uid' => $_G['user']->id,
-				'dateline' => TIMESTAMP,
-				'cost' => floatval($_GET['recharge']),
-				'type' => self::RechargeLog,
-				'paymentmethod' => Wallet::ViaBestpay,
-			);
-
-			$log['cost'] = round($log['cost'] * 100) / 100;
-
-			if($log['cost'] > 0){
-				$table = $db->select_table('userwalletlog');
-				$table->insert($log);
-				$id = $table->insert_id();
-
-				//商户网站订单系统中唯一订单号，必填
-				$_G['bestpaytrade']['tradeid'] = self::$AlipayTradeNoPrefix.$id;
-
-				//订单名称
-				$_G['bestpaytrade']['subject'] = $_G['config']['sitename'].'充值'.$id;
-
-				//付款金额
-				$_G['bestpaytrade']['total_fee'] = $log['cost'];
-			}else{
-				showmsg('the_number_you_must_be_kidding_me', 'back');
-			}
-		}elseif(isset($_GET['rechargeid'])){
-			global $_G, $db;
-
-			$logid = intval($_GET['rechargeid']);
-			$table = $db->select_table('userwalletlog');
-			$log = $table->fetch_first('*', array('id' => $logid, 'type' => self::RechargeLog));
-
-			if(!empty($log['id']) && isset($log['cost']) && $log['cost'] > 0){
-				$_G['bestpaytrade']['tradeid'] = self::$AlipayTradeNoPrefix.$log['id'];
-				$_G['bestpaytrade']['subject'] = $_G['config']['sitename'].'充值'.$log['id'];
-				$_G['bestpaytrade']['total_fee'] = $log['cost'];
-			}else{
-				showmsg('illegal_operation');
-			}
-		}
-	}
-
-	static public function __on_bestpay_notified($out_trade_no, $trade_no, $trade_status){
-		$prefix_len = strlen(self::$AlipayTradeNoPrefix);
-		if(strncmp($out_trade_no, self::$AlipayTradeNoPrefix, $prefix_len) != 0)
+	static public function __on_trade_callback_executed($id, $method, $trade_id, $trade_status, $extra){
+		if(strncmp($id, self::TRADE_PREFIX, 1) != 0){
 			return;
-
-		global $db;
-		$id = substr($out_trade_no, $prefix_len);
-		$id = raddslashes($id);
-
-		$log = array(
-			'paymentmethod' => Wallet::ViaBestpay,
-			'tradeid' => $trade_no,
-			'tradestate' => $trade_status == '0000' ? Wallet::TradeSuccess : Wallet::WaitBuyerPay,
-		);
-		$table = $db->select_table('userwalletlog');
-		$table->update($log, array('id' => $id));
-
-		if($log['tradestate'] == Wallet::TradeSuccess){
-			self::TakeRechargeEffect($id);
 		}
-	}
 
-	static public function __on_bestpay_callback_executed($out_trade_no, $trade_no, $result){
-		global $_G;
-
-		//以异步通知为准，此处不处理只通知
-		if(strncmp($out_trade_no, self::$AlipayTradeNoPrefix, strlen(self::$AlipayTradeNoPrefix)) == 0)
-			showmsg('wallet_is_successfully_recharged', 'index.php?mod=payment');
-	}
-
-	static public function __on_wechatpay_started(){
-		if(isset($_GET['recharge'])){
-			$recharge = floatval($_GET['recharge']);
-			if($recharge <= 0)
-				showmsg('the_number_you_must_be_kidding_me', 'back');
-
-			global $_G, $db;
-
-			$log = array(
-				'uid' => $_G['user']->id,
-				'dateline' => TIMESTAMP,
-				'cost' => $recharge,
-				'type' => self::RechargeLog,
-				'paymentmethod' => Wallet::ViaWeChat,
-			);
-
-			$log['cost'] = round($log['cost'] * 100) / 100;
-
-			$table = $db->select_table('userwalletlog');
-			$table->insert($log);
-			$id = $table->insert_id();
-
-			//商户网站订单系统中唯一订单号，必填
-			$trade = &$_G['wechatpaytrade'];
-			$trade['out_trade_no'] = self::$AlipayTradeNoPrefix.$id;
-			$trade['total_fee'] = $recharge;
-			$trade['subject'] = $_G['config']['sitename'].'充值'.$id;
-
-		}elseif(isset($_GET['rechargeid'])){
-			global $_G, $db;
-
-			$logid = intval($_GET['rechargeid']);
-			$table = $db->select_table('userwalletlog');
-			$log = $table->fetch_first('*', array('id' => $logid, 'type' => self::RechargeLog));
-
-			if(!empty($log['id']) && isset($log['cost']) && $log['cost'] > 0){
-				$trade = &$_G['wechatpaytrade'];
-				$trade['out_trade_no'] = self::$AlipayTradeNoPrefix.$log['id'];
-				$trade['total_fee'] = $log['cost'];
-				$trade['subject'] = $_G['config']['sitename'].'充值'.$log['id'];
-			}else{
-				showmsg('illegal_operation');
-			}
-		}
-	}
-
-	static public function __on_wechatpay_createorder(){
-		global $_G;
-		$trade = &$_G['wechatpaytrade'];
-		$prefix_len = strlen(self::$AlipayTradeNoPrefix);
-		if(strncmp($trade['out_trade_no'], self::$AlipayTradeNoPrefix, $prefix_len) != 0)
-			return;
-
-		$rechargeid = substr($trade['out_trade_no'], $prefix_len);
-
-		global $db;
-		$table = $db->select_table('userwalletlog');
-		$log = $table->fetch_first('*', 'id='.$rechargeid.' AND recharged=0');
-		if($log){
-			$trade['total_fee'] = $log['cost'];
-			$trade['subject'] = $_G['config']['sitename'].'充值'.$log['id'];
-			$trade['valid'] = true;
-		}
-	}
-
-	static public function __on_wechatpay_notified($trade){
-		$prefix_len = strlen(self::$AlipayTradeNoPrefix);
-		if(strncmp($trade['out_trade_no'], self::$AlipayTradeNoPrefix, $prefix_len) != 0)
-			return;
-
-		global $db;
-		$id = substr($trade['out_trade_no'], $prefix_len);
-		$id = intval($id);
-
-		$log = array(
-			'paymentmethod' => Wallet::ViaWeChat,
-			'tradeid' => $trade['transaction_id'],
-			'tradestate' => Wallet::TradeSuccess,
-		);
-		$table = $db->select_table('userwalletlog');
-		$table->update($log, array('id' => $id));
-
-		self::TakeRechargeEffect($id);
-	}
-
-	static public function __on_wechatpay_callback_executed($trade){
-		$prefix_len = strlen(self::$AlipayTradeNoPrefix);
-		if(strncmp($trade['out_trade_no'], self::$AlipayTradeNoPrefix, $prefix_len) != 0)
-			return;
-
-		if($trade['trade_state'] == 'SUCCESS'){
-			global $db;
-			$id = substr($trade['out_trade_no'], $prefix_len);
-			$id = intval($id);
-
-			$log = array(
-				'paymentmethod' => Wallet::ViaWeChat,
-				'tradeid' => $trade['transaction_id'],
-				'tradestate' => Wallet::TradeSuccess,
-			);
-			$table = $db->select_table('userwalletlog');
-			$table->update($log, array('id' => $id));
-
-			self::TakeRechargeEffect($id);
-			showmsg('wallet_is_successfully_recharged', 'index.php?mod=payment');
-		}else{
-			showmsg('wallet_is_not_recharged', 'index.php?mod=payment');
-		}
+		self::__on_trade_notified($id, $method, $trade_id, $trade_status, $extra);
+		showmsg('wallet_is_successfully_recharged', 'index.php?mod=payment');
 	}
 
 	static protected function TakeRechargeEffect($id){
@@ -450,12 +259,4 @@ Wallet::$TradeState = array(
 	Wallet::TradeClosed => lang('common', 'wallet_tradeclosed'),
 	Wallet::TradePending => lang('common', 'wallet_tradepending'),
 	Wallet::TradeFinished => lang('common', 'wallet_tradefinished'),
-);
-
-Wallet::$TradeStateEnum = array(
-	'WAIT_BUYER_PAY' => Wallet::WaitBuyerPay,
-	'TRADE_CLOSED' => Wallet::TradeClosed,
-	'TRADE_SUCCESS' => Wallet::TradeSuccess,
-	'TRADE_PENDING' => Wallet::TradePending,
-	'TRADE_FINISHED' => Wallet::TradeFinished,
 );

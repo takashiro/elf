@@ -43,7 +43,13 @@ if(!$reply || $reply['return_code'] != 'SUCCESS'){
 }
 
 if($reply && isset($reply['transaction_id']) && isset($reply['trade_state']) && isset($reply['out_trade_no'])){
-	runhooks('wechatpay_callback_executed', array($reply));
+	runhooks('trade_callback_executed', array(
+		$reply['out_trade_no'],
+		Wallet::ViaWeChat,
+		$reply['transaction_id'],
+		$reply['trade_state'] == 'SUCCESS' ? Wallet::TradeSuccess : Wallet::WaitBuyerPay,
+		$reply
+	));
 }else{
 	showmsg('order_has_not_been_paid');
 }

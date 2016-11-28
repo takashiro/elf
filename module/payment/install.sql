@@ -2,6 +2,21 @@
 ALTER TABLE `pre_user` ADD `wallet` decimal(9,2) NOT NULL DEFAULT '0.0';
 ALTER TABLE `pre_user` ADD `lastpaymentmethod` tinyint(4) unsigned NULL;
 
+DROP TABLE IF EXISTS `pre_combinedorder`;
+CREATE TABLE IF NOT EXISTS `pre_combinedorder` (
+	`id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+	`userid` mediumint(8) unsigned NOT NULL,
+	`price` decimal(9,2) NOT NULL,
+	PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `pre_combinedorderitem`;
+CREATE TABLE IF NOT EXISTS `pre_combinedorderitem` (
+	`orderid` mediumint(8) unsigned NOT NULL,
+	`out_trade_no` varchar(255) NOT NULL,
+	INDEX `orderid` (`orderid`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `pre_prepaidreward`;
 CREATE TABLE IF NOT EXISTS `pre_prepaidreward` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,

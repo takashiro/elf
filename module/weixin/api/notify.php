@@ -49,6 +49,12 @@ if(!$api->checkSource($input))
 if(!$api->checkSignature($input))
 	exit('invalid signature');
 
-runhooks('wechatpay_notified', array($input));
+runhooks('trade_notified', array(
+	$input['out_trade_no'],
+	Wallet::ViaWeChat,
+	$input['transaction_id'],
+	Wallet::TradeSuccess,
+	$input,
+));
 
 echo '<xml><return_code>SUCCESS</return_code><return_msg>OK</return_msg></xml>';

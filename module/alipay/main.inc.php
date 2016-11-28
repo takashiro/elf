@@ -59,20 +59,20 @@ if(empty($paymentconfig['enabled_method'][Wallet::ViaAlipay])){
 	showmsg('alipay_is_disabled');
 }
 
-$_G['alipaytrade'] = array(
+$_G['trade'] = array(
 	'out_trade_no' => '',
 	'subject' => '',
 	'total_fee' => 0.00,
-	'show_url' => 'index.php',
 );
 
-runhooks('alipay_started');
+runhooks('trade_started', array(Wallet::ViaAlipay));
 
-if(empty($_G['alipaytrade']['out_trade_no']) || empty($_G['alipaytrade']['subject']) || !is_numeric($_G['alipaytrade']['total_fee']))
+$trade = &$_G['trade'];
+if(empty($trade['out_trade_no']) || empty($trade['subject']) || !is_numeric($trade['total_fee']))
 	showmsg('illegal_operation');
 
 $_G['user']->lastpaymentmethod = Wallet::ViaAlipay;
 
 require_once MOD_ROOT.'class/Alipay.class.php';
 $alipay = new Alipay;
-$alipay->createOrder($_G['alipaytrade']['out_trade_no'], $_G['alipaytrade']['total_fee'], $_G['alipaytrade']['subject']);
+$alipay->createOrder($trade['out_trade_no'], $trade['total_fee'], $trade['subject']);

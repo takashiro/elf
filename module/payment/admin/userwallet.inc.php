@@ -112,17 +112,13 @@ class PaymentUserWalletModule extends AdminControlPanelModule{
 		if(isset($result['alipay_trade_query_response'])){
 			if(isset($result['alipay_trade_query_response']['trade_status'])){
 				$trade = $result['alipay_trade_query_response'];
-				$arguments = array(
-					//商户订单号
+				runhooks('trade_notified', array(
 					$trade['out_trade_no'],
-
-					//支付宝交易号
+					Wallet::ViaAlipay,
 					$trade['trade_no'],
-
-					//交易状态
-					$trade['trade_status'],
-				);
-				runhooks('alipay_notified', $arguments);
+					Alipay::$TradeStateEnum[$trade['trade_status']],
+					$trade,
+				));
 			}
 
 			showmsg('successfully_updated_recharge_trade_state', 'refresh');

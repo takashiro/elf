@@ -30,18 +30,18 @@ if(empty($paymentconfig['enabled_method'][Wallet::ViaWeChat])){
 	showmsg('wechatpay_is_disabled');
 }
 
-$_G['wechatpaytrade'] = array(
+$_G['trade'] = array(
 	'out_trade_no' => '',
 	'subject' => '',
 	'total_fee' => 0.00,
 );
 
-runhooks('wechatpay_started');
+runhooks('trade_started', array(Wallet::ViaWeChat));
 
-if(empty($_G['wechatpaytrade']['out_trade_no']))
+$trade = &$_G['trade'];
+if(empty($trade['out_trade_no']))
 	showmsg('illegal_operation');
 
-$trade = &$_G['wechatpaytrade'];
 
 require_once MOD_ROOT.'class/WeChatPay.class.php';
 $wechat = new WeChatPay;
@@ -50,7 +50,13 @@ if(!empty($_GET['enable_trade_query'])){
 	$reply = $wechat->queryOrder($trade['out_trade_no'], false);
 	if($reply && isset($reply['return_code']) && $reply['return_code'] == 'SUCCESS'){
 		if(isset($reply['trade_state']) && $reply['trade_state'] == 'SUCCESS'){
-			runhooks('wechatpay_callback_executed', array($reply));
+			runhooks('trade_callback_executed', array(
+				$trade['out_trade_no'],
+				Wallet::ViaWeChat,
+				$reply['transaction_id'],
+				Wallet::TradeSuccess,
+				$reply
+			));
 			exit;
 		}
 	}

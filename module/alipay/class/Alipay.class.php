@@ -149,4 +149,14 @@ class Alipay extends CUrl{
         }
         return implode('&', $strs);
     }
+
+	public static $TradeStateEnum;
 }
+
+Alipay::$TradeStateEnum = array(
+	'WAIT_BUYER_PAY' => Wallet::WaitBuyerPay,
+	'TRADE_CLOSED' => Wallet::TradeClosed,
+	'TRADE_SUCCESS' => Wallet::TradeSuccess,
+	'TRADE_PENDING' => Wallet::TradePending,
+	'TRADE_FINISHED' => Wallet::TradeFinished,
+);

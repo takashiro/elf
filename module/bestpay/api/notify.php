@@ -47,12 +47,14 @@ if(!empty($_POST['UPTRANSEQ'])){
 	$md5_originalsign = strtoupper(md5($originalsign));
 
 	if($SIGN == $md5_originalsign){
-		$trade = array(
+		$args = array(
 			$ORDERSEQ,
+			Wallet::ViaBestpay,
 			$UPTRANSEQ,
 			$RETNCODE,
+			$_POST,
 		);
-		runhooks('bestpay_notified', $trade);
+		runhooks('trade_notified', $args);
 		echo 'UPTRANSEQ_', $UPTRANSEQ;
 		exit;
 	}else{

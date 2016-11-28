@@ -25,25 +25,24 @@ require_once '../class/Alipay.class.php';
 
 $alipay = new Alipay;
 if($_GET){
-    if(isset($_GET['trade_no'])){
-        $data = $alipay->queryOrder($_GET['trade_no']);
-    }elseif(isset($_GET['out_trade_no'])){
-        $data = $alipay->queryOrder($_GET['out_trade_no']);
-    }
+	if(isset($_GET['trade_no'])){
+		$data = $alipay->queryOrder($_GET['trade_no']);
+	}elseif(isset($_GET['out_trade_no'])){
+		$data = $alipay->queryOrder($_GET['out_trade_no']);
+	}
 
-    if(!isset($data['alipay_trade_query_response']['trade_status'])){
-        showmsg('failed_to_retrieve_trade_state', 'index.php');
-    }
+	if(!isset($data['alipay_trade_query_response']['trade_status'])){
+		showmsg('failed_to_retrieve_trade_state', 'index.php');
+	}
 
-    $arguments = array(
-        //商户订单号
-        $_GET['out_trade_no'],
-        //支付宝交易号
-        $_GET['trade_no'],
-        //交易状态
-        $data['alipay_trade_query_response']['trade_status'],
-    );
-    runhooks('alipay_callback_executed', $arguments);
+	$trade = $data['alipay_trade_query_response'];
+	runhooks('trade_callback_executed', array(
+		$_GET['out_trade_no'],
+		Wallet::ViaAlipay,
+		$_GET['trade_no'],
+		Alipay::$TradeStateEnum[$trade['trade_status']],
+		$trade,
+	));
 }else{
-    showmsg('failed_to_retrieve_trade_state', 'index.php');
+	showmsg('failed_to_retrieve_trade_state', 'index.php');
 }

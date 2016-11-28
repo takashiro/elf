@@ -40,23 +40,24 @@ if(!empty($_GET['ret'])){
 	showmsg('支付成功！', 'index.php?mod=product');
 }
 
-$_G['bestpaytrade'] = array(
-	'tradeid' => '',
+$_G['trade'] = array(
+	'out_trade_no' => '',
 	'subject' => '',
 	'total_fee' => 0.00,
 	'attached_fee' => 0.00,
 );
 
-runhooks('bestpay_started');
+runhooks('trade_started', array(Wallet::ViaBestpay));
 
-if(empty($_G['bestpaytrade']['tradeid']) || empty($_G['bestpaytrade']['subject']) || !is_numeric($_G['bestpaytrade']['total_fee']))
+$trade = &$_G['trade'];
+if(empty($trade['out_trade_no']) || empty($trade['subject']) || !is_numeric($trade['total_fee']))
 	showmsg('illegal_operation');
 
 $key = $bestpay['key'];
 $merchantid = $bestpay['merchantid'];
-$ordid = $_G['bestpaytrade']['tradeid'];
-$attachamount = $_G['bestpaytrade']['attached_fee'];
-$orderamount = $_G['bestpaytrade']['total_fee'];
+$ordid = $trade['out_trade_no'];
+$attachamount = $trade['attached_fee'];
+$orderamount = $trade['total_fee'];
 $productamount = $orderamount - $attachamount;
 
 $productamount = sprintf('%.2f', $productamount);
@@ -76,7 +77,7 @@ $busicode = '0001';								//Transaction type, Consume
 
 $pagereturl = $_G['site_url'].'?mod=bestpay&ret=1';
 $bgreturl = $_G['site_url'].'module/bestpay/api/notify.php';
-$productdesc = $_G['bestpaytrade']['subject'];
+$productdesc = $trade['subject'];
 
 $productid = '0';
 $tmnum = '0';

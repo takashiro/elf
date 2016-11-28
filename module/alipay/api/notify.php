@@ -26,18 +26,13 @@ error_reporting(E_ALL);
 
 $alipay = new Alipay;
 if($data = $alipay->receiveNotification()){//验证成功
-	$arguments = array(
-		//商户订单号
+	runhooks('trade_notified', array(
 		$data['out_trade_no'],
-
-		//支付宝交易号
+		Wallet::ViaAlipay,
 		$data['trade_no'],
-
-		//交易状态
-		$data['trade_status'],
-	);
-
-	runhooks('alipay_notified', $arguments);
+		Alipay::$TradeStateEnum[$data['trade_status']],
+		$data
+	));
 	exit('success');
 
 }else{
