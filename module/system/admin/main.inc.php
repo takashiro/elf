@@ -38,6 +38,7 @@ class SystemMainModule extends AdminControlPanelModule{
 			'timezone' => intval($config['timezone']),
 			'timefix' => intval($config['timefix']),
 			'cookiepre' => $config['cookiepre'],
+			'static_url' => $config['static_url'],
 			'refversion' => $config['refversion'],
 			'charset' => 'utf-8',
 			'style' => $config['style'],
