@@ -106,6 +106,11 @@ class Template{
 		return '';
 	}
 
+	public function getStaticUrl(){
+		global $_G;
+		return $_G['config']['static_url'] ?? ($_G['root_url'] ?? '');
+	}
+
 	public function parse(){
 		$source_path = $this->getSourcePath();
 		$template = file_get_contents($source_path);
@@ -211,12 +216,15 @@ class Template{
 		$const_regexp = "([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)";
 
 		$th = $this;
-		$template = preg_replace_callback("/\{__{$const_regexp}__\}/s", function($matches) use(&$th){
-			$const = str_replace('_', '', $matches[1]);
-			return '<?php echo $_G[\'root_url\'];?>'.$th->{'get'.$const}();
+		$template = preg_replace_callback("/\{$const_regexp\}/s", function($matches) use(&$th){
+			$method = 'get'.str_replace('_', '', $matches[1]);
+			if(method_exists($th, $method)){
+				return $th->$method();
+			}else{
+				return '<?php echo '.$matches[1].';?>';
+			}
 		}, $template);
 
-		$template = preg_replace("/\{$const_regexp\}/s", "<?php echo \\1;?>", $template);
 		$template = preg_replace("/ \?\>[\n\r]*\<\? /s", " ", $template);
 
 		$template = preg_replace_callback('/"(\w+\:\/\/)?[0-9a-z.]+\?[^"]+?"/i', function($matches){
