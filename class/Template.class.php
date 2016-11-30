@@ -88,11 +88,11 @@ class Template{
 	}
 
 	public function getTemplateRoot(){
-		global $_G;
+		$url = $this->getStaticUrl();
 		if($this->style == 'default'){
-			return 'view/'.$this->type.'/';
+			return $url.'view/'.$this->type.'/';
 		}else{
-			return 'extension/view/'.$this->type.'/'.$this->style.'/';
+			return $url.'extension/view/'.$this->type.'/'.$this->style.'/';
 		}
 	}
 
@@ -101,7 +101,7 @@ class Template{
 			$module_path = 'module/'.MOD_NAME.'/';
 			file_exists($module_path) || $module_path = 'extension/'.$module_path;
 			defined('IN_ADMINCP') && $module_path.= 'admin/';
-			return $module_path;
+			return $this->getStaticUrl().$module_path;
 		}
 		return '';
 	}

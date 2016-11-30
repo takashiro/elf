@@ -10,9 +10,9 @@
 <!--{if !empty($_CONFIG['jquery_cdn'])}-->
 <script src="$_CONFIG[jquery_cdn]"></script>
 <!--{/if}-->
-<script>window.jQuery || document.write('<script src="3rdparty/jquery/jquery-3.1.0.min.js"><\/script>');</script>
-<script src="js/common.js?$_CONFIG[refversion]"></script>
-<script src="js/admin.js?$_CONFIG[refversion]"></script>
+<script>window.jQuery || document.write('<script src="{STATIC_URL}3rdparty/jquery/jquery-3.1.0.min.js"><\/script>');</script>
+<script src="{STATIC_URL}js/common.js?$_CONFIG[refversion]"></script>
+<script src="{STATIC_URL}js/admin.js?$_CONFIG[refversion]"></script>
 <!--{if isset($_CONFIG['head_element'])}-->$_CONFIG[head_element]<!--{/if}-->
 </head>
 
