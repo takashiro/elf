@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="stylesheet" href="{__TEMPLATE_ROOT__}image/common.css" type="text/css" />
 <link rel="stylesheet" type="text/css" media="screen and (min-width:800px)" href="{__TEMPLATE_ROOT__}image/desktop.css" type="text/css">
-<script type="text/javascript" src="./3rdparty/jquery/jquery-3.1.0.min.js"></script>
+<script src="3rdparty/jquery/jquery-3.1.0.min.js"></script>
 </head>
 <body>
 	<div class="box messagebox">
@@ -19,7 +19,7 @@
 			<!--{if $url_forward != 'confirm'}-->
 				<!--{if !empty($url_forward)}-->
 				<a href="$url_forward">如果您的浏览器没有自动跳转，请点击这里</a>
-				<script type="text/javascript">
+				<script>
 				setTimeout('location.href="$url_forward";', 3 * 1000);
 				</script>
 				<!--{/if}-->

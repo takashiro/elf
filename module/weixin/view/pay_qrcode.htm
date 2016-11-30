@@ -12,8 +12,8 @@ section.layout .content{
 </style>
 
 <!--{if strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') === false}-->
-	<script type="text/javascript" src="./3rdparty/jquery.qrcode.min.js"></script>
-	<script type="text/javascript">
+	<script src="3rdparty/jquery.qrcode.min.js"></script>
+	<script>
 	$(function(){
 		$('#qrcode').qrcode('{$qrcode_url}');
 	});
@@ -30,7 +30,7 @@ section.layout .content{
 		</div>
 	</section>
 <!--{else}-->
-	<script type="text/javascript">
+	<script>
 	$(function(){
 		$('#qrcode').one('load', function(){
 			$('#prompt').remove();
