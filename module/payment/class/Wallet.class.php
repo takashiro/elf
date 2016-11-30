@@ -58,20 +58,17 @@ class Wallet{
 		$this->user = $user;
 	}
 
-	public function pay($order, $is_credit = false){
+	public function pay($totalprice, $orderid = null, $is_credit = false){
 		global $db, $tpre;
-		$extra = $is_credit ? '' : "AND wallet>={$order->totalprice}";
-		$db->query("UPDATE {$tpre}user SET wallet=wallet-{$order->totalprice} WHERE id={$this->user->id} $extra");
+		$extra = $is_credit ? '' : "AND wallet>={$totalprice}";
+		$db->query("UPDATE {$tpre}user SET wallet=wallet-{$totalprice} WHERE id={$this->user->id} $extra");
 		if($db->affected_rows > 0){
-			$order->tradestate = Wallet::TradeSuccess;
-			$order->paymentmethod = Wallet::ViaWallet;
-			$order->tradetime = TIMESTAMP;
 			$log = array(
 				'uid' => $this->user->id,
 				'type' => self::OrderPaymentLog,
 				'dateline' => TIMESTAMP,
-				'delta' => -$order->totalprice,
-				'orderid' => $order->id,
+				'delta' => -$totalprice,
+				'orderid' => $orderid,
 			);
 			$table = $db->select_table('userwalletlog');
 			$table->insert($log);
