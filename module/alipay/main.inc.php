@@ -75,4 +75,25 @@ $_G['user']->lastpaymentmethod = Wallet::ViaAlipay;
 
 require_once MOD_ROOT.'class/Alipay.class.php';
 $alipay = new Alipay;
+
+if(!empty($_GET['enable_trade_query'])){
+	$result = $alipay->queryOrder('O'.$orderid, false);
+	if(isset($result['alipay_trade_query_response'])){
+		$response = $result['alipay_trade_query_response'];
+		if(isset($response['trade_status'])){
+			$trade_status = Alipay::$TradeStateEnum[$response['trade_status']];
+			if($trade_status == Wallet::TradeSuccess || $trade_status == Wallet::TradeFinished){
+				runhooks('trade_callback_executed', array(
+					$response['out_trade_no'],
+					Wallet::ViaAlipay,
+					$response['trade_no'],
+					$trade_status,
+					$response,
+				));
+				exit;
+			}
+		}
+	}
+}
+
 $alipay->createOrder($trade['out_trade_no'], $trade['total_fee'], $trade['subject']);
