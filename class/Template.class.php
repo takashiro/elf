@@ -156,6 +156,11 @@ class Template{
 		//{loop $var $key $value}
 		for($i = 0; $i < self::$StatementNext; $i++){
 			$template = preg_replace(
+				"/[\n\r\t]*\{mysql_fetch\s+(\S+)\s+(\S+)\}[\n\r]*(.+?)[\n\r]*\{\/mysql_fetch\}[\n\r\t]*/is",
+				'<?php while(\\2 = \\1->fetch_assoc()) { ?>\\3<?php } ?>',
+				$template
+			);
+			$template = preg_replace(
 				"/[\n\r\t]*\{loop\s+(\S+)\s+(\S+)\}[\n\r]*(.+?)[\n\r]*\{\/loop\}[\n\r\t]*/is",
 				'<?php if(is_array(\\1)) { foreach(\\1 as \\2) { ?>\\3<?php } } ?>',
 				$template
