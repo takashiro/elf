@@ -80,6 +80,9 @@ if($wechat->getTradeType() == 'APP'){
 	echo json_encode($response);
 	exit;
 }else{
+	if(empty($reply['code_url'])){
+		showmsg('wechatpay_fetch_qrcode_network_error_please_retry', 'back');
+	}
 	$qrcode_url = $reply['code_url'];
 	include view('pay_qrcode');
 }

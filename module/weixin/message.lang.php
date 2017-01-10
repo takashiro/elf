@@ -27,4 +27,5 @@ return array(
 
 	'failed_to_query_order_due_to_network_error' => '由于网络原因，暂未查询到您的订单信息，请稍后重试。',
 	'order_has_not_been_paid' => '微信支付未完成。',
+	'wechatpay_fetch_qrcode_network_error_please_retry' => '微信支付无法联网，请重试获取付款码。',
 );
