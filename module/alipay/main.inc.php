@@ -77,7 +77,7 @@ require_once MOD_ROOT.'class/Alipay.class.php';
 $alipay = new Alipay;
 
 if(!empty($_GET['enable_trade_query'])){
-	$result = $alipay->queryOrder('O'.$orderid, false);
+	$result = $alipay->queryOrder($trade['out_trade_no'], false);
 	if(isset($result['alipay_trade_query_response'])){
 		$response = $result['alipay_trade_query_response'];
 		if(isset($response['trade_status'])){
