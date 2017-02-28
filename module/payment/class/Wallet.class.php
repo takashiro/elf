@@ -94,7 +94,7 @@ class Wallet{
 		}
 
 		global $_G;
-		if($_G['user']->isLoggedIn() && $_G['user']->lastpaymentmethod !== null){
+		if(isset($_G['user']) && $_G['user']->isLoggedIn() && $_G['user']->lastpaymentmethod !== null){
 			foreach($config['method'] as $i => $method){
 				if($method['id'] == $_G['user']->lastpaymentmethod){
 					array_splice($config['method'], $i, 1);
