@@ -49,10 +49,6 @@ class SmsMainModule extends AdminControlPanelModule{
 
 			$sms = new SMS;
 			$result = $sms->send($template, $mobile, $content);
-			if($result && !is_string($result)){
-				$result = json_encode($result, JSON_UNESCAPED_UNICODE);
-			}
-
 			showmsg($result, 'back');
 		}else{
 			showmsg('illegal operation');

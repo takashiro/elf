@@ -37,7 +37,7 @@ class SMS extends CUrl{
 			$this->pwmd5 = $config['pwmd5'];
 		}
 
-		$this->setServer('http://api.sms.cn/sms/');
+		$this->setServer('https://api.sms.cn/sms/');
 	}
 
 	public function send($template, $mobile, $content){
@@ -49,12 +49,7 @@ class SMS extends CUrl{
 			'content' => is_string($content) ? $content : json_encode($content, JSON_UNESCAPED_UNICODE),
 		);
 
-		$result = $this->request('?ac=send&'.http_build_query($data));
-		if($result){
-			return json_decode($result, true);
-		}else{
-			return null;
-		}
+		return $this->request('?ac=send&'.http_build_query($data));
 	}
 
 }
