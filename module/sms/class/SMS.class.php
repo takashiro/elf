@@ -49,8 +49,12 @@ class SMS extends CUrl{
 			'content' => is_string($content) ? $content : json_encode($content, JSON_UNESCAPED_UNICODE),
 		);
 
-		$result = $this->request('?ac=send'.http_build_query($data));
-		return json_decode($result, true);
+		$result = $this->request('?ac=send&'.http_build_query($data));
+		if($result){
+			return json_decode($result, true);
+		}else{
+			return null;
+		}
 	}
 
 }
