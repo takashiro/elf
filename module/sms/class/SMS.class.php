@@ -38,6 +38,7 @@ class SMS extends CUrl{
 		}
 
 		$this->setServer('https://api.sms.cn/sms/');
+		$this->in_charset = 'gbk';
 	}
 
 	public function send($template, $mobile, $content){
