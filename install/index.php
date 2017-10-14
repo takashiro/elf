@@ -88,9 +88,10 @@ if($_POST){
 	$_G['config'] = array_merge($config, $stconfig);
 	$_G['config']['db'] = $dbconfig;
 
-	$db = new Database($dbconfig['host'], $dbconfig['user'], $dbconfig['pw'], $dbconfig['name']);
+	$db = new Database($dbconfig['host'], $dbconfig['user'], $dbconfig['pw']);
 	$db->set_table_prefix($dbconfig['tpre']);
 
+	$db->query('CREATE DATABASE IF NOT EXISTS `'.$dbconfig['name'].'` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci');
 	$databases = $db->fetch_all('SHOW DATABASES');
 	$database_exists = false;
 	foreach($databases as $d){
