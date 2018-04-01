@@ -28,9 +28,9 @@ if(PHP_VERSION < '7.0'){
 	exit('Elf Web App requires PHP 7.0 or later.');
 }
 
-function __autoload($classname){
+spl_autoload_register(function($classname){
 	require_once S_ROOT.'./class/'.$classname.'.class.php';
-}
+});
 
 function writeconfig($config, $value){
 	file_put_contents(S_ROOT.'./data/'.$config.'.inc.php', '<?php return '.var_export($value, true).';?>');
