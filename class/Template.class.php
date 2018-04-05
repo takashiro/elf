@@ -127,6 +127,9 @@ class Template{
 		//Remove commented statements <!--{...}--> into {...}
 		$template = preg_replace("/\<\!\-\-\{(.+?)\}\-\-\>/s", "{\\1}", $template);
 
+		//{mod *url*}
+		$template = preg_replace("/[\n\r\t]*\{mod\s+(.+?)\}[\n\r\t]*/is", 'index.php?mod=\\1', $template);
+
 		//{lang *type* *text*}
 		$template = preg_replace_callback("/\{lang\s+([a-zA-Z0-9_]+?)\s+([a-zA-Z0-9_]+?)\}/is", function($matches){
 			return lang($matches[1], $matches[2]);
