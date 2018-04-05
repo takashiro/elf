@@ -33,28 +33,31 @@ class SystemFileModule extends AdminControlPanelModule{
 
 		$lost_files = array();
 		$modified_files = array();
+		$standard_update_time = 0;
 
-		$lines = file('data/sha1.inc.php');
-		$line_count = count($lines);
-		for($i = 1; $i < $line_count; $i++){
-			list($standard_sha1, $filename) = explode("\t", $lines[$i]);
-			$standard_sha1 = trim($standard_sha1);
-			$filename = trim($filename);
+		if (file_exists('data/sha1.inc.php')) {
+			$lines = file('data/sha1.inc.php');
+			$line_count = count($lines);
+			for($i = 1; $i < $line_count; $i++){
+				list($standard_sha1, $filename) = explode("\t", $lines[$i]);
+				$standard_sha1 = trim($standard_sha1);
+				$filename = trim($filename);
 
-			if(file_exists(S_ROOT.$filename)){
-				$current_sha1 = self::FileSHA1($filename);
-				if($standard_sha1 != $current_sha1){
-					$modified_files[] = array(
-						'file_name' => $filename,
-						'modified_time' => filemtime($filename),
-					);
+				if(file_exists(S_ROOT.$filename)){
+					$current_sha1 = self::FileSHA1($filename);
+					if($standard_sha1 != $current_sha1){
+						$modified_files[] = array(
+							'file_name' => $filename,
+							'modified_time' => filemtime($filename),
+						);
+					}
+				}else{
+					$lost_files[] = $filename;
 				}
-			}else{
-				$lost_files[] = $filename;
 			}
-		}
 
-		$standard_update_time = filemtime('data/sha1.inc.php');
+			$standard_update_time = filemtime('data/sha1.inc.php');
+		}
 
 		$writable_directories = array(
 			'./data/',
