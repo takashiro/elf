@@ -15,10 +15,6 @@ $(function(){
 		var input = $(this);
 		input.val(randomstr(3) + '_');
 	});
-
-	$('#refversion').dblclick(function(){
-		$(this).val(randomstr(3));
-	});
 });
 </script>
 
@@ -62,18 +58,6 @@ $(function(){
 		<tr>
 			<th><label>cookie前缀：</label></th>
 			<td><input type="text" id="cookiepre" name="system[cookiepre]" value="$_CONFIG[cookiepre]" /></td>
-		</tr>
-		<tr>
-			<th><label>静态资源路径：</label></th>
-			<td><input type="text" name="system[static_url]" value="$_CONFIG[static_url]" /></td>
-		</tr>
-		<tr>
-			<th><label>外接资源后缀：</label></th>
-			<td><input type="text" id="refversion" name="system[refversion]" value="$_CONFIG[refversion]" /></td>
-		</tr>
-		<tr>
-			<th><label>jQuery CDN：</label></th>
-			<td><input type="text" name="system[jquery_cdn]" value="$_CONFIG[jquery_cdn]" /></td>
 		</tr>
 		<tr>
 			<th><label>其他配置：</label></th>

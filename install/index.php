@@ -67,7 +67,6 @@ if($_POST){
 		'charset' => 'utf-8',
 		'sitename' => $_POST['config']['sitename'],
 		'style' => 'default',
-		'refversion' => randomstr(3),
 	);
 
 	$stconfig = array(

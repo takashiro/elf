@@ -26,6 +26,7 @@ return array(
 	'module_system:cache' => '缓存',
 	'module_system:file' => '文件',
 	'module_system:database' => '数据库',
+	'module_system:template' => '模板设置',
 	'module_system:cpconfig' => '后台设置',
 
 	'permission_system' => '系统设置',

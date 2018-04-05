@@ -1,0 +1,50 @@
+<!--{template header}-->
+
+<script>
+$(function () {
+	$('#static-version').dblclick(function () {
+		$(this).val(randomstr(3));
+	});
+});
+</script>
+
+
+<ol class="nav">
+		<li><a href="admin.php">管理面板</a></li>
+		<li><a href="admin.php?mod=system">系统</a></li>
+		<li>模板设置</li>
+	</ol>
+
+	<div class="box edit_form">
+		<form class="toast" action="$mod_url" method="post">
+
+		<h2>模板设置</h2>
+		<table>
+			<tr>
+				<th><label>链接静态化：</label></th>
+				<td>
+					{echo Template::radio('static_mod_url', array('关闭', '开启'), $config['static_mod_url'])}
+				</td>
+			</tr>
+			<tr>
+				<th><label>静态资源后缀：</label></th>
+				<td><input type="text" id="static-version" name="static_version" value="$config[static_version]" /></td>
+			</tr>
+			<tr>
+				<th><label>静态站点路径：</label></th>
+				<td><input type="text" name="static_url" value="$config[static_url]" /></td>
+			</tr>
+			<tr>
+				<th><label>jQuery CDN：</label></th>
+				<td><input type="text" name="jquery_cdn" value="$config[jquery_cdn]" /></td>
+			</tr>
+		</table>
+
+		<div class="post_buttons">
+			<button type="submit">修改设置</button>
+		</div>
+
+		</form>
+	</div>
+
+	<!--{template footer}-->

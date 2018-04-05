@@ -11,10 +11,10 @@
 			<div id="sharebox" data-id="share-box">
 				<p>
 				<!--{if $_G['user']->isLoggedIn()}-->
-					<a href="index.php?mod=order">$_USER[account]</a>
-					<a href="index.php?mod=user:logout">[退出]</a>
+					<a href="{mod user}">$_USER[account]</a>
+					<a href="{mod user:logout}">[退出]</a>
 				<!--{else}-->
-					<a href="index.php?mod=user:login" class="button">登录</a>
+					<a href="{mod user:login}" class="button">登录</a>
 				<!--{/if}-->
 				</p>
 			</div>

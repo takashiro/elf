@@ -20,8 +20,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 takashiro@qq.com
 ************************************************************************/
 
-class Template{
+class Template {
 	const SOURCE_DIR = 'extension/view/';
+
+	static public $Config = array(
+		'static_version' => '',
+		'static_url' => '',
+		'static_mod_url' => false,
+		'jquery_cdn' => '',
+	);
 
 	static protected $StatementNext = 6;
 
@@ -108,7 +115,19 @@ class Template{
 
 	public function getStaticUrl(){
 		global $_G;
-		return $_G['config']['static_url'] ?? ($_G['root_url'] ?? '');
+		return self::$Config['static_url'] ?? ($_G['root_url'] ?? '');
+	}
+
+	public function getStaticVersion() {
+		return self::$Config['static_version'];
+	}
+
+	public function getJQueryCDN() {
+		if (!empty(self::$Config['jquery_cdn'])) {
+			return '<script src="'.self::$Config['jquery_cdn'].'"></script>';
+		} else {
+			return '';
+		}
 	}
 
 	public function parse(){
@@ -128,7 +147,20 @@ class Template{
 		$template = preg_replace("/\<\!\-\-\{(.+?)\}\-\-\>/s", "{\\1}", $template);
 
 		//{mod *url*}
-		$template = preg_replace("/[\n\r\t]*\{mod\s+(.+?)\}[\n\r\t]*/is", 'index.php?mod=\\1', $template);
+		$template = preg_replace_callback("/[\n\r\t]*\{mod\s+(.+?)\}(\??)[\n\r\t]*/is", function($match){
+			if (empty(Template::$Config['static_mod_url'])) {
+				$url = 'index.php?mod='.$match[1];
+				if ($match[2]) {
+					$url.= '&';
+				}
+			} else {
+				$url = str_replace(':', '.', $match[1]).'.elf';
+				if ($match[2]) {
+					$url.= '?';
+				}
+			}
+			return $url;
+		}, $template);
 
 		//{lang *type* *text*}
 		$template = preg_replace_callback("/\{lang\s+([a-zA-Z0-9_]+?)\s+([a-zA-Z0-9_]+?)\}/is", function($matches){
@@ -369,4 +401,17 @@ class Template{
 
 		return $style_list;
 	}
+
+	static public function LoadConfig() {
+		$config = readdata('tplconfig');
+		if($config && is_array($config)){
+			foreach(self::$Config as $var => $oldvalue){
+				if(isset($config[$var])){
+					self::$Config[$var] = $config[$var];
+				}
+			}
+		}
+	}
 }
+
+Template::LoadConfig();
