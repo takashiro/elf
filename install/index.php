@@ -186,6 +186,7 @@ $writable_directories = array(
 	'./data/error/',
 	'./data/js/',
 	'./data/log/',
+	'./data/temp/',
 	'./data/template/',
 );
 
